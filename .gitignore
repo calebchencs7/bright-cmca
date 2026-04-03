@@ -1,0 +1,38 @@
+# ===== Large project folders =====
+data/
+original data/
+checkpoints/
+outputs/
+infer_results/
+
+# ===== Logs / runtime =====
+*.log
+*.err
+*.out
+*.pid
+
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+.venv/
+venv/
+env/
+*.egg-info/
+
+# ===== Model / binary artifacts =====
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.npy
+*.npz
+
+# ===== IDE / OS =====
+.vscode/
+.DS_Store
+Thumbs.db

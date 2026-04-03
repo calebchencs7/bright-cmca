@@ -1,0 +1,14 @@
+python bda_benchmark\script\standard_ML\generate_sam_building_masks.py `
+  --dataset_path D:\Project\haoChen\BRIGHT\data `
+  --data_list_path D:\Project\haoChen\BRIGHT\bda_benchmark\dataset\splitname\standard_ML\val_set.txt `
+  --output_dir D:\Project\haoChen\BRIGHT\outputs\sam_masks\standard_ML `
+  --sam_checkpoint D:\Project\haoChen\BRIGHT\checkpoints\sam\sam_vit_b_01ec64.pth `
+  --sam_model_type vit_b `
+  --device cpu `
+  --source both `
+  --points_per_side 24 `
+  --crop_n_layers 1 `
+  --pred_iou_thresh 0.86 `
+  --stability_score_thresh 0.92 `
+  --max_area_ratio 0.6 `
+  --overwrite
