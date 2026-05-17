@@ -1,432 +1,926 @@
+"""
+Unified training script for building damage assessment.
+
+Fully backward-compatible with the BRIGHT paper's original training procedure.
+Default hyper-parameters reproduce the paper baselines exactly.
+
+Extensions (all opt-in, zero impact on baseline when unused):
+    - SAM-Guided Refinement (SGR): a pluggable post-processing module
+    - Ordinal Damage Loss (ODL): exploits ordinal structure of damage levels
+    - Damage Prototype Contrastive Learning (DPCL): organises pixel features
+        into class-discriminative clusters via prototype InfoNCE on a 128-d
+        projection of the dec3 decoder feature. Targets the persistently low
+        Damaged-class IoU. Supports SP-DPCL (single proto/class) and MP-DPCL
+        (multi proto/class) via --dpcl_num_prototypes.
+    - PolyLR / CosineAnnealing schedule (default: constant LR, same as paper)
+    - AMP mixed precision on CUDA
+    - Class-weighted CE loss
+
+Architecture when SGR is enabled:
+    backbone(input) -> logits -> SGR(logits, sam_mask) -> refined_logits -> loss
+
+Architecture when DPCL is enabled:
+    backbone(input, return_features=True) -> (logits, dec3)
+    main_loss(logits, labels) + lambda_dpcl(t) * DPCL(dec3, labels)
+"""
+
 import os
 import sys
 import argparse
-import time
 
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 if PROJECT_ROOT not in sys.path:
     sys.path.append(PROJECT_ROOT)
 
 import numpy as np
-
 import torch
 import torch.nn.functional as F
 import torch.optim as optim
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-from dataset.make_data_loader import MultimodalDamageAssessmentDatset, MultimodalDamageAssessmentDatsetWithSAM
-from model.UNet import UNet
-from model.SiamCRNN import SiamCRNN
 from datetime import datetime
 
+from dataset.make_data_loader import (
+    MultimodalDamageAssessmentDatset,
+    MultimodalDamageAssessmentDatsetWithSAM,
+)
+from model.UNet import UNet
 from util_func.metrics import Evaluator
 import util_func.lovasz_loss as L
 from util_func.training_curve import TrainingCurveRecorder
 
 
-class Trainer(object):
+# ---------------------------------------------------------------------------
+# Helper: build backbone by name
+# ---------------------------------------------------------------------------
+
+def build_backbone(model_type, in_channels, num_classes):
+    """Instantiate a segmentation backbone by name."""
+    mt = model_type.lower()
+
+    if mt == "unet":
+        return UNet(in_channels=in_channels, num_classes=num_classes)
+
+    if mt == "unetwithfeatures":
+        # DPCL-friendly subclass of UNet. Same parameters and state dict as
+        # the baseline UNet; only forward() additionally exposes dec3.
+        from model.UNetDPCL import UNetWithFeatures
+        return UNetWithFeatures(in_channels=in_channels, num_classes=num_classes)
+
+    if mt == "unetcmca":
+        from model.UNetCMCA import UNetCMCA
+        return UNetCMCA(in_channels=in_channels, num_classes=num_classes)
+
+    if mt in ("deeplabv3plus", "deeplabv3+"):
+        from model.DeepLabV3Plus import DeepLabV3Plus
+        return DeepLabV3Plus(in_channels=in_channels, num_classes=num_classes)
+
+    if mt == "siamattnunet":
+        from model.SiamAttnUNet import SiamAttnUNet
+        return SiamAttnUNet(in_channels=3, num_classes=num_classes)
+
+    if mt == "siamcrnn":
+        from model.SiamCRNN import SiamCRNN
+        return SiamCRNN()
+
+    raise ValueError(f"Unknown model_type: {model_type}")
+
+
+# ---------------------------------------------------------------------------
+# Ordinal Damage Loss (ODL) — exploits rank order of damage levels
+# ---------------------------------------------------------------------------
+
+def ordinal_damage_loss(logits, labels):
     """
-    Trainer class that encapsulates model, optimizer, and data loading.
-    It can train the model and evaluate its performance on a holdout set.
+    Ordinal rank-BCE loss for building damage classes 1/2/3.
+
+    Motivation: damage levels have natural ordering (Intact < Damaged < Destroyed).
+    Standard CE treats all misclassifications equally, but confusing Intact with
+    Destroyed (2-rank error) should be penalized more than Intact with Damaged
+    (1-rank error). This loss encodes that ordinal structure.
+
+    Method: decompose the 3-class ordinal problem into 2 binary thresholds:
+        - P(label > 1): is damage at least "Damaged"?
+        - P(label > 2): is damage "Destroyed"?
+    Then apply BCE on each threshold independently.
+
+    Only computed on building pixels (label ∈ {1, 2, 3}). Background (label=0)
+    and ignore (label=255) pixels are excluded.
+
+    Args:
+        logits: (B, 4, H, W) raw model output (4 classes: bg, intact, damaged, destroyed)
+        labels: (B, H, W) ground truth labels
+
+    Returns:
+        Scalar loss, or 0 if no valid building pixels exist.
+    """
+    valid = (labels > 0) & (labels != 255)
+    if not torch.any(valid):
+        return logits.new_tensor(0.0)
+
+    # Softmax over damage sub-classes only: P(intact), P(damaged), P(destroyed)
+    damage_probs = F.softmax(logits[:, 1:4], dim=1)  # (B, 3, H, W)
+
+    # Extract valid building pixels: (N, 3)
+    flat_probs = damage_probs.permute(0, 2, 3, 1)[valid]
+    flat_labels = labels[valid]
+
+    # Cumulative probabilities for ordinal thresholds
+    p_gt1 = (flat_probs[:, 1] + flat_probs[:, 2]).clamp(1e-6, 1 - 1e-6)  # P(≥Damaged)
+    p_gt2 = flat_probs[:, 2].clamp(1e-6, 1 - 1e-6)                       # P(=Destroyed)
+
+    # Binary targets
+    t_gt1 = (flat_labels > 1).float()  # 1 if Damaged or Destroyed
+    t_gt2 = (flat_labels > 2).float()  # 1 if Destroyed
+
+    # BCE in fp32 for numerical stability (not AMP-safe otherwise)
+    with torch.autocast(device_type=logits.device.type, enabled=False):
+        loss_gt1 = F.binary_cross_entropy(p_gt1.float(), t_gt1, reduction="mean")
+        loss_gt2 = F.binary_cross_entropy(p_gt2.float(), t_gt2, reduction="mean")
+
+    return loss_gt1 + loss_gt2
+
+
+# ---------------------------------------------------------------------------
+# Trainer
+# ---------------------------------------------------------------------------
+
+class Trainer:
+    """
+    Clean, modular trainer for building damage assessment.
+
+    Default configuration reproduces the BRIGHT paper baselines:
+        - AdamW, lr=1e-4, weight_decay=5e-3
+        - Constant LR (no scheduler)
+        - CE + 0.75 * Lovász softmax
+        - max_iters controls dataset length (sample-level budget)
     """
 
     def __init__(self, args):
         self.args = args
         self.device = self._resolve_device(args.device)
-        print(f'Using device: {self.device}')
+        print(f"Using device: {self.device}")
 
+        # Evaluators
         self.evaluator_loc = Evaluator(num_class=2)
         self.evaluator_clf = Evaluator(num_class=4)
         self.evaluator_total = Evaluator(num_class=4)
 
-        self.use_sam_mask = args.sam_mask_dir is not None and args.sam_mask_dir != ""
-        self.sam_mode = args.sam_mode.lower()
-        self.hybrid_min_area_ratio = args.hybrid_min_area_ratio
-        self.hybrid_max_area_ratio = args.hybrid_max_area_ratio
+        # SAM config
+        self.use_sam = bool(args.sam_mask_dir)
+        if self.use_sam:
+            print(f"SAM guidance enabled (mask_dir={args.sam_mask_dir})")
 
-        if self.sam_mode not in ['soft', 'hard', 'hybrid']:
-            raise ValueError(f'Unsupported sam_mode: {self.sam_mode}')
-        if self.sam_mode == 'hybrid' and self.hybrid_min_area_ratio >= self.hybrid_max_area_ratio:
-            raise ValueError('hybrid_min_area_ratio must be smaller than hybrid_max_area_ratio.')
+        # Intervals
+        self.eval_interval = max(1, int(args.eval_interval))
+        self.log_interval = max(1, int(args.curve_log_interval))
+        self.save_interval = max(1, int(args.curve_save_interval))
 
-        if self.use_sam_mask:
-            print(f'SAM guidance enabled. mode={self.sam_mode}')
+        # DataLoader options
+        self.pin_memory = bool(args.pin_memory and self.device.type == "cuda")
+        self.persistent_workers = bool(
+            args.persistent_workers and args.num_workers and args.num_workers > 0
+        )
+        self.prefetch_factor = max(1, int(args.prefetch_factor))
+
+        # AMP
+        self.use_amp = bool(args.use_amp and self.device.type == "cuda")
+        self.amp_dtype = torch.float16 if args.amp_dtype == "fp16" else torch.bfloat16
+        if self.use_amp:
+            try:
+                self.scaler = torch.amp.GradScaler("cuda", enabled=True)
+            except Exception:
+                self.scaler = torch.cuda.amp.GradScaler(enabled=True)
         else:
-            print('SAM guidance disabled (no sam_mask_dir provided).')
+            self.scaler = None
 
-        in_channels = 7 if self.use_sam_mask else 6
-        self.deep_model = UNet(in_channels=in_channels, num_classes=4)
-        # self.deep_model = SiamCRNN()
-        self.deep_model = self.deep_model.to(self.device)
+        # CUDA optimizations
+        if self.device.type == "cuda":
+            torch.backends.cudnn.benchmark = True
 
+        # ---- Build backbone ----
+        in_channels = 6  # pre(3) + post(3), always 6
+        self.backbone = build_backbone(args.model_type, in_channels, num_classes=4)
+        self.backbone = self.backbone.to(self.device)
+
+        # ---- Build SAM-Guided Refinement (optional) ----
+        if self.use_sam and args.use_sgr:
+            from model.SAMGuidedRefinement import SAMGuidedRefinement
+            self.refiner = SAMGuidedRefinement(
+                num_classes=4,
+                hidden_dim=args.sgr_hidden_dim,
+                alpha_init=args.sgr_alpha_init,
+            ).to(self.device)
+            print(f"SAM-Guided Refinement enabled "
+                  f"(hidden={args.sgr_hidden_dim}, alpha_init={args.sgr_alpha_init})")
+        else:
+            self.refiner = None
+
+        # ---- Ordinal Damage Loss (optional) ----
+        self.use_ordinal = bool(args.use_ordinal_loss)
+        self.ordinal_weight = max(0.0, float(args.ordinal_weight))
+        self.ordinal_warmup_iters = max(0, int(args.ordinal_warmup_iters))
+        if self.use_ordinal:
+            if self.ordinal_warmup_iters > 0:
+                print(f"Ordinal Damage Loss enabled (weight={self.ordinal_weight}, "
+                      f"warmup={self.ordinal_warmup_iters} iters linear ramp)")
+            else:
+                print(f"Ordinal Damage Loss enabled (weight={self.ordinal_weight}, no warmup)")
+
+        # ---- Damage Prototype Contrastive Learning (optional) ----
+        self.use_dpcl = bool(args.use_dpcl)
+        self.dpcl_weight = max(0.0, float(args.dpcl_weight))
+        self.dpcl = None
+        if self.use_dpcl:
+            # Sanity-check: DPCL needs the backbone to expose decoder features.
+            # The baseline `UNet` does NOT — use `UNetWithFeatures` instead.
+            mt_lower = args.model_type.lower()
+            dpcl_compatible = ("unetwithfeatures", "unetcmca")
+            if mt_lower not in dpcl_compatible:
+                raise ValueError(
+                    f"--use_dpcl requires a backbone that exposes decoder "
+                    f"features via forward(x, return_features=True). "
+                    f"Got --model_type {args.model_type!r}. "
+                    f"Use one of: {dpcl_compatible}. "
+                    f"(The vanilla 'UNet' is the baseline reference and does "
+                    f"not return features; use 'UNetWithFeatures' for DPCL.)"
+                )
+
+            from model.DPCL import DamagePrototypeContrastiveLoss
+
+            # Parse --dpcl_num_prototypes "1,1,1" → {1:1, 2:1, 3:1}
+            kk = [int(x) for x in str(args.dpcl_num_prototypes).split(",")]
+            if len(kk) != 3:
+                raise ValueError(
+                    "--dpcl_num_prototypes must be 3 comma-separated ints "
+                    "(intact, damaged, destroyed), e.g. '1,1,1' or '1,3,2'."
+                )
+            num_proto = {1: kk[0], 2: kk[1], 3: kk[2]}
+
+            # Parse --dpcl_class_loss_weights "1.0,2.0,1.0" → {1:1.0, 2:2.0, 3:1.0}
+            ww = [float(x) for x in str(args.dpcl_class_loss_weights).split(",")]
+            if len(ww) != 3:
+                raise ValueError(
+                    "--dpcl_class_loss_weights must be 3 floats "
+                    "(intact, damaged, destroyed)."
+                )
+            cls_w = {1: ww[0], 2: ww[1], 3: ww[2]}
+
+            # dec3 channel count is 256 for both UNet and UNetCMCA
+            feat_dim = int(args.dpcl_feat_dim)
+
+            self.dpcl = DamagePrototypeContrastiveLoss(
+                feat_dim=feat_dim,
+                proj_dim=int(args.dpcl_proj_dim),
+                num_prototypes_per_class=num_proto,
+                samples_per_class=int(args.dpcl_samples_per_class),
+                warmup_iters=int(args.dpcl_warmup_iters),
+                ramp_iters=int(args.dpcl_ramp_iters),
+                momentum=float(args.dpcl_momentum),
+                temperature=float(args.dpcl_temperature),
+                class_loss_weights=cls_w,
+                ortho_weight=float(args.dpcl_ortho_weight),
+            ).to(self.device)
+
+            mode = "SP-DPCL" if all(k == 1 for k in kk) else "MP-DPCL"
+            print(f"Damage Prototype Contrastive Learning enabled ({mode})")
+            print(f"  num_protos={num_proto}, weight={self.dpcl_weight}, "
+                  f"τ={args.dpcl_temperature}, m={args.dpcl_momentum}, "
+                  f"warmup={args.dpcl_warmup_iters}+ramp={args.dpcl_ramp_iters} iters")
+
+        # ---- Save path ----
         now_str = datetime.now().strftime("%Y%m%d_%H%M%S")
-        self.model_save_path = os.path.join(args.model_param_path, args.dataset, args.model_type + '_' + now_str)
-        if not os.path.exists(self.model_save_path):
-            os.makedirs(self.model_save_path)
-
+        suffix_parts = []
+        if self.refiner is not None:
+            suffix_parts.append("SGR")
+        if self.use_ordinal:
+            suffix_parts.append("ODL")
+        if self.use_dpcl:
+            suffix_parts.append(
+                "MPDPCL" if (self.dpcl is not None and not self.dpcl.is_single_proto)
+                else "SPDPCL"
+            )
+        suffix = ("_" + "_".join(suffix_parts)) if suffix_parts else ""
+        self.model_save_path = os.path.join(
+            args.model_param_path, args.dataset,
+            args.model_type + suffix + "_" + now_str
+        )
+        os.makedirs(self.model_save_path, exist_ok=True)
         self.curve_recorder = TrainingCurveRecorder(self.model_save_path)
 
-        if args.resume is not None:
-            if not os.path.isfile(args.resume):
-                raise RuntimeError("=> no checkpoint found at '{}'".format(args.resume))
-            checkpoint = torch.load(args.resume, map_location=self.device)
-            model_dict = {}
-            state_dict = self.deep_model.state_dict()
-            for k, v in checkpoint.items():
-                if k in state_dict:
-                    model_dict[k] = v
-            state_dict.update(model_dict)
-            self.deep_model.load_state_dict(state_dict)
+        # ---- Resume ----
+        if args.resume:
+            self._load_checkpoint(args.resume)
+
+        # ---- Optimizer: joint params ----
+        params = list(self.backbone.parameters())
+        if self.refiner is not None:
+            params += list(self.refiner.parameters())
+        if self.dpcl is not None:
+            # Only the projection head has trainable parameters; prototypes
+            # are buffers updated via EMA, not SGD.
+            params += list(self.dpcl.proj.parameters())
 
         self.optim = optim.AdamW(
-            self.deep_model.parameters(),
-            lr=args.learning_rate,
-            weight_decay=args.weight_decay
+            params, lr=args.learning_rate, weight_decay=args.weight_decay
         )
 
+        # ---- Class weights ----
         self.class_weights = None
-        if args.class_weights is not None:
-            weights = [float(x) for x in args.class_weights.split(',')]
+        if args.class_weights:
+            weights = [float(x) for x in args.class_weights.split(",")]
             if len(weights) != 4:
-                raise ValueError("class_weights must have 4 comma-separated values (for 4 classes).")
+                raise ValueError("class_weights must have 4 comma-separated values.")
             self.class_weights = torch.tensor(weights, dtype=torch.float32).to(self.device)
+
+        # ---- LR scheduler ----
+        self.scheduler = self._build_scheduler(args)
+
+    # -----------------------------------------------------------------------
+    # Device / schedule
+    # -----------------------------------------------------------------------
 
     @staticmethod
     def _resolve_device(device_arg):
-        if device_arg == 'auto':
+        if device_arg == "auto":
             if torch.cuda.is_available():
-                return torch.device('cuda')
-            if hasattr(torch.backends, 'mps') and torch.backends.mps.is_available():
-                return torch.device('mps')
-            return torch.device('cpu')
+                return torch.device("cuda")
+            if hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+                return torch.device("mps")
+            return torch.device("cpu")
+        if device_arg == "cuda" and not torch.cuda.is_available():
+            raise RuntimeError("CUDA is not available.")
+        if device_arg == "mps":
+            if not (hasattr(torch.backends, "mps") and torch.backends.mps.is_available()):
+                raise RuntimeError("MPS is not available.")
+        return torch.device(device_arg)
 
-        if device_arg == 'cuda':
-            if not torch.cuda.is_available():
-                raise RuntimeError('CUDA is not available on this machine.')
-            return torch.device('cuda')
+    def _build_scheduler(self, args):
+        if args.lr_policy == "constant":
+            return None
 
-        if device_arg == 'mps':
-            if not (hasattr(torch.backends, 'mps') and torch.backends.mps.is_available()):
-                raise RuntimeError('MPS is not available on this machine.')
-            return torch.device('mps')
+        # Compute total steps for schedule
+        total_steps = max(1, int(np.ceil(
+            float(args.max_iters) / float(max(1, args.train_batch_size))
+        )))
 
-        return torch.device('cpu')
+        if args.lr_policy == "poly":
+            warmup = max(0, int(args.warmup_iters))
+            power = args.lr_power
 
-    @staticmethod
-    def _safe_hmean(scores, eps=1e-6):
-        scores = np.asarray(scores, dtype=np.float32)
-        scores = scores[np.isfinite(scores)]
-        if scores.size == 0:
-            return 0.0
-        scores = np.where(scores <= 0, eps, scores)
-        return len(scores) / np.sum(1.0 / scores)
+            def lr_lambda(step):
+                if step < warmup:
+                    return max(1e-6, float(step + 1) / float(max(1, warmup)))
+                progress = float(step - warmup) / float(max(1, total_steps - warmup))
+                return max(1e-6, (1.0 - progress) ** power)
 
-    def _create_dataset(self, dataset_path, data_name_list, crop_size, max_iters, data_type):
-        if self.use_sam_mask:
+            return optim.lr_scheduler.LambdaLR(self.optim, lr_lambda=lr_lambda)
+
+        if args.lr_policy == "cosine":
+            return optim.lr_scheduler.CosineAnnealingLR(
+                self.optim, T_max=total_steps, eta_min=1e-7
+            )
+
+        return None
+
+    def _load_checkpoint(self, path):
+        if not os.path.isfile(path):
+            raise RuntimeError(f"Checkpoint not found: {path}")
+        ckpt = torch.load(path, map_location=self.device)
+        # Handle both old-style (flat state_dict) and new-style (nested dict)
+        if "backbone" in ckpt:
+            self.backbone.load_state_dict(ckpt["backbone"], strict=False)
+            if self.refiner is not None and "refiner" in ckpt:
+                self.refiner.load_state_dict(ckpt["refiner"], strict=False)
+        else:
+            # Legacy format: flat state_dict
+            backbone_state = {k: v for k, v in ckpt.items()
+                              if k in self.backbone.state_dict()}
+            self.backbone.load_state_dict(backbone_state, strict=False)
+        print(f"Loaded checkpoint from {path}")
+
+    # -----------------------------------------------------------------------
+    # Dataset factory
+    # -----------------------------------------------------------------------
+
+    def _make_dataset(self, dataset_path, data_list, crop_size, max_iters, split):
+        if self.use_sam:
             return MultimodalDamageAssessmentDatsetWithSAM(
                 dataset_path=dataset_path,
-                data_list=data_name_list,
+                data_list=data_list,
                 crop_size=crop_size,
                 sam_mask_path=self.args.sam_mask_dir,
                 max_iters=max_iters,
-                type=data_type,
-                suffix='.tif',
+                type=split,
+                suffix=".tif",
                 sam_mask_suffix=self.args.sam_mask_suffix,
-                sam_mask_threshold=self.args.sam_mask_threshold
+                sam_mask_threshold=self.args.sam_mask_threshold,
             )
-
         return MultimodalDamageAssessmentDatset(
             dataset_path=dataset_path,
-            data_list=data_name_list,
+            data_list=data_list,
             crop_size=crop_size,
             max_iters=max_iters,
-            type=data_type,
-            suffix='.tif'
+            type=split,
+            suffix=".tif",
         )
 
-    def _resolve_guidance_mask(self, sam_mask):
-        if sam_mask is None:
-            return None
-
-        binary_mask = sam_mask.squeeze(1) >= 0.5
-        if self.sam_mode == 'soft':
-            return None
-        if self.sam_mode == 'hard':
-            return binary_mask
-
-        area_ratio = binary_mask.float().mean(dim=(1, 2))
-        use_hard = (area_ratio >= self.hybrid_min_area_ratio) & (area_ratio <= self.hybrid_max_area_ratio)
-        if torch.all(use_hard):
-            return binary_mask
-
-        effective_mask = torch.ones_like(binary_mask, dtype=torch.bool)
-        effective_mask[use_hard] = binary_mask[use_hard]
-        return effective_mask
+    # -----------------------------------------------------------------------
+    # Batch preparation
+    # -----------------------------------------------------------------------
 
     def _prepare_batch(self, data):
-        if self.use_sam_mask:
-            pre_change_imgs, post_change_imgs, sam_mask, labels_loc, labels_clf, _ = data
+        """Unpack batch. Returns (input, sam_mask, labels_loc, labels_clf)."""
+        if self.use_sam:
+            pre, post, sam_mask, labels_loc, labels_clf, _ = data
             sam_mask = sam_mask.to(self.device).float()
         else:
-            pre_change_imgs, post_change_imgs, labels_loc, labels_clf, _ = data
+            pre, post, labels_loc, labels_clf, _ = data
             sam_mask = None
 
-        pre_change_imgs = pre_change_imgs.to(self.device)
-        post_change_imgs = post_change_imgs.to(self.device)
+        pre = pre.to(self.device)
+        post = post.to(self.device)
         labels_loc = labels_loc.to(self.device).long()
         labels_clf = labels_clf.to(self.device).long()
 
-        if sam_mask is not None:
-            input_data = torch.cat([pre_change_imgs, post_change_imgs, sam_mask], dim=1)
-            guidance_mask = self._resolve_guidance_mask(sam_mask)
-            if guidance_mask is not None:
-                labels_for_loss = labels_clf.clone()
-                labels_for_loss[~guidance_mask] = 255
-            else:
-                labels_for_loss = labels_clf
-        else:
-            input_data = torch.cat([pre_change_imgs, post_change_imgs], dim=1)
-            labels_for_loss = labels_clf
-            guidance_mask = None
+        input_data = torch.cat([pre, post], dim=1)
+        return input_data, sam_mask, labels_loc, labels_clf
 
-        return input_data, labels_loc, labels_clf, labels_for_loss, sam_mask, guidance_mask
+    # -----------------------------------------------------------------------
+    # Forward
+    # -----------------------------------------------------------------------
+
+    def _forward(self, input_data, sam_mask, return_features=False):
+        """
+        Backbone + optional SGR refiner.
+
+        If `return_features` is True, also returns the dec3 mid-decoder
+        feature map for use by DPCL or other auxiliary losses.
+
+        Returns:
+            logits: (B, num_classes, H, W)
+            feat_dec3: (B, 256, H/4, W/4)   only if return_features=True
+        """
+        if return_features:
+            logits, feat = self.backbone(input_data, return_features=True)
+        else:
+            logits = self.backbone(input_data)
+            feat = None
+
+        if self.refiner is not None and sam_mask is not None:
+            logits = self.refiner(logits, sam_mask)
+
+        if return_features:
+            return logits, feat
+        return logits
+
+    # -----------------------------------------------------------------------
+    # Loss — baseline: CE + 0.75 * Lovász; optional: + ordinal
+    # -----------------------------------------------------------------------
+
+    def _effective_ordinal_weight(self, current_iter):
+        """
+        Linear warmup schedule for ordinal loss weight.
+
+        Phase 1 [0, warmup):          weight = 0   (ODL silent, main loss stabilises)
+        Phase 2 [warmup, 2*warmup):   weight ramps linearly 0 → ordinal_weight
+        Phase 3 [2*warmup, ∞):        weight = ordinal_weight (full strength)
+
+        If ordinal_warmup_iters == 0, always returns ordinal_weight (no warmup).
+        """
+        if self.ordinal_warmup_iters <= 0:
+            return self.ordinal_weight
+        if current_iter < self.ordinal_warmup_iters:
+            return 0.0
+        ramp = min(1.0, (current_iter - self.ordinal_warmup_iters)
+                   / float(self.ordinal_warmup_iters))
+        return self.ordinal_weight * ramp
+
+    def _compute_loss(self, logits, labels_clf, current_iter=0, feat_dec3=None):
+        """
+        CE + 0.75 * Lovász softmax + optional ordinal damage loss + optional DPCL.
+
+        current_iter is used to compute the warmup-adjusted ordinal / DPCL weights.
+        feat_dec3 is the dec3 decoder feature; required when self.dpcl is enabled.
+
+        NOTE: The original BRIGHT paper code does NOT use ignore_index=255 in
+        cross_entropy. We keep that behaviour as default. Lovász already handles
+        ignore=255 via its own masking.
+        """
+        if self.class_weights is not None:
+            ce = F.cross_entropy(logits, labels_clf, weight=self.class_weights)
+        else:
+            ce = F.cross_entropy(logits, labels_clf)
+
+        lovasz = L.lovasz_softmax(
+            F.softmax(logits, dim=1), labels_clf, ignore=255
+        )
+
+        total = ce + 0.75 * lovasz
+
+        # Optional: ordinal damage loss with warmup
+        ord_loss = logits.new_tensor(0.0)
+        if self.use_ordinal:
+            ord_loss = ordinal_damage_loss(logits, labels_clf)
+            eff_w = self._effective_ordinal_weight(current_iter)
+            total = total + eff_w * ord_loss
+
+        # Optional: damage prototype contrastive loss with warmup
+        dpcl_loss = logits.new_tensor(0.0)
+        if self.dpcl is not None and feat_dec3 is not None:
+            # DPCL is computed in fp32 internally; safe under AMP autocast
+            # because the projection head is a small MLP and prototype math
+            # is forced to fp32 inside DamagePrototypeContrastiveLoss.
+            dpcl_loss = self.dpcl(feat_dec3, labels_clf, current_iter=current_iter)
+            eff_w_dpcl = self.dpcl.effective_weight(current_iter, self.dpcl_weight)
+            if eff_w_dpcl > 0.0:
+                total = total + eff_w_dpcl * dpcl_loss
+
+        return total, ce, lovasz, ord_loss, dpcl_loss
+
+    # -----------------------------------------------------------------------
+    # Training loop
+    # -----------------------------------------------------------------------
 
     def training(self):
         best_mIoU = 0.0
-        best_round = []
+        best_round = {}
 
-        if self.device.type == 'cuda':
+        if self.device.type == "cuda":
             torch.cuda.empty_cache()
 
-        train_dataset = self._create_dataset(
+        # Paper convention: max_iters = number of samples to see
+        train_dataset = self._make_dataset(
             dataset_path=self.args.train_dataset_path,
-            data_name_list=self.args.train_data_name_list,
+            data_list=self.args.train_data_name_list,
             crop_size=self.args.crop_size,
             max_iters=self.args.max_iters,
-            data_type='train'
-        )
-        train_data_loader = DataLoader(
-            train_dataset,
-            batch_size=self.args.train_batch_size,
-            shuffle=True,
-            num_workers=self.args.num_workers,
-            drop_last=False
+            split="train",
         )
 
-        elem_num = len(train_data_loader)
-        train_enumerator = enumerate(train_data_loader)
+        loader_kwargs = {
+            "batch_size": self.args.train_batch_size,
+            "shuffle": True,
+            "num_workers": self.args.num_workers,
+            "drop_last": False,
+            "pin_memory": self.pin_memory,
+        }
+        if self.args.num_workers and self.args.num_workers > 0:
+            loader_kwargs["persistent_workers"] = self.persistent_workers
+            loader_kwargs["prefetch_factor"] = self.prefetch_factor
 
-        for _ in tqdm(range(elem_num)):
-            itera, data = train_enumerator.__next__()
-            input_data, labels_loc, labels_clf, labels_for_loss, _, _ = self._prepare_batch(data)
+        train_loader = DataLoader(train_dataset, **loader_kwargs)
+        elem_num = len(train_loader)
 
-            valid_labels_clf = (labels_for_loss != 255).any().item()
-            if not valid_labels_clf:
-                continue
+        self.backbone.train()
+        if self.refiner is not None:
+            self.refiner.train()
+        if self.dpcl is not None:
+            self.dpcl.train()
 
-            output_clf = self.deep_model(input_data)
+        train_enumerator = enumerate(train_loader)
+        pbar = tqdm(total=elem_num, desc="Training")
 
-            self.optim.zero_grad()
-            ce_loss_clf = F.cross_entropy(output_clf, labels_for_loss, ignore_index=255, weight=self.class_weights)
-            lovasz_loss_clf = L.lovasz_softmax(F.softmax(output_clf, dim=1), labels_for_loss, ignore=255)
-            final_loss = ce_loss_clf + 0.75 * lovasz_loss_clf
+        try:
+            for itera, data in train_enumerator:
+                pbar.update(1)
 
-            final_loss.backward()
-            self.optim.step()
+                input_data, sam_mask, labels_loc, labels_clf = self._prepare_batch(data)
 
-            if (itera + 1) % 10 == 0:
-                print(f'iter is {itera + 1}, classification loss is {final_loss.item()}')
-                self.curve_recorder.add_train_loss(itera + 1, final_loss.item())
+                # Skip empty label batches
+                if not (labels_clf != 255).any().item():
+                    continue
 
-                if (itera + 1) % 500 == 0:
-                    self.deep_model.eval()
-                    loc_f1_score_val, harmonic_mean_f1_val, final_OA_val, mIoU_val, IoU_of_each_class_val = self.validation()
-                    loc_f1_score_test, harmonic_mean_f1_test, final_OA_test, mIoU_test, IoU_of_each_class_test = self.test()
+                self.optim.zero_grad(set_to_none=True)
 
-                    self.curve_recorder.add_eval_metrics(itera + 1, 'val', final_OA_val * 100, mIoU_val * 100)
-                    self.curve_recorder.add_eval_metrics(itera + 1, 'test', final_OA_test * 100, mIoU_test * 100)
+                amp_ctx = torch.autocast(
+                    device_type="cuda", dtype=self.amp_dtype, enabled=self.use_amp
+                )
+                with amp_ctx:
+                    if self.dpcl is not None:
+                        logits, feat_dec3 = self._forward(
+                            input_data, sam_mask, return_features=True
+                        )
+                    else:
+                        logits = self._forward(input_data, sam_mask)
+                        feat_dec3 = None
+                    total_loss, ce_loss, lovasz_loss, ord_loss, dpcl_loss = (
+                        self._compute_loss(
+                            logits, labels_clf,
+                            current_iter=itera, feat_dec3=feat_dec3,
+                        )
+                    )
 
-                    if mIoU_val > best_mIoU:
-                        torch.save(self.deep_model.state_dict(), os.path.join(self.model_save_path, 'best_model.pth'))
-                        best_mIoU = mIoU_val
+                if self.use_amp:
+                    self.scaler.scale(total_loss).backward()
+                    self.scaler.step(self.optim)
+                    self.scaler.update()
+                else:
+                    total_loss.backward()
+                    self.optim.step()
+
+                if self.scheduler is not None:
+                    self.scheduler.step()
+
+                self.curve_recorder.add_train_loss(itera + 1, total_loss.item())
+
+                # Logging
+                if (itera + 1) % self.log_interval == 0:
+                    lr = self.optim.param_groups[0]["lr"]
+                    msg = (f"iter {itera+1} | total={total_loss.item():.4f} "
+                           f"ce={ce_loss.item():.4f} lovasz={lovasz_loss.item():.4f}")
+                    if self.use_ordinal:
+                        eff_w = self._effective_ordinal_weight(itera)
+                        msg += f" ord={ord_loss.item():.4f}(w={eff_w:.4f})"
+                    if self.dpcl is not None:
+                        eff_w_dpcl = self.dpcl.effective_weight(itera, self.dpcl_weight)
+                        msg += f" dpcl={dpcl_loss.item():.4f}(w={eff_w_dpcl:.4f})"
+                    msg += f" lr={lr:.2e}"
+                    if self.refiner is not None:
+                        msg += f" alpha={self.refiner.alpha.item():.4f}"
+                    print(msg)
+
+                # Evaluation
+                if (itera + 1) % self.eval_interval == 0:
+                    self.backbone.eval()
+                    if self.refiner is not None:
+                        self.refiner.eval()
+
+                    val_metrics = self._evaluate("val")
+                    test_metrics = self._evaluate("test")
+
+                    self.curve_recorder.add_eval_metrics(
+                        itera + 1, "val",
+                        val_metrics["OA"] * 100, val_metrics["mIoU"] * 100
+                    )
+                    self.curve_recorder.add_eval_metrics(
+                        itera + 1, "test",
+                        test_metrics["OA"] * 100, test_metrics["mIoU"] * 100
+                    )
+
+                    if val_metrics["mIoU"] > best_mIoU:
+                        best_mIoU = val_metrics["mIoU"]
+                        self._save_checkpoint(itera + 1)
                         best_round = {
-                            'best iter': itera + 1,
-                            'loc f1 (val)': loc_f1_score_val * 100,
-                            'clf f1 (val)': harmonic_mean_f1_val * 100,
-                            'OA (val)': final_OA_val * 100,
-                            'mIoU (val)': mIoU_val * 100,
-                            'sub class IoU (val)': IoU_of_each_class_val * 100,
-                            'loc f1 (test)': loc_f1_score_test * 100,
-                            'clf f1 (test)': harmonic_mean_f1_test * 100,
-                            'OA (test)': final_OA_test * 100,
-                            'mIoU (test)': mIoU_test * 100,
-                            'sub class IoU (test)': IoU_of_each_class_test * 100
+                            "best iter": itera + 1,
+                            "loc f1 (val)": val_metrics["loc_f1"] * 100,
+                            "clf f1 (val)": val_metrics["clf_f1"] * 100,
+                            "OA (val)": val_metrics["OA"] * 100,
+                            "mIoU (val)": val_metrics["mIoU"] * 100,
+                            "sub class IoU (val)": val_metrics["IoU_per_class"] * 100,
+                            "loc f1 (test)": test_metrics["loc_f1"] * 100,
+                            "clf f1 (test)": test_metrics["clf_f1"] * 100,
+                            "OA (test)": test_metrics["OA"] * 100,
+                            "mIoU (test)": test_metrics["mIoU"] * 100,
+                            "sub class IoU (test)": test_metrics["IoU_per_class"] * 100,
                         }
-                    self.deep_model.train()
 
-        self.curve_recorder.save()
-        print(f'Training curve files are saved in {self.model_save_path}')
-        print('The accuracy of the best round is ', best_round)
+                    self.backbone.train()
+                    if self.refiner is not None:
+                        self.refiner.train()
+                    self.curve_recorder.save()
 
-    def validation(self):
-        print('---------starting validation-----------')
+                elif (itera + 1) % self.save_interval == 0:
+                    self.curve_recorder.save()
+
+        finally:
+            pbar.close()
+            self.curve_recorder.save()
+            print(f"Training curves saved to {self.model_save_path}")
+            print(f"The accuracy of the best round is {best_round}")
+
+    # -----------------------------------------------------------------------
+    # Evaluation
+    # -----------------------------------------------------------------------
+
+    def _evaluate(self, split="val"):
+        """Run evaluation on val or test set."""
         self.evaluator_total.reset()
         self.evaluator_loc.reset()
         self.evaluator_clf.reset()
 
-        val_dataset = self._create_dataset(
-            dataset_path=self.args.val_dataset_path,
-            data_name_list=self.args.val_data_name_list,
+        if split == "val":
+            dataset_path = self.args.val_dataset_path
+            data_list = self.args.val_data_name_list
+            print("---------starting validation-----------")
+        else:
+            dataset_path = self.args.test_dataset_path
+            data_list = self.args.test_data_name_list
+            print("---------starting testing-----------")
+
+        eval_dataset = self._make_dataset(
+            dataset_path=dataset_path,
+            data_list=data_list,
             crop_size=1024,
             max_iters=None,
-            data_type='test'
+            split="test",
         )
-        val_data_loader = DataLoader(val_dataset, batch_size=self.args.eval_batch_size, num_workers=1, drop_last=False)
+        eval_loader = DataLoader(
+            eval_dataset, batch_size=self.args.eval_batch_size,
+            num_workers=1, drop_last=False
+        )
 
-        if self.device.type == 'cuda':
+        if self.device.type == "cuda":
             torch.cuda.empty_cache()
 
         with torch.no_grad():
-            for _, data in enumerate(val_data_loader):
-                input_data, labels_loc, labels_clf, _, _, guidance_mask = self._prepare_batch(data)
-                output_clf = self.deep_model(input_data)
+            for data in eval_loader:
+                input_data, sam_mask, labels_loc, labels_clf = self._prepare_batch(data)
+                logits = self._forward(input_data, sam_mask)
 
-                labels_loc = labels_loc.cpu().numpy()
-                output_clf = output_clf.data.cpu().numpy()
-                output_clf = np.argmax(output_clf, axis=1)
+                labels_loc_np = labels_loc.cpu().numpy()
+                labels_clf_np = labels_clf.cpu().numpy()
+                pred_clf = logits.data.cpu().numpy().argmax(axis=1)
 
-                if guidance_mask is not None:
-                    output_clf[~guidance_mask.cpu().numpy()] = 0
+                pred_loc = pred_clf.copy()
+                pred_loc[pred_loc > 0] = 1
 
-                labels_clf = labels_clf.cpu().numpy()
-                output_loc = output_clf.copy()
-                output_loc[output_loc > 0] = 1
+                self.evaluator_loc.add_batch(labels_loc_np, pred_loc)
+                self.evaluator_clf.add_batch(
+                    labels_clf_np[labels_loc_np > 0],
+                    pred_clf[labels_loc_np > 0],
+                )
+                self.evaluator_total.add_batch(labels_clf_np, pred_clf)
 
-                self.evaluator_loc.add_batch(labels_loc, output_loc)
-                output_clf_damage_part = output_clf[labels_loc > 0]
-                labels_clf_damage_part = labels_clf[labels_loc > 0]
-                self.evaluator_clf.add_batch(labels_clf_damage_part, output_clf_damage_part)
-                self.evaluator_total.add_batch(labels_clf, output_clf)
-
-        loc_f1_score = self.evaluator_loc.Pixel_F1_score()
-        damage_f1_score = self.evaluator_clf.Damage_F1_score()
-        harmonic_mean_f1 = self._safe_hmean(damage_f1_score)
-        final_OA = self.evaluator_total.Pixel_Accuracy()
-        IoU_of_each_class = self.evaluator_total.Intersection_over_Union()
+        loc_f1 = self.evaluator_loc.Pixel_F1_score()
+        damage_f1 = self.evaluator_clf.Damage_F1_score()
+        harmonic_f1 = _safe_hmean(damage_f1)
+        OA = self.evaluator_total.Pixel_Accuracy()
+        IoU_per_class = self.evaluator_total.Intersection_over_Union()
         mIoU = self.evaluator_total.Mean_Intersection_over_Union()
-        print(f'OA is {100 * final_OA}, mIoU is {100 * mIoU}, sub class IoU is {100 * IoU_of_each_class}')
-        return loc_f1_score, harmonic_mean_f1, final_OA, mIoU, IoU_of_each_class
 
-    def test(self):
-        print('---------starting testing-----------')
-        self.evaluator_total.reset()
-        self.evaluator_loc.reset()
-        self.evaluator_clf.reset()
+        tag = "VAL" if split == "val" else "TEST"
+        print(f"[{tag}] OA={100*OA:.4f}, mIoU={100*mIoU:.4f}, IoU={100*IoU_per_class}")
 
-        test_dataset = self._create_dataset(
-            dataset_path=self.args.test_dataset_path,
-            data_name_list=self.args.test_data_name_list,
-            crop_size=1024,
-            max_iters=None,
-            data_type='test'
-        )
-        test_data_loader = DataLoader(test_dataset, batch_size=self.args.eval_batch_size, num_workers=1, drop_last=False)
+        return {
+            "loc_f1": loc_f1,
+            "clf_f1": harmonic_f1,
+            "OA": OA,
+            "mIoU": mIoU,
+            "IoU_per_class": IoU_per_class,
+        }
 
-        if self.device.type == 'cuda':
-            torch.cuda.empty_cache()
+    def _save_checkpoint(self, step):
+        """Save backbone + refiner + DPCL state dict."""
+        state = {"backbone": self.backbone.state_dict(), "step": step}
+        if self.refiner is not None:
+            state["refiner"] = self.refiner.state_dict()
+        if self.dpcl is not None:
+            # Save the full DPCL state (projection head weights + prototype
+            # buffers + assignment counters), in case we want to inspect or
+            # resume contrastive training.
+            state["dpcl"] = self.dpcl.state_dict()
+        torch.save(state, os.path.join(self.model_save_path, "best_model.pth"))
 
-        with torch.no_grad():
-            for _, data in enumerate(test_data_loader):
-                input_data, labels_loc, labels_clf, _, _, guidance_mask = self._prepare_batch(data)
-                output_clf = self.deep_model(input_data)
 
-                labels_loc = labels_loc.cpu().numpy()
-                output_clf = output_clf.data.cpu().numpy()
-                output_clf = np.argmax(output_clf, axis=1)
+# ---------------------------------------------------------------------------
+# Utilities
+# ---------------------------------------------------------------------------
 
-                if guidance_mask is not None:
-                    output_clf[~guidance_mask.cpu().numpy()] = 0
+def _safe_hmean(scores, eps=1e-6):
+    scores = np.asarray(scores, dtype=np.float32)
+    scores = scores[np.isfinite(scores)]
+    if scores.size == 0:
+        return 0.0
+    scores = np.where(scores <= 0, eps, scores)
+    return len(scores) / np.sum(1.0 / scores)
 
-                labels_clf = labels_clf.cpu().numpy()
-                output_loc = output_clf.copy()
-                output_loc[output_loc > 0] = 1
 
-                self.evaluator_loc.add_batch(labels_loc, output_loc)
-                output_clf_damage_part = output_clf[labels_loc > 0]
-                labels_clf_damage_part = labels_clf[labels_loc > 0]
-                self.evaluator_clf.add_batch(labels_clf_damage_part, output_clf_damage_part)
-                self.evaluator_total.add_batch(labels_clf, output_clf)
-
-        loc_f1_score = self.evaluator_loc.Pixel_F1_score()
-        damage_f1_score = self.evaluator_clf.Damage_F1_score()
-        harmonic_mean_f1 = self._safe_hmean(damage_f1_score)
-        final_OA = self.evaluator_total.Pixel_Accuracy()
-        IoU_of_each_class = self.evaluator_total.Intersection_over_Union()
-        mIoU = self.evaluator_total.Mean_Intersection_over_Union()
-        print(f'OA is {100 * final_OA}, mIoU is {100 * mIoU}, sub class IoU is {100 * IoU_of_each_class}')
-        return loc_f1_score, harmonic_mean_f1, final_OA, mIoU, IoU_of_each_class
-
+# ---------------------------------------------------------------------------
+# CLI — defaults match the original BRIGHT paper code exactly
+# ---------------------------------------------------------------------------
 
 def main():
     parser = argparse.ArgumentParser(description="Training on BRIGHT dataset")
 
-    parser.add_argument('--dataset', type=str, default='BRIGHT')
-    parser.add_argument('--train_dataset_path', type=str)
-    parser.add_argument('--train_data_list_path', type=str)
-    parser.add_argument('--val_dataset_path', type=str)
-    parser.add_argument('--val_data_list_path', type=str)
-    parser.add_argument('--test_dataset_path', type=str)
-    parser.add_argument('--test_data_list_path', type=str)
+    # Data
+    parser.add_argument("--dataset", type=str, default="BRIGHT")
+    parser.add_argument("--train_dataset_path", type=str)
+    parser.add_argument("--train_data_list_path", type=str)
+    parser.add_argument("--val_dataset_path", type=str)
+    parser.add_argument("--val_data_list_path", type=str)
+    parser.add_argument("--test_dataset_path", type=str)
+    parser.add_argument("--test_data_list_path", type=str)
 
-    parser.add_argument('--train_batch_size', type=int, default=8)
-    parser.add_argument('--eval_batch_size', type=int, default=1)
-    parser.add_argument('--crop_size', type=int)
+    # Training — paper defaults
+    parser.add_argument("--train_batch_size", type=int, default=16)
+    parser.add_argument("--eval_batch_size", type=int, default=4)
+    parser.add_argument("--crop_size", type=int, default=640)
+    parser.add_argument("--num_workers", type=int, default=8)
+    parser.add_argument("--start_iter", type=int, default=0)
+    parser.add_argument("--max_iters", type=int, default=800000)
 
-    parser.add_argument('--train_data_name_list', type=list)
-    parser.add_argument('--val_data_name_list', type=list)
-    parser.add_argument('--test_data_name_list', type=list)
+    # Model
+    parser.add_argument("--model_type", type=str, default="UNet")
+    parser.add_argument("--model_param_path", type=str, default="./checkpoints")
+    parser.add_argument("--resume", type=str, default=None)
 
-    parser.add_argument('--start_iter', type=int, default=0)
-    parser.add_argument('--cuda', type=bool, default=True)
-    parser.add_argument('--max_iters', type=int, default=240000)
-    parser.add_argument('--model_type', type=str)
-    parser.add_argument('--model_param_path', type=str, default='/home/songjian/project/BRIGHT/dfc25_benchmark/saved_weights')
+    # Optimizer — paper defaults: lr=1e-4, wd=5e-3, constant LR
+    parser.add_argument("--learning_rate", type=float, default=1e-4)
+    parser.add_argument("--weight_decay", type=float, default=5e-3)
+    parser.add_argument("--lr_policy", type=str, default="constant",
+                        choices=["constant", "poly", "cosine"],
+                        help="LR schedule. Paper default: constant.")
+    parser.add_argument("--lr_power", type=float, default=0.9,
+                        help="Poly LR decay power (only for poly schedule).")
+    parser.add_argument("--warmup_iters", type=int, default=1000,
+                        help="Linear warmup steps (only for poly/cosine).")
 
-    parser.add_argument('--resume', type=str)
-    parser.add_argument('--learning_rate', type=float, default=1e-4)
-    parser.add_argument('--momentum', type=float, default=0.9)
-    parser.add_argument('--weight_decay', type=float, default=5e-3)
-    parser.add_argument('--num_workers', type=int)
+    # Loss
+    parser.add_argument("--class_weights", type=str, default=None,
+                        help="Comma-separated weights for 4 classes, e.g. 1,1,2,2")
 
-    parser.add_argument('--device', type=str, default='auto', choices=['auto', 'cuda', 'mps', 'cpu'],
-                        help='Training device. Use auto to prefer CUDA, then MPS, then CPU.')
-    parser.add_argument('--class_weights', type=str, default=None,
-                        help='Comma-separated weights for 4 classes, e.g. 1,1,2,2')
+    # SAM-Guided Refinement (SGR) — all opt-in
+    parser.add_argument("--sam_mask_dir", type=str, default=None,
+                        help="Directory of SAM building masks.")
+    parser.add_argument("--sam_mask_suffix", type=str, default=".png")
+    parser.add_argument("--sam_mask_threshold", type=int, default=127)
+    parser.add_argument("--use_sgr", action="store_true",
+                        help="Enable SAM-Guided Refinement module.")
+    parser.add_argument("--sgr_hidden_dim", type=int, default=32,
+                        help="Hidden channels in SGR refinement convs.")
+    parser.add_argument("--sgr_alpha_init", type=float, default=0.1,
+                        help="Initial residual scale in SGR.")
 
-    parser.add_argument('--sam_mask_dir', type=str, default=None,
-                        help='Directory of SAM building masks. File naming: <tile_id>_building_mask<sam_mask_suffix>.')
-    parser.add_argument('--sam_mask_suffix', type=str, default='.png',
-                        help='Suffix of SAM mask files.')
-    parser.add_argument('--sam_mask_threshold', type=int, default=127,
-                        help='Threshold for binarizing SAM masks.')
+    # Ordinal Damage Loss (ODL) — opt-in
+    parser.add_argument("--use_ordinal_loss", action="store_true",
+                        help="Enable ordinal damage loss (rank-BCE on damage levels).")
+    parser.add_argument("--ordinal_weight", type=float, default=0.15,
+                        help="Target weight for ordinal damage loss term.")
+    parser.add_argument("--ordinal_warmup_iters", type=int, default=0,
+                        help="Linear warmup iters for ODL weight. "
+                             "0 = no warmup (apply full weight from iter 0). "
+                             "N > 0: ODL is silent for first N iters, then ramps "
+                             "linearly to ordinal_weight over the next N iters.")
 
-    parser.add_argument('--sam_mode', type=str, default='soft', choices=['soft', 'hard', 'hybrid'],
-                        help='soft=feature-only guidance, hard=mask constraint, hybrid=area-based fallback.')
-    parser.add_argument('--hybrid_min_area_ratio', type=float, default=0.001,
-                        help='Hybrid lower bound of mask area ratio to apply hard mask.')
-    parser.add_argument('--hybrid_max_area_ratio', type=float, default=0.6,
-                        help='Hybrid upper bound of mask area ratio to apply hard mask.')
+    # Damage Prototype Contrastive Learning (DPCL) — opt-in
+    parser.add_argument("--use_dpcl", action="store_true",
+                        help="Enable Damage Prototype Contrastive Learning.")
+    parser.add_argument("--dpcl_weight", type=float, default=0.1,
+                        help="Target weight for DPCL loss term after warmup.")
+    parser.add_argument("--dpcl_num_prototypes", type=str, default="1,1,1",
+                        help="Number of prototypes per building class as "
+                             "'intact,damaged,destroyed'. SP-DPCL: '1,1,1'. "
+                             "MP-DPCL example: '1,3,2'.")
+    parser.add_argument("--dpcl_class_loss_weights", type=str, default="1.0,2.0,1.0",
+                        help="Per-class loss weight for DPCL InfoNCE, "
+                             "'intact,damaged,destroyed'. Damaged is upweighted "
+                             "by default to address its lowest IoU.")
+    parser.add_argument("--dpcl_feat_dim", type=int, default=256,
+                        help="Channel count of the hooked decoder feature. "
+                             "256 for dec3 in UNet/UNetCMCA at crop=640.")
+    parser.add_argument("--dpcl_proj_dim", type=int, default=128,
+                        help="Embedding dimension after DPCL projection head.")
+    parser.add_argument("--dpcl_samples_per_class", type=int, default=512,
+                        help="Max pixels sampled per class per batch.")
+    parser.add_argument("--dpcl_warmup_iters", type=int, default=3000,
+                        help="Iterations during which DPCL only updates "
+                             "prototypes; loss is masked out.")
+    parser.add_argument("--dpcl_ramp_iters", type=int, default=2000,
+                        help="Iterations of linear ramp from 0 to dpcl_weight "
+                             "after warmup completes.")
+    parser.add_argument("--dpcl_momentum", type=float, default=0.99,
+                        help="EMA momentum for prototype updates. "
+                             "Smaller -> faster adaptation. 0.99 recommended.")
+    parser.add_argument("--dpcl_temperature", type=float, default=0.1,
+                        help="Softmax temperature τ for InfoNCE.")
+    parser.add_argument("--dpcl_ortho_weight", type=float, default=0.0,
+                        help="Weight on orthogonality regulariser between "
+                             "sub-prototypes of the same class. Only relevant "
+                             "for MP-DPCL (K>1 for some class). 0.01 suggested.")
+
+    # Performance
+    parser.add_argument("--device", type=str, default="auto",
+                        choices=["auto", "cuda","cuda:0", "cuda:1", "mps", "cpu"])
+    parser.add_argument("--use_amp", action="store_true")
+    parser.add_argument("--amp_dtype", type=str, default="fp16",
+                        choices=["fp16", "bf16"])
+    parser.add_argument("--pin_memory", action="store_true")
+    parser.add_argument("--persistent_workers", action="store_true")
+    parser.add_argument("--prefetch_factor", type=int, default=2)
+
+    # Logging
+    parser.add_argument("--eval_interval", type=int, default=500)
+    parser.add_argument("--curve_log_interval", type=int, default=10)
+    parser.add_argument("--curve_save_interval", type=int, default=500)
+
+    # Internal (backward compat)
+    parser.add_argument("--train_data_name_list", type=list, default=None)
+    parser.add_argument("--val_data_name_list", type=list, default=None)
+    parser.add_argument("--test_data_name_list", type=list, default=None)
 
     args = parser.parse_args()
 
-    with open(args.train_data_list_path, "r") as f:
-        args.train_data_name_list = [data_name.strip() for data_name in f]
+    # Load split files
+    with open(args.train_data_list_path) as f:
+        args.train_data_name_list = [line.strip() for line in f]
+    with open(args.val_data_list_path) as f:
+        args.val_data_name_list = [line.strip() for line in f]
+    with open(args.test_data_list_path) as f:
+        args.test_data_name_list = [line.strip() for line in f]
 
-    with open(args.val_data_list_path, "r") as f:
-        args.val_data_name_list = [data_name.strip() for data_name in f]
-
-    with open(args.test_data_list_path, "r") as f:
-        args.test_data_name_list = [data_name.strip() for data_name in f]
+    if args.val_data_name_list == args.test_data_name_list:
+        print("[WARN] val and test lists are identical.")
 
     trainer = Trainer(args)
     trainer.training()

@@ -1,350 +1,313 @@
+"""
+Inference script for building damage assessment.
+
+Supports:
+    - Vanilla backbone (UNet, DeepLabV3+, etc.) — loads flat state_dict
+    - Backbone + SAM-Guided Refinement (SGR) — loads nested checkpoint
+    - Per-disaster-event and per-disaster-type metrics
+"""
+
 import os
 import sys
 import argparse
-import time
 
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 if PROJECT_ROOT not in sys.path:
     sys.path.append(PROJECT_ROOT)
 
 import numpy as np
-
-
 import torch
-import torch.nn.functional as F
-import torch.optim as optim
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-from dataset.make_data_loader import MultimodalDamageAssessmentDatset, MultimodalDamageAssessmentDatsetWithSAM
-from model.UNet import UNet
-from model.SiamCRNN import SiamCRNN
-from datetime import datetime
-
-from util_func.metrics import Evaluator
-import util_func.lovasz_loss as L
-
-
 from PIL import Image
 
+from dataset.make_data_loader import (
+    MultimodalDamageAssessmentDatset,
+    MultimodalDamageAssessmentDatsetWithSAM,
+)
+from model.UNet import UNet
+from util_func.metrics import Evaluator
+
+
+# ---------------------------------------------------------------------------
+# Build backbone (shared with train_UNet.py)
+# ---------------------------------------------------------------------------
+
+def build_backbone(model_type, in_channels, num_classes):
+    mt = model_type.lower()
+    if mt == "unet":
+        return UNet(in_channels=in_channels, num_classes=num_classes)
+    if mt == "unetwithfeatures":
+        # DPCL-friendly subclass of UNet. State dict is identical to UNet,
+        # so checkpoints are cross-compatible. At inference we just call
+        # backbone(x) (return_features=False is the default) and the
+        # forward path is byte-identical to vanilla UNet.
+        from model.UNetDPCL import UNetWithFeatures
+        return UNetWithFeatures(in_channels=in_channels, num_classes=num_classes)
+    if mt == "unetcmca":
+        from model.UNetCMCA import UNetCMCA
+        return UNetCMCA(in_channels=in_channels, num_classes=num_classes)
+    if mt in ("deeplabv3plus", "deeplabv3+"):
+        from model.DeepLabV3Plus import DeepLabV3Plus
+        return DeepLabV3Plus(in_channels=in_channels, num_classes=num_classes)
+    if mt == "siamattnunet":
+        from model.SiamAttnUNet import SiamAttnUNet
+        return SiamAttnUNet(in_channels=3, num_classes=num_classes)
+    if mt == "siamcrnn":
+        from model.SiamCRNN import SiamCRNN
+        return SiamCRNN()
+    raise ValueError(f"Unknown model_type: {model_type}")
+
+
+# ---------------------------------------------------------------------------
+# Inference class
+# ---------------------------------------------------------------------------
+
 class Inference:
+    DISASTER_EVENTS = [
+        "turkey-earthquake", "hawaii-wildfire", "morocco-earthquake",
+        "haiti-earthquake", "la_palma-volcano", "congo-volcano",
+        "beirut-explosion", "bata-explosion", "libya-flood",
+        "noto-earthquake", "marshall-wildfire", "ukraine-conflict",
+        "myanmar-hurricane", "mexico-hurricane",
+    ]
+    DISASTER_TYPES = [
+        "earthquake", "wildfire", "volcano", "explosion",
+        "flood", "conflict", "hurricane",
+    ]
+    COLOR_MAP = {
+        0: (255, 255, 255),   # Background - white
+        1: (70, 181, 121),    # Intact - green
+        2: (228, 189, 139),   # Damaged - yellow
+        3: (182, 70, 69),     # Destroyed - red
+    }
+
     def __init__(self, args):
         self.device = self._resolve_device(args.device)
-        print(f'Using device: {self.device}')
-        self.model_path = args.model_path
+        print(f"Using device: {self.device}")
+
         self.output_dir = args.output_dir
-        self.use_sam_mask = args.sam_mask_dir is not None and args.sam_mask_dir != ""
-        self.sam_mode = args.sam_mode.lower()
-        self.hybrid_min_area_ratio = args.hybrid_min_area_ratio
-        self.hybrid_max_area_ratio = args.hybrid_max_area_ratio
-        if self.sam_mode not in ['soft', 'hard', 'hybrid']:
-            raise ValueError(f'Unsupported sam_mode: {self.sam_mode}')
-        if self.sam_mode == 'hybrid' and self.hybrid_min_area_ratio >= self.hybrid_max_area_ratio:
-            raise ValueError('hybrid_min_area_ratio must be smaller than hybrid_max_area_ratio.')
-        if self.use_sam_mask:
-            print(f'SAM guidance enabled. mode={self.sam_mode}')
-        else:
-            print('SAM guidance disabled (no sam_mask_dir provided).')
-        # config = get_config(args)
-        num_classes = 4
-        # Load dataset
-        if self.use_sam_mask:
+        self.use_sam = bool(args.sam_mask_dir)
+
+        # ---- Dataset ----
+        if self.use_sam:
             dataset = MultimodalDamageAssessmentDatsetWithSAM(
                 dataset_path=args.test_dataset_path,
                 data_list=args.test_data_list,
                 crop_size=1024,
                 sam_mask_path=args.sam_mask_dir,
                 max_iters=None,
-                type='test',
-                suffix='.tif',
+                type="test",
+                suffix=".tif",
                 sam_mask_suffix=args.sam_mask_suffix,
-                sam_mask_threshold=args.sam_mask_threshold
+                sam_mask_threshold=args.sam_mask_threshold,
             )
         else:
-            dataset = MultimodalDamageAssessmentDatset(args.test_dataset_path, args.test_data_list, 1024, None, 'test', suffix='.tif')
+            dataset = MultimodalDamageAssessmentDatset(
+                args.test_dataset_path, args.test_data_list,
+                1024, None, "test", suffix=".tif",
+            )
         self.test_loader = DataLoader(dataset, batch_size=1, num_workers=1, drop_last=False)
-        
-        # Load model
-        in_channels = 7 if self.use_sam_mask else 6
-        self.model = UNet(in_channels=in_channels, num_classes=num_classes)
-        # self.model = torch.nn.DataParallel(self.model)
-        self.model.load_state_dict(torch.load(self.model_path, map_location=self.device))
-        self.model = self.model.to(self.device)
-        self.model.eval()
-        self.color_map = {
-            0: (255, 255, 255),       # No damage - black
-            1: (70, 181, 121),     # Minor damage - green
-            2: (228, 189, 139),   # Major damage - yellow
-            3: (182, 70, 69)      # Destroyed - red
-        }
-        # Overall evaluator
-        self.evaluator = Evaluator(num_class=num_classes)
-        self.single_evaluator = Evaluator(num_class=num_classes)
-        self.evaluator_clf = Evaluator(num_class=num_classes)
 
-        # Disaster-type-specific evaluators
-        self.disaster_type_evaluator_dict = {event: Evaluator(num_class=num_classes) for event in self.get_disaster_types()}
-        self.disaster_event_evaluator_dict = {event: Evaluator(num_class=num_classes) for event in self.get_disaster_events()}
+        # ---- Build backbone ----
+        self.backbone = build_backbone(args.model_type, in_channels=6, num_classes=4)
 
-        if not os.path.exists(self.output_dir):
-            os.makedirs(self.output_dir)
-        
-        if not os.path.exists(os.path.join(self.output_dir, 'original')):
-            os.makedirs(os.path.join(self.output_dir, 'original'))
-        
-        if not os.path.exists(os.path.join(self.output_dir, 'colored')):
-            os.makedirs(os.path.join(self.output_dir, 'colored'))
+        # ---- Build SGR refiner (optional) ----
+        self.refiner = None
+        if self.use_sam and args.use_sgr:
+            from model.SAMGuidedRefinement import SAMGuidedRefinement
+            self.refiner = SAMGuidedRefinement(
+                num_classes=4,
+                hidden_dim=args.sgr_hidden_dim,
+                alpha_init=0.1,
+            )
+
+        # ---- Load checkpoint ----
+        ckpt = torch.load(args.model_path, map_location=self.device)
+
+        if "backbone" in ckpt:
+            # New-style nested checkpoint
+            self.backbone.load_state_dict(ckpt["backbone"], strict=True)
+            if self.refiner is not None and "refiner" in ckpt:
+                self.refiner.load_state_dict(ckpt["refiner"], strict=True)
+            print(f"Loaded nested checkpoint (step={ckpt.get('step', '?')})")
+        else:
+            # Legacy flat state_dict
+            self.backbone.load_state_dict(ckpt, strict=True)
+            print("Loaded legacy flat checkpoint")
+
+        self.backbone = self.backbone.to(self.device).eval()
+        if self.refiner is not None:
+            self.refiner = self.refiner.to(self.device).eval()
+
+        # ---- Evaluators ----
+        self.evaluator = Evaluator(num_class=4)
+        self.evaluator_clf = Evaluator(num_class=4)
+        self.single_evaluator = Evaluator(num_class=4)
+        self.disaster_type_evals = {t: Evaluator(num_class=4) for t in self.DISASTER_TYPES}
+        self.disaster_event_evals = {e: Evaluator(num_class=4) for e in self.DISASTER_EVENTS}
+
+        # Output dirs
+        os.makedirs(os.path.join(self.output_dir, "original"), exist_ok=True)
+        os.makedirs(os.path.join(self.output_dir, "colored"), exist_ok=True)
 
     @staticmethod
     def _resolve_device(device_arg):
-        if device_arg == 'auto':
+        if device_arg == "auto":
             if torch.cuda.is_available():
-                return torch.device('cuda')
-            if hasattr(torch.backends, 'mps') and torch.backends.mps.is_available():
-                return torch.device('mps')
-            return torch.device('cpu')
+                return torch.device("cuda")
+            if hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+                return torch.device("mps")
+            return torch.device("cpu")
+        return torch.device(device_arg)
 
-        if device_arg == 'cuda':
-            if not torch.cuda.is_available():
-                raise RuntimeError('CUDA is not available on this machine.')
-            return torch.device('cuda')
-
-        if device_arg == 'mps':
-            if not (hasattr(torch.backends, 'mps') and torch.backends.mps.is_available()):
-                raise RuntimeError('MPS is not available on this machine.')
-            return torch.device('mps')
-
-        return torch.device('cpu')
-
-    @staticmethod
-    def _safe_hmean(scores, eps=1e-6):
-        scores = np.asarray(scores, dtype=np.float32)
-        scores = scores[np.isfinite(scores)]
-        if scores.size == 0:
-            return 0.0
-        scores = np.where(scores <= 0, eps, scores)
-        return len(scores) / np.sum(1.0 / scores)
-
-    def _resolve_guidance_mask(self, sam_mask):
-        if sam_mask is None:
-            return None
-
-        binary_mask = sam_mask.squeeze(1) >= 0.5
-        if self.sam_mode == 'soft':
-            return None
-        if self.sam_mode == 'hard':
-            return binary_mask
-
-        # Hybrid: use hard mask only for samples whose mask area is within a normal range.
-        area_ratio = binary_mask.float().mean(dim=(1, 2))
-        use_hard = (area_ratio >= self.hybrid_min_area_ratio) & (area_ratio <= self.hybrid_max_area_ratio)
-        if torch.all(use_hard):
-            return binary_mask
-
-        effective_mask = torch.ones_like(binary_mask, dtype=torch.bool)
-        effective_mask[use_hard] = binary_mask[use_hard]
-        return effective_mask
-
-    def get_disaster_events(self):
-        """Returns a list of disaster events based on filename prefixes."""
-        return [
-            "turkey-earthquake", "hawaii-wildfire", "morocco-earthquake",
-            "haiti-earthquake", "la_palma-volcano", "congo-volcano",
-            "beirut-explosion", "bata-explosion", "libya-flood", 
-            "noto-earthquake", "marshall-wildfire", "ukraine-conflict", "myanmar-hurricane", "mexico-hurricane"
-        ]
-    
-    def get_disaster_types(self):
-        """Returns a list of disaster events based on filename prefixes."""
-        return [
-            "earthquake", "wildfire", "volcano", "explosion", "flood", 
-            "conflict", "hurricane"
-        ]
-
-    def apply_tta_inference(self, model, pre_change_imgs, post_change_imgs):
-        """
-        Performs test-time augmentations (TTA) on the input images and
-        fuses the resulting logits. Returns fused logits for damage classification.
-        
-        Args:
-            model (nn.Module): your model in eval mode
-            pre_change_imgs (Tensor): shape [B, C, H, W]
-            post_change_imgs (Tensor): shape [B, C, H, W]
-        
-        Returns:
-            Tensor: fused logits with shape [B, num_damage_classes, H, W]
-        """
-        # Collect logits from each transform
-        logits_collection = []
-        
-        # 1) No transform
-        output_clf = model(torch.cat([pre_change_imgs, post_change_imgs], dim=1))  # output_clf is [B, num_damage_classes, H, W]
-        logits_collection.append(output_clf)
-
-        # 2) Horizontal flip
-        output_clf_hf = model(torch.cat([pre_change_imgs.flip(dims=[3]), post_change_imgs.flip(dims=[3])], dim=1))
-        # Unflip the output back
-        output_clf_hf = output_clf_hf.flip(dims=[3])
-        logits_collection.append(output_clf_hf)
-
-        # 3) Vertical flip
-        output_clf_vf = model(torch.cat([pre_change_imgs.flip(dims=[2]), post_change_imgs.flip(dims=[2])], dim=1))
-        # Unflip the output
-        output_clf_vf = output_clf_vf.flip(dims=[2])
-        logits_collection.append(output_clf_vf)
-
-        # 4) 90-degree rotation
-        pre_90 = torch.rot90(pre_change_imgs, 1, dims=(2, 3))
-        post_90 = torch.rot90(post_change_imgs, 1, dims=(2, 3))
-        output_clf_90 = model(torch.cat([pre_90, post_90], dim=1))
-        output_clf_90 = torch.rot90(output_clf_90, 3, dims=(2, 3))
-        logits_collection.append(output_clf_90)
-
-        # 5) 180-degree rotation
-        pre_180 = torch.rot90(pre_change_imgs, 2, dims=(2, 3))
-        post_180 = torch.rot90(post_change_imgs, 2, dims=(2, 3))
-        output_clf_180 = model(torch.cat([pre_180, post_180], dim=1))
-        output_clf_180 = torch.rot90(output_clf_180, 2, dims=(2, 3))
-        logits_collection.append(output_clf_180)
-
-        # 6) 270-degree rotation
-        pre_270 = torch.rot90(pre_change_imgs, 3, dims=(2, 3))
-        post_270 = torch.rot90(post_change_imgs, 3, dims=(2, 3))
-        output_clf_270 = model(torch.cat([pre_270, post_270], dim=1))
-        output_clf_270 = torch.rot90(output_clf_270, 1, dims=(2, 3))
-        logits_collection.append(output_clf_270)
-
-        fused_logits = torch.mean(torch.stack(logits_collection, dim=0), dim=0)
-        return fused_logits
+    def _forward(self, input_data, sam_mask):
+        logits = self.backbone(input_data)
+        if self.refiner is not None and sam_mask is not None:
+            logits = self.refiner(logits, sam_mask)
+        return logits
 
     def run_inference(self):
-        print('Starting inference...')
+        print("Starting inference...")
         self.evaluator.reset()
-        
+        self.evaluator_clf.reset()
+
         with torch.no_grad():
-            for i, data in enumerate(tqdm(self.test_loader)):
+            for data in tqdm(self.test_loader):
                 self.single_evaluator.reset()
-                if self.use_sam_mask:
-                    pre_change_imgs, post_change_imgs, sam_mask, labels_loc, labels_clf, file_name = data
+
+                if self.use_sam:
+                    pre, post, sam_mask, labels_loc, labels_clf, file_name = data
                     sam_mask = sam_mask.to(self.device).float()
                 else:
-                    pre_change_imgs, post_change_imgs, labels_loc, labels_clf, file_name = data
+                    pre, post, labels_loc, labels_clf, file_name = data
                     sam_mask = None
-                guidance_mask = self._resolve_guidance_mask(sam_mask)
 
-                pre_change_imgs = pre_change_imgs.to(self.device)
-                post_change_imgs = post_change_imgs.to(self.device)
+                pre = pre.to(self.device)
+                post = post.to(self.device)
                 file_name = file_name[0]
-                
-                if sam_mask is not None:
-                    input_data = torch.cat([pre_change_imgs, post_change_imgs, sam_mask], dim=1)
-                else:
-                    input_data = torch.cat([pre_change_imgs, post_change_imgs], dim=1)
-                output_clf = self.model(input_data)
 
-                output = torch.argmax(output_clf, dim=1).cpu().numpy().astype(np.uint8)
-                if guidance_mask is not None:
-                    output[~guidance_mask.cpu().numpy()] = 0
+                input_data = torch.cat([pre, post], dim=1)
+                logits = self._forward(input_data, sam_mask)
+
+                output = torch.argmax(logits, dim=1).cpu().numpy().astype(np.uint8)
                 output = output.squeeze(0)
 
                 self.save_colored_map(output, file_name)
                 self.save_original_map(output, file_name)
 
-                labels_clf = labels_clf.squeeze().cpu().numpy()
-                labels_loc = labels_loc.squeeze().cpu().numpy()
+                labels_clf_np = labels_clf.squeeze().cpu().numpy()
+                labels_loc_np = labels_loc.squeeze().cpu().numpy()
 
-                damage_mask = labels_loc > 0
+                # Per-building damage evaluation
+                damage_mask = labels_loc_np > 0
                 if damage_mask.any():
-                    output_clf_damage_part = output[damage_mask]
-                    labels_clf_damage_part = labels_clf[damage_mask]
-                    self.evaluator_clf.add_batch(labels_clf_damage_part, output_clf_damage_part)
+                    self.evaluator_clf.add_batch(
+                        labels_clf_np[damage_mask], output[damage_mask]
+                    )
 
-                self.evaluator.add_batch(labels_clf, output)
-                self.single_evaluator.add_batch(labels_clf, output)
-                print(f'{file_name}: {self.single_evaluator.Mean_Intersection_over_Union()}')
+                self.evaluator.add_batch(labels_clf_np, output)
+                self.single_evaluator.add_batch(labels_clf_np, output)
 
-                for disaster_type in self.disaster_type_evaluator_dict.keys():
-                    if disaster_type in file_name:
-                        self.disaster_type_evaluator_dict[disaster_type].add_batch(labels_clf, output)
+                for dtype in self.DISASTER_TYPES:
+                    if dtype in file_name:
+                        self.disaster_type_evals[dtype].add_batch(labels_clf_np, output)
                         break
-                
-                for event in self.disaster_event_evaluator_dict.keys():
+
+                for event in self.DISASTER_EVENTS:
                     if event in file_name:
-                        self.disaster_event_evaluator_dict[event].add_batch(labels_clf, output)
+                        self.disaster_event_evals[event].add_batch(labels_clf_np, output)
                         break
 
-        self.compute_and_print_overall_metrics()
-        self.compute_and_print_disaster_event_metrics()
-        self.compute_and_print_disaster_type_metrics()
+        self._print_overall_metrics()
+        self._print_event_metrics()
+        self._print_type_metrics()
 
     def save_original_map(self, prediction, file_name):
-        output_path = os.path.join(self.output_dir, 'original', file_name + '_building_damage.png')
-        Image.fromarray(prediction).save(output_path)
+        path = os.path.join(self.output_dir, "original", file_name + "_building_damage.png")
+        Image.fromarray(prediction).save(path)
 
     def save_colored_map(self, prediction, file_name):
-        color_map_img = np.zeros((prediction.shape[0], prediction.shape[1], 3), dtype=np.uint8)
-        for cls, color in self.color_map.items():
-            color_map_img[prediction == cls] = color
-        output_path = os.path.join(self.output_dir, 'colored', file_name + '_building_damage.png')
-        Image.fromarray(color_map_img).save(output_path)
+        color_img = np.zeros((*prediction.shape, 3), dtype=np.uint8)
+        for cls, color in self.COLOR_MAP.items():
+            color_img[prediction == cls] = color
+        path = os.path.join(self.output_dir, "colored", file_name + "_building_damage.png")
+        Image.fromarray(color_img).save(path)
 
-    def compute_and_print_overall_metrics(self):
-        pixel_accuracy = self.evaluator.Pixel_Accuracy()
-        mean_iou = self.evaluator.Mean_Intersection_over_Union()
-        
-        print("\nOverall Metrics:")
-        print(f'Pixel Accuracy: {pixel_accuracy * 100:.2f}%')
-        print(f'Mean IoU: {mean_iou * 100:.2f}%')
-        print(f'IoU: {self.evaluator.Intersection_over_Union()}')
-        damage_f1_score = self.evaluator_clf.Damage_F1_score()
-        harmonic_mean_f1 = self._safe_hmean(damage_f1_score) * 100
-        print(f'F1 Score: {harmonic_mean_f1:.2f}%')
+    def _print_overall_metrics(self):
+        OA = self.evaluator.Pixel_Accuracy()
+        mIoU = self.evaluator.Mean_Intersection_over_Union()
+        IoU = self.evaluator.Intersection_over_Union()
+        damage_f1 = self.evaluator_clf.Damage_F1_score()
+        hmean_f1 = _safe_hmean(damage_f1) * 100
 
-    def compute_and_print_disaster_type_metrics(self):
-        print("\nPer-Disaster Type mIoU:")
-        average_mIoU = 0
-        for disaster_type, evaluator in self.disaster_type_evaluator_dict.items():
-            mean_iou = evaluator.Mean_Intersection_over_Union()
-            iou_per_class = evaluator.Intersection_over_Union()
-            average_mIoU += mean_iou
-            print(f"{disaster_type}: mIoU = {mean_iou * 100:.2f}%, IoU = {iou_per_class * 100}")
-        print(f"Average mIoU = {average_mIoU / 7 * 100:.2f}%")
-    
-    def compute_and_print_disaster_event_metrics(self):
-        print("\nPer-Event Type mIoU:")
-        average_mIoU = 0
-        for event, evaluator in self.disaster_event_evaluator_dict.items():
-            mean_iou = evaluator.Mean_Intersection_over_Union()
-            iou_per_class = evaluator.Intersection_over_Union()
-            average_mIoU += mean_iou
-            print(f"{event}: mIoU = {mean_iou * 100:.2f}%, IoU = {iou_per_class * 100}")
-        print(f"Average mIoU = {average_mIoU / 14 * 100:.2f}%")
+        print("\n=== Overall Metrics ===")
+        print(f"Pixel Accuracy: {OA*100:.2f}%")
+        print(f"Mean IoU: {mIoU*100:.2f}%")
+        print(f"IoU per class: {IoU*100}")
+        print(f"F1 Score (damage): {hmean_f1:.2f}%")
+
+    def _print_event_metrics(self):
+        print("\n=== Per-Event Metrics ===")
+        total = 0.0
+        for event, ev in self.disaster_event_evals.items():
+            miou = ev.Mean_Intersection_over_Union()
+            iou = ev.Intersection_over_Union()
+            total += miou
+            print(f"{event}: mIoU={miou*100:.2f}%, IoU={iou*100}")
+        print(f"Average mIoU={total/len(self.DISASTER_EVENTS)*100:.2f}%")
+
+    def _print_type_metrics(self):
+        print("\n=== Per-Disaster-Type Metrics ===")
+        total = 0.0
+        for dtype, ev in self.disaster_type_evals.items():
+            miou = ev.Mean_Intersection_over_Union()
+            iou = ev.Intersection_over_Union()
+            total += miou
+            print(f"{dtype}: mIoU={miou*100:.2f}%, IoU={iou*100}")
+        print(f"Average mIoU={total/len(self.DISASTER_TYPES)*100:.2f}%")
+
+
+def _safe_hmean(scores, eps=1e-6):
+    scores = np.asarray(scores, dtype=np.float32)
+    scores = scores[np.isfinite(scores)]
+    if scores.size == 0:
+        return 0.0
+    scores = np.where(scores <= 0, eps, scores)
+    return len(scores) / np.sum(1.0 / scores)
+
+
+# ---------------------------------------------------------------------------
+# CLI
+# ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Inference on BRIGHT")
-    parser.add_argument('--model_path', type=str, default='BRIGHT')
-    parser.add_argument('--test_dataset_path', type=str)
-    parser.add_argument('--test_data_list_path', type=str)
-    parser.add_argument('--output_dir', type=str)
-    parser.add_argument('--device', type=str, default='auto', choices=['auto', 'cuda', 'mps', 'cpu'],
-                        help='Inference device. Use auto to prefer CUDA, then MPS, then CPU.')
-    parser.add_argument('--sam_mask_dir', type=str, default=None,
-                        help='Directory of SAM building masks. File naming: <tile_id>_building_mask<sam_mask_suffix>.')
-    parser.add_argument('--sam_mask_suffix', type=str, default='.png',
-                        help='Suffix of SAM mask files.')
-    parser.add_argument('--sam_mask_threshold', type=int, default=127,
-                        help='Threshold for binarizing SAM masks.')
-    parser.add_argument('--sam_mode', type=str, default='hard', choices=['soft', 'hard', 'hybrid'],
-                        help='How SAM masks are used: soft=as feature only, hard=mask constraint, hybrid=auto fallback by area.')
-    parser.add_argument('--hybrid_min_area_ratio', type=float, default=0.001,
-                        help='Hybrid lower bound of mask area ratio to apply hard mask.')
-    parser.add_argument('--hybrid_max_area_ratio', type=float, default=0.6,
-                        help='Hybrid upper bound of mask area ratio to apply hard mask.')
+
+    parser.add_argument("--model_path", type=str, required=True)
+    parser.add_argument("--model_type", type=str, default="UNet")
+    parser.add_argument("--test_dataset_path", type=str, required=True)
+    parser.add_argument("--test_data_list_path", type=str, required=True)
+    parser.add_argument("--output_dir", type=str, required=True)
+    parser.add_argument(
+        "--device",
+        type=str,
+        default="auto",
+        help="Device to use: auto, cuda, cuda:0, cuda:1, mps, or cpu",
+    )
+
+    # SAM-Guided Refinement
+    parser.add_argument("--sam_mask_dir", type=str, default=None)
+    parser.add_argument("--sam_mask_suffix", type=str, default=".png")
+    parser.add_argument("--sam_mask_threshold", type=int, default=127)
+    parser.add_argument("--use_sgr", action="store_true",
+                        help="Enable SAM-Guided Refinement module.")
+    parser.add_argument("--sgr_hidden_dim", type=int, default=32)
 
     args = parser.parse_args()
-    
-    with open(args.test_data_list_path, "r") as f:
-        test_data_list = [data_name.strip() for data_name in f]
-    args.test_data_list = test_data_list
+
+    with open(args.test_data_list_path) as f:
+        args.test_data_list = [line.strip() for line in f]
 
     inference = Inference(args)
     inference.run_inference()

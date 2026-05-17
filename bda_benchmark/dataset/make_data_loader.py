@@ -4,8 +4,9 @@ import random
 
 import imageio
 import numpy as np
+from scipy.ndimage import gaussian_filter
 from torch.utils.data import Dataset
-# import cv2 
+import cv2
 import dataset.imutils as imutils
 import matplotlib.pyplot as plt
 from torch.utils import data
@@ -228,7 +229,29 @@ class MultimodalDamageAssessmentDatsetWithSAM(Dataset):
         post_img = imutils.normalize_img(post_img)
         post_img = np.transpose(post_img, (2, 0, 1))
 
-        sam_mask = (sam_mask > self.sam_mask_threshold).astype(np.float32)
+        # Soft mask processing: instead of hard {0,1} binarization, produce a
+        # [0,1] confidence map with smooth boundaries.  This gives the SGR module
+        # gradient information at mask edges so it can learn to discount uncertain
+        # regions rather than treating every SAM pixel with equal certainty.
+        #
+        # Pipeline:
+        #   1. Normalize raw pixel values to [0, 1]
+        #   2. Binarize at threshold to get the core mask
+        #   3. Compute a signed distance transform from the boundary
+        #   4. Apply a sigmoid to the distance → smooth [0, 1] transition
+        #      (sigma controls transition width; 3px ≈ ~6px soft band)
+        sam_binary = (sam_mask > self.sam_mask_threshold).astype(np.uint8)
+
+        # Distance transform: positive inside, negative outside
+        dist_inside = cv2.distanceTransform(sam_binary, cv2.DIST_L2, 5)
+        dist_outside = cv2.distanceTransform(1 - sam_binary, cv2.DIST_L2, 5)
+        signed_dist = dist_inside - dist_outside
+
+        # Sigmoid softening (sigma=3 → ~6px transition band)
+        sigma = 3.0
+        sam_mask = 1.0 / (1.0 + np.exp(-signed_dist / sigma))
+        sam_mask = sam_mask.astype(np.float32)
+
         sam_mask = np.expand_dims(sam_mask, axis=0)
         return pre_img, post_img, label, sam_mask
 
