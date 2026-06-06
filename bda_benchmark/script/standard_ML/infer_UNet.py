@@ -3,7 +3,6 @@ Inference script for building damage assessment.
 
 Supports:
     - Vanilla backbone (UNet, DeepLabV3+, etc.) — loads flat state_dict
-    - Backbone + SAM-Guided Refinement (SGR) — loads nested checkpoint
     - Per-disaster-event and per-disaster-type metrics
 """
 
@@ -23,7 +22,6 @@ from PIL import Image
 
 from dataset.make_data_loader import (
     MultimodalDamageAssessmentDatset,
-    MultimodalDamageAssessmentDatsetWithSAM,
 )
 from model.UNet import UNet
 from util_func.metrics import Evaluator
@@ -87,40 +85,16 @@ class Inference:
         print(f"Using device: {self.device}")
 
         self.output_dir = args.output_dir
-        self.use_sam = bool(args.sam_mask_dir)
 
         # ---- Dataset ----
-        if self.use_sam:
-            dataset = MultimodalDamageAssessmentDatsetWithSAM(
-                dataset_path=args.test_dataset_path,
-                data_list=args.test_data_list,
-                crop_size=1024,
-                sam_mask_path=args.sam_mask_dir,
-                max_iters=None,
-                type="test",
-                suffix=".tif",
-                sam_mask_suffix=args.sam_mask_suffix,
-                sam_mask_threshold=args.sam_mask_threshold,
-            )
-        else:
-            dataset = MultimodalDamageAssessmentDatset(
-                args.test_dataset_path, args.test_data_list,
-                1024, None, "test", suffix=".tif",
-            )
+        dataset = MultimodalDamageAssessmentDatset(
+            args.test_dataset_path, args.test_data_list,
+            1024, None, "test", suffix=".tif",
+        )
         self.test_loader = DataLoader(dataset, batch_size=1, num_workers=1, drop_last=False)
 
         # ---- Build backbone ----
         self.backbone = build_backbone(args.model_type, in_channels=6, num_classes=4)
-
-        # ---- Build SGR refiner (optional) ----
-        self.refiner = None
-        if self.use_sam and args.use_sgr:
-            from model.SAMGuidedRefinement import SAMGuidedRefinement
-            self.refiner = SAMGuidedRefinement(
-                num_classes=4,
-                hidden_dim=args.sgr_hidden_dim,
-                alpha_init=0.1,
-            )
 
         # ---- Load checkpoint ----
         ckpt = torch.load(args.model_path, map_location=self.device)
@@ -128,8 +102,6 @@ class Inference:
         if "backbone" in ckpt:
             # New-style nested checkpoint
             self.backbone.load_state_dict(ckpt["backbone"], strict=True)
-            if self.refiner is not None and "refiner" in ckpt:
-                self.refiner.load_state_dict(ckpt["refiner"], strict=True)
             print(f"Loaded nested checkpoint (step={ckpt.get('step', '?')})")
         else:
             # Legacy flat state_dict
@@ -137,11 +109,10 @@ class Inference:
             print("Loaded legacy flat checkpoint")
 
         self.backbone = self.backbone.to(self.device).eval()
-        if self.refiner is not None:
-            self.refiner = self.refiner.to(self.device).eval()
 
         # ---- Evaluators ----
         self.evaluator = Evaluator(num_class=4)
+        self.evaluator_loc = Evaluator(num_class=2)
         self.evaluator_clf = Evaluator(num_class=4)
         self.single_evaluator = Evaluator(num_class=4)
         self.disaster_type_evals = {t: Evaluator(num_class=4) for t in self.DISASTER_TYPES}
@@ -161,34 +132,27 @@ class Inference:
             return torch.device("cpu")
         return torch.device(device_arg)
 
-    def _forward(self, input_data, sam_mask):
-        logits = self.backbone(input_data)
-        if self.refiner is not None and sam_mask is not None:
-            logits = self.refiner(logits, sam_mask)
-        return logits
+    def _forward(self, input_data):
+        return self.backbone(input_data)
 
     def run_inference(self):
         print("Starting inference...")
         self.evaluator.reset()
+        self.evaluator_loc.reset()
         self.evaluator_clf.reset()
 
         with torch.no_grad():
             for data in tqdm(self.test_loader):
                 self.single_evaluator.reset()
 
-                if self.use_sam:
-                    pre, post, sam_mask, labels_loc, labels_clf, file_name = data
-                    sam_mask = sam_mask.to(self.device).float()
-                else:
-                    pre, post, labels_loc, labels_clf, file_name = data
-                    sam_mask = None
+                pre, post, labels_loc, labels_clf, file_name = data
 
                 pre = pre.to(self.device)
                 post = post.to(self.device)
                 file_name = file_name[0]
 
                 input_data = torch.cat([pre, post], dim=1)
-                logits = self._forward(input_data, sam_mask)
+                logits = self._forward(input_data)
 
                 output = torch.argmax(logits, dim=1).cpu().numpy().astype(np.uint8)
                 output = output.squeeze(0)
@@ -198,6 +162,11 @@ class Inference:
 
                 labels_clf_np = labels_clf.squeeze().cpu().numpy()
                 labels_loc_np = labels_loc.squeeze().cpu().numpy()
+
+                # Localization F1 (binary: building vs background)
+                output_loc = output.copy()
+                output_loc[output_loc > 0] = 1
+                self.evaluator_loc.add_batch(labels_loc_np, output_loc)
 
                 # Per-building damage evaluation
                 damage_mask = labels_loc_np > 0
@@ -238,6 +207,7 @@ class Inference:
         OA = self.evaluator.Pixel_Accuracy()
         mIoU = self.evaluator.Mean_Intersection_over_Union()
         IoU = self.evaluator.Intersection_over_Union()
+        loc_f1 = self.evaluator_loc.Pixel_F1_score() * 100
         damage_f1 = self.evaluator_clf.Damage_F1_score()
         hmean_f1 = _safe_hmean(damage_f1) * 100
 
@@ -245,7 +215,8 @@ class Inference:
         print(f"Pixel Accuracy: {OA*100:.2f}%")
         print(f"Mean IoU: {mIoU*100:.2f}%")
         print(f"IoU per class: {IoU*100}")
-        print(f"F1 Score (damage): {hmean_f1:.2f}%")
+        print(f"F1 Score (loc): {loc_f1:.2f}%")
+        print(f"F1 Score (clf): {hmean_f1:.2f}%")
 
     def _print_event_metrics(self):
         print("\n=== Per-Event Metrics ===")
@@ -295,14 +266,6 @@ if __name__ == "__main__":
         default="auto",
         help="Device to use: auto, cuda, cuda:0, cuda:1, mps, or cpu",
     )
-
-    # SAM-Guided Refinement
-    parser.add_argument("--sam_mask_dir", type=str, default=None)
-    parser.add_argument("--sam_mask_suffix", type=str, default=".png")
-    parser.add_argument("--sam_mask_threshold", type=int, default=127)
-    parser.add_argument("--use_sgr", action="store_true",
-                        help="Enable SAM-Guided Refinement module.")
-    parser.add_argument("--sgr_hidden_dim", type=int, default=32)
 
     args = parser.parse_args()
 

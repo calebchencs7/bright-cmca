@@ -1,6 +1,12 @@
 import csv
 import os
+import tempfile
 from typing import Dict, List
+
+os.environ.setdefault("MPLCONFIGDIR", os.path.join(tempfile.gettempdir(), "matplotlib"))
+os.environ.setdefault("XDG_CACHE_HOME", os.path.join(tempfile.gettempdir(), "xdg-cache"))
+os.makedirs(os.environ["MPLCONFIGDIR"], exist_ok=True)
+os.makedirs(os.environ["XDG_CACHE_HOME"], exist_ok=True)
 
 import matplotlib
 
@@ -17,13 +23,25 @@ class TrainingCurveRecorder:
     def add_train_loss(self, iteration: int, loss: float) -> None:
         self.loss_history.append({"iter": int(iteration), "loss": float(loss)})
 
-    def add_eval_metrics(self, iteration: int, split: str, oa: float, miou: float) -> None:
+    def add_eval_metrics(
+        self,
+        iteration: int,
+        split: str,
+        oa: float,
+        miou: float,
+        event_miou_std: float = None,
+        event_miou_min: float = None,
+        event_miou_p25: float = None,
+    ) -> None:
         self.metric_history.append(
             {
                 "iter": int(iteration),
                 "split": split,
                 "oa": float(oa),
                 "miou": float(miou),
+                "event_miou_std": "" if event_miou_std is None else float(event_miou_std),
+                "event_miou_min": "" if event_miou_min is None else float(event_miou_min),
+                "event_miou_p25": "" if event_miou_p25 is None else float(event_miou_p25),
             }
         )
 
@@ -44,7 +62,18 @@ class TrainingCurveRecorder:
 
         metric_csv = os.path.join(self.save_dir, "eval_metric_curve.csv")
         with open(metric_csv, "w", newline="") as f:
-            writer = csv.DictWriter(f, fieldnames=["iter", "split", "oa", "miou"])
+            writer = csv.DictWriter(
+                f,
+                fieldnames=[
+                    "iter",
+                    "split",
+                    "oa",
+                    "miou",
+                    "event_miou_std",
+                    "event_miou_min",
+                    "event_miou_p25",
+                ],
+            )
             writer.writeheader()
             writer.writerows(self.metric_history)
 

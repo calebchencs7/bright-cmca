@@ -1,11 +1,10 @@
 """
 Unified training script for building damage assessment.
 
-Fully backward-compatible with the BRIGHT paper's original training procedure.
-Default hyper-parameters reproduce the paper baselines exactly.
+Default hyper-parameters reproduce the BRIGHT paper baselines exactly.
 
 Extensions (all opt-in, zero impact on baseline when unused):
-    - SAM-Guided Refinement (SGR): a pluggable post-processing module
+    - DACutMix: event-aware, damage-aware CutMix across disaster events
     - Ordinal Damage Loss (ODL): exploits ordinal structure of damage levels
     - Damage Prototype Contrastive Learning (DPCL): organises pixel features
         into class-discriminative clusters via prototype InfoNCE on a 128-d
@@ -16,12 +15,10 @@ Extensions (all opt-in, zero impact on baseline when unused):
     - AMP mixed precision on CUDA
     - Class-weighted CE loss
 
-Architecture when SGR is enabled:
-    backbone(input) -> logits -> SGR(logits, sam_mask) -> refined_logits -> loss
-
 Architecture when DPCL is enabled:
     backbone(input, return_features=True) -> (logits, dec3)
     main_loss(logits, labels) + lambda_dpcl(t) * DPCL(dec3, labels)
+
 """
 
 import os
@@ -42,7 +39,7 @@ from datetime import datetime
 
 from dataset.make_data_loader import (
     MultimodalDamageAssessmentDatset,
-    MultimodalDamageAssessmentDatsetWithSAM,
+    parse_disaster_event,
 )
 from model.UNet import UNet
 from util_func.metrics import Evaluator
@@ -166,11 +163,15 @@ class Trainer:
         self.evaluator_clf = Evaluator(num_class=4)
         self.evaluator_total = Evaluator(num_class=4)
 
-        # SAM config
-        self.use_sam = bool(args.sam_mask_dir)
-        if self.use_sam:
-            print(f"SAM guidance enabled (mask_dir={args.sam_mask_dir})")
-
+        self.damage_class_ids = _parse_int_csv(args.damage_class_ids, "damage_class_ids")
+        print(f"Damage class ids: {self.damage_class_ids}")
+        if args.use_dacutmix:
+            print(
+                "DACutMix enabled "
+                f"(p={args.dacutmix_prob}, damage_ids={self.damage_class_ids}, "
+                f"min_pixels={args.dacutmix_min_damage_pixels}, "
+                f"min_ratio={args.dacutmix_min_damage_ratio})"
+            )
         # Intervals
         self.eval_interval = max(1, int(args.eval_interval))
         self.log_interval = max(1, int(args.curve_log_interval))
@@ -203,18 +204,7 @@ class Trainer:
         self.backbone = build_backbone(args.model_type, in_channels, num_classes=4)
         self.backbone = self.backbone.to(self.device)
 
-        # ---- Build SAM-Guided Refinement (optional) ----
-        if self.use_sam and args.use_sgr:
-            from model.SAMGuidedRefinement import SAMGuidedRefinement
-            self.refiner = SAMGuidedRefinement(
-                num_classes=4,
-                hidden_dim=args.sgr_hidden_dim,
-                alpha_init=args.sgr_alpha_init,
-            ).to(self.device)
-            print(f"SAM-Guided Refinement enabled "
-                  f"(hidden={args.sgr_hidden_dim}, alpha_init={args.sgr_alpha_init})")
-        else:
-            self.refiner = None
+        self.grad_clip_norm = max(0.0, float(getattr(args, "grad_clip_norm", 0.0)))
 
         # ---- Ordinal Damage Loss (optional) ----
         self.use_ordinal = bool(args.use_ordinal_loss)
@@ -291,15 +281,16 @@ class Trainer:
         # ---- Save path ----
         now_str = datetime.now().strftime("%Y%m%d_%H%M%S")
         suffix_parts = []
-        if self.refiner is not None:
-            suffix_parts.append("SGR")
         if self.use_ordinal:
             suffix_parts.append("ODL")
         if self.use_dpcl:
-            suffix_parts.append(
+            dpcl_suffix = (
                 "MPDPCL" if (self.dpcl is not None and not self.dpcl.is_single_proto)
                 else "SPDPCL"
             )
+            suffix_parts.append(dpcl_suffix)
+        if args.use_dacutmix:
+            suffix_parts.append("DACutMix")
         suffix = ("_" + "_".join(suffix_parts)) if suffix_parts else ""
         self.model_save_path = os.path.join(
             args.model_param_path, args.dataset,
@@ -314,13 +305,11 @@ class Trainer:
 
         # ---- Optimizer: joint params ----
         params = list(self.backbone.parameters())
-        if self.refiner is not None:
-            params += list(self.refiner.parameters())
         if self.dpcl is not None:
             # Only the projection head has trainable parameters; prototypes
             # are buffers updated via EMA, not SGD.
             params += list(self.dpcl.proj.parameters())
-
+        self.trainable_params = params
         self.optim = optim.AdamW(
             params, lr=args.learning_rate, weight_decay=args.weight_decay
         )
@@ -390,8 +379,8 @@ class Trainer:
         # Handle both old-style (flat state_dict) and new-style (nested dict)
         if "backbone" in ckpt:
             self.backbone.load_state_dict(ckpt["backbone"], strict=False)
-            if self.refiner is not None and "refiner" in ckpt:
-                self.refiner.load_state_dict(ckpt["refiner"], strict=False)
+            if self.dpcl is not None and "dpcl" in ckpt:
+                self.dpcl.load_state_dict(ckpt["dpcl"], strict=False)
         else:
             # Legacy format: flat state_dict
             backbone_state = {k: v for k, v in ckpt.items()
@@ -404,18 +393,6 @@ class Trainer:
     # -----------------------------------------------------------------------
 
     def _make_dataset(self, dataset_path, data_list, crop_size, max_iters, split):
-        if self.use_sam:
-            return MultimodalDamageAssessmentDatsetWithSAM(
-                dataset_path=dataset_path,
-                data_list=data_list,
-                crop_size=crop_size,
-                sam_mask_path=self.args.sam_mask_dir,
-                max_iters=max_iters,
-                type=split,
-                suffix=".tif",
-                sam_mask_suffix=self.args.sam_mask_suffix,
-                sam_mask_threshold=self.args.sam_mask_threshold,
-            )
         return MultimodalDamageAssessmentDatset(
             dataset_path=dataset_path,
             data_list=data_list,
@@ -423,20 +400,25 @@ class Trainer:
             max_iters=max_iters,
             type=split,
             suffix=".tif",
+            use_dacutmix=(split == "train" and self.args.use_dacutmix),
+            dacutmix_prob=self.args.dacutmix_prob,
+            damage_class_ids=self.damage_class_ids,
+            dacutmix_min_damage_pixels=self.args.dacutmix_min_damage_pixels,
+            dacutmix_min_damage_ratio=self.args.dacutmix_min_damage_ratio,
+            dacutmix_patch_min_ratio=self.args.dacutmix_patch_min_ratio,
+            dacutmix_patch_max_ratio=self.args.dacutmix_patch_max_ratio,
+            dacutmix_box_tries=self.args.dacutmix_box_tries,
+            dacutmix_donor_tries=self.args.dacutmix_donor_tries,
+            return_dacutmix_stats=(split == "train" and self.args.use_dacutmix),
         )
 
     # -----------------------------------------------------------------------
     # Batch preparation
     # -----------------------------------------------------------------------
 
-    def _prepare_batch(self, data):
-        """Unpack batch. Returns (input, sam_mask, labels_loc, labels_clf)."""
-        if self.use_sam:
-            pre, post, sam_mask, labels_loc, labels_clf, _ = data
-            sam_mask = sam_mask.to(self.device).float()
-        else:
-            pre, post, labels_loc, labels_clf, _ = data
-            sam_mask = None
+    def _prepare_batch(self, data, return_ids=False):
+        """Unpack batch. Returns (input, labels_loc, labels_clf)."""
+        pre, post, labels_loc, labels_clf, data_idx = data[:5]
 
         pre = pre.to(self.device)
         post = post.to(self.device)
@@ -444,16 +426,36 @@ class Trainer:
         labels_clf = labels_clf.to(self.device).long()
 
         input_data = torch.cat([pre, post], dim=1)
-        return input_data, sam_mask, labels_loc, labels_clf
+        if return_ids:
+            return input_data, labels_loc, labels_clf, data_idx
+        return input_data, labels_loc, labels_clf
+
+    @staticmethod
+    def _dacutmix_batch_counts(data):
+        if len(data) < 7:
+            return 0, 0
+        attempted = data[5]
+        applied = data[6]
+        if torch.is_tensor(attempted):
+            attempted = int(attempted.sum().item())
+        else:
+            attempted = int(np.asarray(attempted).sum())
+        if torch.is_tensor(applied):
+            applied = int(applied.sum().item())
+        else:
+            applied = int(np.asarray(applied).sum())
+        return attempted, applied
 
     # -----------------------------------------------------------------------
     # Forward
     # -----------------------------------------------------------------------
 
-    def _forward(self, input_data, sam_mask, return_features=False):
+    def _forward(
+        self,
+        input_data,
+        return_features=False,
+    ):
         """
-        Backbone + optional SGR refiner.
-
         If `return_features` is True, also returns the dec3 mid-decoder
         feature map for use by DPCL or other auxiliary losses.
 
@@ -461,14 +463,12 @@ class Trainer:
             logits: (B, num_classes, H, W)
             feat_dec3: (B, 256, H/4, W/4)   only if return_features=True
         """
+        feat = None
+
         if return_features:
             logits, feat = self.backbone(input_data, return_features=True)
         else:
             logits = self.backbone(input_data)
-            feat = None
-
-        if self.refiner is not None and sam_mask is not None:
-            logits = self.refiner(logits, sam_mask)
 
         if return_features:
             return logits, feat
@@ -496,7 +496,13 @@ class Trainer:
                    / float(self.ordinal_warmup_iters))
         return self.ordinal_weight * ramp
 
-    def _compute_loss(self, logits, labels_clf, current_iter=0, feat_dec3=None):
+    def _compute_loss(
+        self,
+        logits,
+        labels_clf,
+        current_iter=0,
+        feat_dec3=None,
+    ):
         """
         CE + 0.75 * Lovász softmax + optional ordinal damage loss + optional DPCL.
 
@@ -507,26 +513,27 @@ class Trainer:
         cross_entropy. We keep that behaviour as default. Lovász already handles
         ignore=255 via its own masking.
         """
+        loss_logits = logits.float()
         if self.class_weights is not None:
-            ce = F.cross_entropy(logits, labels_clf, weight=self.class_weights)
+            ce = F.cross_entropy(loss_logits, labels_clf, weight=self.class_weights)
         else:
-            ce = F.cross_entropy(logits, labels_clf)
+            ce = F.cross_entropy(loss_logits, labels_clf)
 
         lovasz = L.lovasz_softmax(
-            F.softmax(logits, dim=1), labels_clf, ignore=255
+            F.softmax(loss_logits, dim=1), labels_clf, ignore=255
         )
 
         total = ce + 0.75 * lovasz
 
         # Optional: ordinal damage loss with warmup
-        ord_loss = logits.new_tensor(0.0)
+        ord_loss = loss_logits.new_tensor(0.0)
         if self.use_ordinal:
-            ord_loss = ordinal_damage_loss(logits, labels_clf)
+            ord_loss = ordinal_damage_loss(loss_logits, labels_clf)
             eff_w = self._effective_ordinal_weight(current_iter)
             total = total + eff_w * ord_loss
 
         # Optional: damage prototype contrastive loss with warmup
-        dpcl_loss = logits.new_tensor(0.0)
+        dpcl_loss = loss_logits.new_tensor(0.0)
         if self.dpcl is not None and feat_dec3 is not None:
             # DPCL is computed in fp32 internally; safe under AMP autocast
             # because the projection head is a small MLP and prototype math
@@ -573,19 +580,31 @@ class Trainer:
         elem_num = len(train_loader)
 
         self.backbone.train()
-        if self.refiner is not None:
-            self.refiner.train()
         if self.dpcl is not None:
             self.dpcl.train()
 
         train_enumerator = enumerate(train_loader)
         pbar = tqdm(total=elem_num, desc="Training")
+        dacutmix_attempted_window = 0
+        dacutmix_applied_window = 0
+        dacutmix_seen_window = 0
+        dacutmix_attempted_total = 0
+        dacutmix_applied_total = 0
+        dacutmix_seen_total = 0
 
         try:
             for itera, data in train_enumerator:
                 pbar.update(1)
+                dacutmix_attempted, dacutmix_applied = self._dacutmix_batch_counts(data)
+                batch_size_seen = int(data[0].shape[0]) if hasattr(data[0], "shape") else 0
+                dacutmix_attempted_window += dacutmix_attempted
+                dacutmix_applied_window += dacutmix_applied
+                dacutmix_seen_window += batch_size_seen
+                dacutmix_attempted_total += dacutmix_attempted
+                dacutmix_applied_total += dacutmix_applied
+                dacutmix_seen_total += batch_size_seen
 
-                input_data, sam_mask, labels_loc, labels_clf = self._prepare_batch(data)
+                input_data, labels_loc, labels_clf = self._prepare_batch(data)
 
                 # Skip empty label batches
                 if not (labels_clf != 255).any().item():
@@ -597,26 +616,50 @@ class Trainer:
                     device_type="cuda", dtype=self.amp_dtype, enabled=self.use_amp
                 )
                 with amp_ctx:
-                    if self.dpcl is not None:
+                    feat_dec3 = None
+                    need_dec3 = self.dpcl is not None
+
+                    if need_dec3:
                         logits, feat_dec3 = self._forward(
-                            input_data, sam_mask, return_features=True
+                            input_data, return_features=True
                         )
                     else:
-                        logits = self._forward(input_data, sam_mask)
-                        feat_dec3 = None
-                    total_loss, ce_loss, lovasz_loss, ord_loss, dpcl_loss = (
-                        self._compute_loss(
-                            logits, labels_clf,
-                            current_iter=itera, feat_dec3=feat_dec3,
-                        )
+                        logits = self._forward(input_data)
+
+                (
+                    total_loss, ce_loss, lovasz_loss, ord_loss,
+                    dpcl_loss,
+                ) = (
+                    self._compute_loss(
+                        logits, labels_clf,
+                        current_iter=itera,
+                        feat_dec3=feat_dec3,
                     )
+                )
+
+                if not torch.isfinite(total_loss).item():
+                    print(
+                        f"[WARN] non-finite loss at iter {itera+1}; "
+                        "skipping optimizer step to avoid corrupting weights."
+                    )
+                    self.optim.zero_grad(set_to_none=True)
+                    continue
 
                 if self.use_amp:
                     self.scaler.scale(total_loss).backward()
+                    if self.grad_clip_norm > 0.0:
+                        self.scaler.unscale_(self.optim)
+                        torch.nn.utils.clip_grad_norm_(
+                            self.trainable_params, self.grad_clip_norm
+                        )
                     self.scaler.step(self.optim)
                     self.scaler.update()
                 else:
                     total_loss.backward()
+                    if self.grad_clip_norm > 0.0:
+                        torch.nn.utils.clip_grad_norm_(
+                            self.trainable_params, self.grad_clip_norm
+                        )
                     self.optim.step()
 
                 if self.scheduler is not None:
@@ -636,26 +679,44 @@ class Trainer:
                         eff_w_dpcl = self.dpcl.effective_weight(itera, self.dpcl_weight)
                         msg += f" dpcl={dpcl_loss.item():.4f}(w={eff_w_dpcl:.4f})"
                     msg += f" lr={lr:.2e}"
-                    if self.refiner is not None:
-                        msg += f" alpha={self.refiner.alpha.item():.4f}"
+                    if self.args.use_dacutmix and dacutmix_seen_window > 0:
+                        attempt_rate = 100.0 * dacutmix_attempted_window / max(1, dacutmix_seen_window)
+                        success_rate = 100.0 * dacutmix_applied_window / max(1, dacutmix_seen_window)
+                        accept_rate = 100.0 * dacutmix_applied_window / max(1, dacutmix_attempted_window)
+                        total_success = 100.0 * dacutmix_applied_total / max(1, dacutmix_seen_total)
+                        msg += (
+                            f" dacutmix={dacutmix_applied_window}/{dacutmix_attempted_window}"
+                            f"/{dacutmix_seen_window}"
+                            f"(succ={success_rate:.1f}%,"
+                            f" try={attempt_rate:.1f}%,"
+                            f" acc={accept_rate:.1f}%,"
+                            f" total={total_success:.1f}%)"
+                        )
+                        dacutmix_attempted_window = 0
+                        dacutmix_applied_window = 0
+                        dacutmix_seen_window = 0
                     print(msg)
 
                 # Evaluation
                 if (itera + 1) % self.eval_interval == 0:
                     self.backbone.eval()
-                    if self.refiner is not None:
-                        self.refiner.eval()
 
                     val_metrics = self._evaluate("val")
                     test_metrics = self._evaluate("test")
 
                     self.curve_recorder.add_eval_metrics(
                         itera + 1, "val",
-                        val_metrics["OA"] * 100, val_metrics["mIoU"] * 100
+                        val_metrics["OA"] * 100, val_metrics["mIoU"] * 100,
+                        val_metrics["event_mIoU_std"] * 100,
+                        val_metrics["event_mIoU_min"] * 100,
+                        val_metrics["event_mIoU_p25"] * 100,
                     )
                     self.curve_recorder.add_eval_metrics(
                         itera + 1, "test",
-                        test_metrics["OA"] * 100, test_metrics["mIoU"] * 100
+                        test_metrics["OA"] * 100, test_metrics["mIoU"] * 100,
+                        test_metrics["event_mIoU_std"] * 100,
+                        test_metrics["event_mIoU_min"] * 100,
+                        test_metrics["event_mIoU_p25"] * 100,
                     )
 
                     if val_metrics["mIoU"] > best_mIoU:
@@ -668,16 +729,20 @@ class Trainer:
                             "OA (val)": val_metrics["OA"] * 100,
                             "mIoU (val)": val_metrics["mIoU"] * 100,
                             "sub class IoU (val)": val_metrics["IoU_per_class"] * 100,
+                            "event mIoU std (val)": val_metrics["event_mIoU_std"] * 100,
+                            "worst event mIoU (val)": val_metrics["event_mIoU_min"] * 100,
+                            "event mIoU p25 (val)": val_metrics["event_mIoU_p25"] * 100,
                             "loc f1 (test)": test_metrics["loc_f1"] * 100,
                             "clf f1 (test)": test_metrics["clf_f1"] * 100,
                             "OA (test)": test_metrics["OA"] * 100,
                             "mIoU (test)": test_metrics["mIoU"] * 100,
                             "sub class IoU (test)": test_metrics["IoU_per_class"] * 100,
+                            "event mIoU std (test)": test_metrics["event_mIoU_std"] * 100,
+                            "worst event mIoU (test)": test_metrics["event_mIoU_min"] * 100,
+                            "event mIoU p25 (test)": test_metrics["event_mIoU_p25"] * 100,
                         }
 
                     self.backbone.train()
-                    if self.refiner is not None:
-                        self.refiner.train()
                     self.curve_recorder.save()
 
                 elif (itera + 1) % self.save_interval == 0:
@@ -698,6 +763,7 @@ class Trainer:
         self.evaluator_total.reset()
         self.evaluator_loc.reset()
         self.evaluator_clf.reset()
+        event_evaluators = {}
 
         if split == "val":
             dataset_path = self.args.val_dataset_path
@@ -725,8 +791,10 @@ class Trainer:
 
         with torch.no_grad():
             for data in eval_loader:
-                input_data, sam_mask, labels_loc, labels_clf = self._prepare_batch(data)
-                logits = self._forward(input_data, sam_mask)
+                input_data, labels_loc, labels_clf, data_idx = self._prepare_batch(
+                    data, return_ids=True
+                )
+                logits = self._forward(input_data)
 
                 labels_loc_np = labels_loc.cpu().numpy()
                 labels_clf_np = labels_clf.cpu().numpy()
@@ -742,15 +810,38 @@ class Trainer:
                 )
                 self.evaluator_total.add_batch(labels_clf_np, pred_clf)
 
+                for b, name in enumerate(data_idx):
+                    event = parse_disaster_event(name)
+                    if event not in event_evaluators:
+                        event_evaluators[event] = Evaluator(num_class=4)
+                    event_evaluators[event].add_batch(labels_clf_np[b], pred_clf[b])
+
         loc_f1 = self.evaluator_loc.Pixel_F1_score()
         damage_f1 = self.evaluator_clf.Damage_F1_score()
         harmonic_f1 = _safe_hmean(damage_f1)
         OA = self.evaluator_total.Pixel_Accuracy()
         IoU_per_class = self.evaluator_total.Intersection_over_Union()
         mIoU = self.evaluator_total.Mean_Intersection_over_Union()
+        per_event_miou = {
+            event: evaluator.Mean_Intersection_over_Union()
+            for event, evaluator in event_evaluators.items()
+        }
+        per_event_values = np.asarray(list(per_event_miou.values()), dtype=np.float32)
+        if per_event_values.size > 0:
+            event_miou_std = float(np.std(per_event_values))
+            event_miou_min = float(np.min(per_event_values))
+            event_miou_p25 = float(np.percentile(per_event_values, 25))
+        else:
+            event_miou_std = 0.0
+            event_miou_min = 0.0
+            event_miou_p25 = 0.0
 
         tag = "VAL" if split == "val" else "TEST"
         print(f"[{tag}] OA={100*OA:.4f}, mIoU={100*mIoU:.4f}, IoU={100*IoU_per_class}")
+        print(
+            f"[{tag}] event_mIoU std={100*event_miou_std:.4f}, "
+            f"worst={100*event_miou_min:.4f}, p25={100*event_miou_p25:.4f}"
+        )
 
         return {
             "loc_f1": loc_f1,
@@ -758,13 +849,15 @@ class Trainer:
             "OA": OA,
             "mIoU": mIoU,
             "IoU_per_class": IoU_per_class,
+            "per_event_mIoU": per_event_miou,
+            "event_mIoU_std": event_miou_std,
+            "event_mIoU_min": event_miou_min,
+            "event_mIoU_p25": event_miou_p25,
         }
 
     def _save_checkpoint(self, step):
-        """Save backbone + refiner + DPCL state dict."""
+        """Save backbone + optional DPCL state dict."""
         state = {"backbone": self.backbone.state_dict(), "step": step}
-        if self.refiner is not None:
-            state["refiner"] = self.refiner.state_dict()
         if self.dpcl is not None:
             # Save the full DPCL state (projection head weights + prototype
             # buffers + assignment counters), in case we want to inspect or
@@ -776,6 +869,16 @@ class Trainer:
 # ---------------------------------------------------------------------------
 # Utilities
 # ---------------------------------------------------------------------------
+
+def _parse_int_csv(value, name):
+    try:
+        out = tuple(int(x.strip()) for x in str(value).split(",") if x.strip())
+    except Exception as exc:
+        raise ValueError(f"{name} must be a comma-separated list of ints.") from exc
+    if not out:
+        raise ValueError(f"{name} must contain at least one class id.")
+    return out
+
 
 def _safe_hmean(scores, eps=1e-6):
     scores = np.asarray(scores, dtype=np.float32)
@@ -829,18 +932,29 @@ def main():
     # Loss
     parser.add_argument("--class_weights", type=str, default=None,
                         help="Comma-separated weights for 4 classes, e.g. 1,1,2,2")
+    parser.add_argument("--damage_class_ids", type=str, default="2,3",
+                        help="Comma-separated class ids treated as damaged for "
+                             "DACutMix and damage-balanced sampling.")
 
-    # SAM-Guided Refinement (SGR) — all opt-in
-    parser.add_argument("--sam_mask_dir", type=str, default=None,
-                        help="Directory of SAM building masks.")
-    parser.add_argument("--sam_mask_suffix", type=str, default=".png")
-    parser.add_argument("--sam_mask_threshold", type=int, default=127)
-    parser.add_argument("--use_sgr", action="store_true",
-                        help="Enable SAM-Guided Refinement module.")
-    parser.add_argument("--sgr_hidden_dim", type=int, default=32,
-                        help="Hidden channels in SGR refinement convs.")
-    parser.add_argument("--sgr_alpha_init", type=float, default=0.1,
-                        help="Initial residual scale in SGR.")
+    # DACutMix (Damage-Aware CutMix) — all opt-in.
+    parser.add_argument("--use_dacutmix", action="store_true",
+                        help="Enable event-aware, damage-aware CutMix "
+                             "(DACutMix) in the training dataset.")
+    parser.add_argument("--dacutmix_prob", type=float, default=0.5,
+                        help="Probability of applying DACutMix to a training sample.")
+    parser.add_argument("--dacutmix_min_damage_pixels", type=int, default=200,
+                        help="Minimum damaged pixels required in a donor patch.")
+    parser.add_argument("--dacutmix_min_damage_ratio", type=float, default=0.05,
+                        help="Minimum donor patch damage ratio required for CutMix.")
+    parser.add_argument("--dacutmix_patch_min_ratio", type=float, default=0.20,
+                        help="Minimum patch side length as a fraction of crop size.")
+    parser.add_argument("--dacutmix_patch_max_ratio", type=float, default=0.50,
+                        help="Maximum patch side length as a fraction of crop size.")
+    parser.add_argument("--dacutmix_box_tries", type=int, default=10,
+                        help="Random boxes to try per donor sample.")
+    parser.add_argument("--dacutmix_donor_tries", type=int, default=10,
+                        help="Cross-event donor samples to try before falling back "
+                             "to the un-mixed image.")
 
     # Ordinal Damage Loss (ODL) — opt-in
     parser.add_argument("--use_ordinal_loss", action="store_true",
@@ -888,7 +1002,6 @@ def main():
                         help="Weight on orthogonality regulariser between "
                              "sub-prototypes of the same class. Only relevant "
                              "for MP-DPCL (K>1 for some class). 0.01 suggested.")
-
     # Performance
     parser.add_argument("--device", type=str, default="auto",
                         choices=["auto", "cuda","cuda:0", "cuda:1", "mps", "cpu"])
@@ -898,6 +1011,8 @@ def main():
     parser.add_argument("--pin_memory", action="store_true")
     parser.add_argument("--persistent_workers", action="store_true")
     parser.add_argument("--prefetch_factor", type=int, default=2)
+    parser.add_argument("--grad_clip_norm", type=float, default=0.0,
+                        help="Clip global gradient norm when > 0. Useful for AMP stability.")
 
     # Logging
     parser.add_argument("--eval_interval", type=int, default=500)

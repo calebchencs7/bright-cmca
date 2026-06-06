@@ -4,14 +4,14 @@ import subprocess
 
 # ========= 修改这三个 =========
 
-MODEL_PATH = r"D:\Project\haoChen\BRIGHT\checkpoints\sam_guided_unet\unet_smoke.pth\BRIGHT\UNet_20260307_182457\best_model.pth"
-DATA_PATH = r"D:\Project\haoChen\BRIGHT\data"
-TEST_LIST = r"D:\Project\haoChen\BRIGHT\bda_benchmark\dataset\splitname\standard_ML\test_set.txt"
-OUTPUT_DIR = r"D:\Project\haoChen\BRIGHT\infer_results\unet_best_001"
+MODEL_PATH = r"E:\haoChen\BRIGHT\checkpoints\unet\BRIGHT\UNet_YYYYMMDD_HHMMSS\best_model.pth"
+DATA_PATH = r"E:\haoChen\BRIGHT\data"
+TEST_LIST = r"E:\haoChen\BRIGHT\bda_benchmark\dataset\splitname\standard_ML\test_set.txt"
+OUTPUT_DIR = r"E:\haoChen\BRIGHT\infer_results\unet_best_001"
 
 # ===============================
 
-PROJECT_ROOT = r"D:\Project\haoChen\BRIGHT"
+PROJECT_ROOT = r"E:\haoChen\BRIGHT"
 BDA_ROOT = os.path.join(PROJECT_ROOT, "bda_benchmark")
 
 def main():

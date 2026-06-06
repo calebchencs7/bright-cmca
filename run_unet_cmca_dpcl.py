@@ -1,28 +1,15 @@
-# run_unet_cmca_dpcl.py — UNet-CMCA + Damage Prototype Contrastive Learning
+# run_unet_cmca_dpcl.py — UNet-CMCA + DPCL on dec3
 # ==========================================================================
-# Trains UNet-CMCA (your existing first innovation: dual-branch encoder +
-# Cross-Modal Change Attention) combined with DPCL (the second innovation:
-# class-prototype InfoNCE on dec3 features). This is the FINAL combined
-# model that the paper will report.
+# Trains your first innovation (UNet-CMCA) with the original Damage Prototype
+# Contrastive Learning auxiliary loss.
 #
-# Story:
-#   CMCA — learns *where* cross-modal change evidence comes from
-#          (input-side: how to fuse optical and SAR features semantically).
-#   DPCL — learns *how* fused features should be organised in embedding
-#          space so that ambiguous "Damaged" pixels separate cleanly from
-#          "Intact" and "Destroyed".
-#
-# Loss = CE + 0.75 * Lovász + λ_DPCL(t) * DamagePrototypeContrastive
-#
-# This script uses SP-DPCL (1 prototype per class) for v1. To upgrade to
-# MP-DPCL after v1 ablation: change --dpcl_num_prototypes to "1,3,2" and
-# set --dpcl_ortho_weight 0.01.
+# Loss = CE + 0.75 * Lovasz + lambda_DPCL(t) * DPCL(dec3, labels)
 
 import os
 import sys
 import subprocess
 
-ROOT = r"D:\Project\haoChen\BRIGHT"
+ROOT = r"E:\haoChen\BRIGHT"
 BDA_ROOT = os.path.join(ROOT, "bda_benchmark")
 
 DATA_PATH = os.path.join(ROOT, "data")
@@ -56,7 +43,7 @@ run([
     "--test_dataset_path", DATA_PATH,
     "--test_data_list_path", os.path.join(SPLIT_DIR, "test_set.txt"),
 
-    # Training — same hyper-parameters as CMCA-only run for fair comparison
+    # Training — same as CMCA-only run for fair comparison
     "--train_batch_size", "16",
     "--eval_batch_size", "4",
     "--num_workers", "16",
@@ -70,26 +57,28 @@ run([
     "--model_type", "UNetCMCA",
     "--model_param_path", SAVE_DIR,
 
-    # DPCL — SP-DPCL (single prototype per class)
+    # DPCL — SP-DPCL on dec3
     "--use_dpcl",
-    "--dpcl_weight", "0.1",
-    "--dpcl_num_prototypes", "1,1,1",
+    "--dpcl_weight",             "0.05",
+    "--dpcl_num_prototypes",     "1,1,1",
     "--dpcl_class_loss_weights", "1.0,2.0,1.0",
-    "--dpcl_feat_dim", "256",                     # d3 channel count in UNetCMCA
-    "--dpcl_proj_dim", "128",
-    "--dpcl_samples_per_class", "512",
-    "--dpcl_warmup_iters", "3000",
-    "--dpcl_ramp_iters", "2000",
-    "--dpcl_momentum", "0.99",
-    "--dpcl_temperature", "0.1",
-    "--dpcl_ortho_weight", "0.0",
+    "--dpcl_feat_dim",           "256",           # dec3 channel count
+    "--dpcl_proj_dim",           "128",
+    "--dpcl_samples_per_class",  "512",
+    "--dpcl_warmup_iters",       "10000",
+    "--dpcl_ramp_iters",         "5000",
+    "--dpcl_momentum",           "0.99",
+    "--dpcl_temperature",        "0.2",
+    "--dpcl_ortho_weight",       "0.0",
 
     # Logging
     "--eval_interval", "500",
     "--curve_log_interval", "10",
     "--curve_save_interval", "500",
 
-    # Performance
+    # Performance — AMP enabled for local baseline (consistent across all
+    # local experiments). All comparisons in this repo are apples-to-apples
+    # since every experiment runs with the same AMP config.
     "--use_amp",
     "--amp_dtype", "fp16",
     "--pin_memory",

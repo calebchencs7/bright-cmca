@@ -1,20 +1,37 @@
-# run_unet_dpcl.py — UNet + DPCL
-# =======================================================================
-# Trains vanilla UNet with DPCL only (no CMCA, no ODL).
-
+# run_unet_cmca_dacutmix.py -- UNet-CMCA + DACutMix (main result)
+# =================================================================
+# Main launcher for the second contribution:
+#   1. CMCA handles optical/SAR cross-modal fusion.
+#   2. DACutMix (Damage-Aware CutMix) handles cross-event generalization
+#      and Damaged-class data scarcity.
+#
+# DACutMix is event-aware, damage-aware CutMix applied jointly over
+# optical / SAR / label inputs:
+#   - donor patches come from a different disaster event,
+#   - donor patches must contain >=5% Damaged/Destroyed pixels,
+#   - the same crop box is applied to pre/post/label so spatial
+#     correspondence across modalities is preserved.
+#
+# Ablation matrix:
+#   UNet                       : run_unet.py
+#   UNet + CMCA                : run_unet_cmca.py
+#   UNet + DACutMix            : run_unet_dacutmix.py
+#   UNet + CMCA + DACutMix     : THIS SCRIPT (main result)
+#
 import os
 import sys
 import subprocess
 
-ROOT = r"E:\haoChen\BRIGHT"
+
+ROOT = os.environ.get("BRIGHT_ROOT", r"E:\haoChen\BRIGHT")
 BDA_ROOT = os.path.join(ROOT, "bda_benchmark")
 
 DATA_PATH = os.path.join(ROOT, "data")
 SPLIT_DIR = os.path.join(BDA_ROOT, "dataset", "splitname", "standard_ML")
-SAVE_DIR = os.path.join(ROOT, "checkpoints", "unet_dpcl")
+SAVE_DIR = os.path.join(ROOT, "checkpoints", "unet_cmca_dacutmix")
 TRAIN_SCRIPT = os.path.join(BDA_ROOT, "script", "standard_ML", "train_UNet.py")
 
-DEVICE = "cuda:0"
+DEVICE = os.environ.get("BRIGHT_DEVICE", "cuda:0")
 
 os.makedirs(SAVE_DIR, exist_ok=True)
 
@@ -40,7 +57,7 @@ run([
     "--test_dataset_path", DATA_PATH,
     "--test_data_list_path", os.path.join(SPLIT_DIR, "test_set.txt"),
 
-    # Training — paper baseline hyper-parameters
+    # Training -- same budget as CMCA baseline
     "--train_batch_size", "16",
     "--eval_batch_size", "4",
     "--num_workers", "16",
@@ -50,25 +67,20 @@ run([
     "--weight_decay", "5e-3",
     "--lr_policy", "constant",
 
-    # Model — UNetWithFeatures (subclass of vanilla UNet that exposes dec3 for DPCL).
-    # Identical parameters and state dict to UNet; forward() additionally
-    # returns the mid-decoder feature when return_features=True.
-    "--model_type", "UNetWithFeatures",
+    # Model
+    "--model_type", "UNetCMCA",
     "--model_param_path", SAVE_DIR,
 
-    # DPCL — SP-DPCL
-    "--use_dpcl",
-    "--dpcl_weight", "0.05",
-    "--dpcl_num_prototypes", "1,1,1",
-    "--dpcl_class_loss_weights", "1.0,2.0,1.0",
-    "--dpcl_feat_dim", "256",                     # dec3 channel count
-    "--dpcl_proj_dim", "128",
-    "--dpcl_samples_per_class", "512",
-    "--dpcl_warmup_iters", "10000",               # backbone learns a stable baseline first
-    "--dpcl_ramp_iters", "5000",
-    "--dpcl_momentum", "0.99",
-    "--dpcl_temperature", "0.2",
-    "--dpcl_ortho_weight", "0.0",
+    # DACutMix configuration
+    "--damage_class_ids", "2,3",
+    "--use_dacutmix",
+    "--dacutmix_prob", "0.25",
+    "--dacutmix_min_damage_pixels", "200",
+    "--dacutmix_min_damage_ratio", "0.05",
+    "--dacutmix_patch_min_ratio", "0.12",
+    "--dacutmix_patch_max_ratio", "0.35",
+    "--dacutmix_box_tries", "10",
+    "--dacutmix_donor_tries", "10",
 
     # Logging
     "--eval_interval", "500",

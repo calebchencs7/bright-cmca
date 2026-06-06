@@ -1,7 +1,6 @@
 # run_unet_ordinal.py — UNet + Ordinal Damage Loss (ODL)
 # =======================================================
 # Trains UNet with ordinal damage loss only.
-# No SAM masks, no SGR — pure ordinal learning ablation.
 #
 # Loss = CE + 0.75 * Lovász + ordinal_weight * OrdinalBCE
 #

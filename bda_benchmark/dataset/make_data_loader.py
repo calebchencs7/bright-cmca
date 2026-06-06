@@ -1,16 +1,20 @@
-import argparse
 import os
 import random
 
 import imageio
 import numpy as np
-from scipy.ndimage import gaussian_filter
 from torch.utils.data import Dataset
-import cv2
 import dataset.imutils as imutils
-import matplotlib.pyplot as plt
-from torch.utils import data
-from PIL import Image
+
+
+def parse_disaster_event(data_name):
+    """Return the disaster-event id from a BRIGHT split entry."""
+    name = str(data_name).replace("\\", "/")
+    if "/" in name:
+        return name.split("/", 1)[0]
+    if "_" in name:
+        return name.rsplit("_", 1)[0]
+    return name
 
 
 def img_loader(path):
@@ -18,35 +22,78 @@ def img_loader(path):
     return img
 
 
-def mask_loader(path):
-    mask = np.array(imageio.imread(path), np.float32)
-    if mask.ndim == 3:
-        mask = mask[:, :, 0]
-    return mask
-
-
-
 class MultimodalDamageAssessmentDatset(Dataset):
-    def __init__(self, dataset_path, data_list, crop_size, max_iters=None, type='train', data_loader=img_loader, suffix='.tif'):
+    def __init__(
+        self,
+        dataset_path,
+        data_list,
+        crop_size,
+        max_iters=None,
+        type='train',
+        data_loader=img_loader,
+        suffix='.tif',
+        use_dacutmix=False,
+        dacutmix_prob=0.0,
+        damage_class_ids=(2, 3),
+        dacutmix_min_damage_pixels=200,
+        dacutmix_min_damage_ratio=0.05,
+        dacutmix_patch_min_ratio=0.20,
+        dacutmix_patch_max_ratio=0.50,
+        dacutmix_box_tries=10,
+        dacutmix_donor_tries=10,
+        return_dacutmix_stats=False,
+    ):
         self.dataset_path = dataset_path
         self.data_list = data_list
         self.loader = data_loader
         self.type = type
         self.data_pro_type = self.type
         self.suffix = suffix
+        self.damage_class_ids = tuple(int(c) for c in damage_class_ids)
+        self.use_dacutmix = bool(use_dacutmix)
+        self.dacutmix_prob = float(dacutmix_prob)
+        self.dacutmix_min_damage_pixels = int(dacutmix_min_damage_pixels)
+        self.dacutmix_min_damage_ratio = float(dacutmix_min_damage_ratio)
+        self.dacutmix_patch_min_ratio = float(dacutmix_patch_min_ratio)
+        self.dacutmix_patch_max_ratio = float(dacutmix_patch_max_ratio)
+        self.dacutmix_box_tries = int(dacutmix_box_tries)
+        self.dacutmix_donor_tries = int(dacutmix_donor_tries)
+        self.return_dacutmix_stats = bool(return_dacutmix_stats)
 
         if max_iters is not None:
             self.data_list = self.data_list * int(np.ceil(float(max_iters) / len(self.data_list)))
             self.data_list = self.data_list[0:max_iters]
         self.crop_size = crop_size
+        self.events = [parse_disaster_event(x) for x in self.data_list]
+        self.event_to_indices = {}
+        for i, event in enumerate(self.events):
+            self.event_to_indices.setdefault(event, []).append(i)
 
-    def __transforms(self, aug, pre_img, post_img, label):
+        if len(self.event_to_indices) < 2:
+            self.use_dacutmix = False
+        self.last_dacutmix_info = None
+
+    def _load_sample(self, index):
+        data_name = self.data_list[index]
+        pre_path = os.path.join(self.dataset_path, 'pre-event', data_name + '_pre_disaster' + self.suffix)
+        post_path = os.path.join(self.dataset_path, 'post-event', data_name + '_post_disaster'  + self.suffix)
+        label_path = os.path.join(self.dataset_path, 'target', data_name + '_building_damage'  + self.suffix)
+
+        pre_img = self.loader(pre_path)[:, :, 0:3]
+        post_img = self.loader(post_path)
+        post_img = np.stack((post_img,) * 3, axis=-1)
+        clf_label = self.loader(label_path)
+        return pre_img, post_img, clf_label
+
+    def __augment(self, aug, pre_img, post_img, label):
         if aug:
             pre_img, post_img, label = imutils.random_crop(pre_img, post_img, label, self.crop_size)
             pre_img, post_img, label = imutils.random_fliplr(pre_img, post_img, label)
             pre_img, post_img, label = imutils.random_flipud(pre_img, post_img, label)
             pre_img, post_img, label = imutils.random_rot(pre_img, post_img, label)
+        return pre_img, post_img, label
 
+    def __normalize_transpose(self, pre_img, post_img, label):
         pre_img = imutils.normalize_img(pre_img)  # imagenet normalization
         pre_img = np.transpose(pre_img, (2, 0, 1))
 
@@ -55,20 +102,95 @@ class MultimodalDamageAssessmentDatset(Dataset):
 
         return pre_img, post_img, label
 
+    def __transforms(self, aug, pre_img, post_img, label):
+        pre_img, post_img, label = self.__augment(aug, pre_img, post_img, label)
+        return self.__normalize_transpose(pre_img, post_img, label)
+
+    def _sample_donor_index(self, index):
+        current_event = self.events[index]
+        donor_events = [e for e in self.event_to_indices if e != current_event]
+        if not donor_events:
+            return None
+        donor_event = random.choice(donor_events)
+        return random.choice(self.event_to_indices[donor_event])
+
+    def _random_patch_box(self, h, w):
+        min_ratio = min(max(self.dacutmix_patch_min_ratio, 0.01), 1.0)
+        max_ratio = min(max(self.dacutmix_patch_max_ratio, min_ratio), 1.0)
+        min_h = max(1, int(round(h * min_ratio)))
+        max_h = max(min_h, int(round(h * max_ratio)))
+        min_w = max(1, int(round(w * min_ratio)))
+        max_w = max(min_w, int(round(w * max_ratio)))
+        patch_h = random.randint(min_h, max_h)
+        patch_w = random.randint(min_w, max_w)
+        y0 = random.randint(0, max(0, h - patch_h))
+        x0 = random.randint(0, max(0, w - patch_w))
+        return y0, y0 + patch_h, x0, x0 + patch_w
+
+    def _find_damage_patch_box(self, label):
+        h, w = label.shape
+        for _ in range(max(1, self.dacutmix_box_tries)):
+            y0, y1, x0, x1 = self._random_patch_box(h, w)
+            patch = label[y0:y1, x0:x1]
+            damage_pixels = np.isin(patch, self.damage_class_ids).sum()
+            min_pixels = max(
+                self.dacutmix_min_damage_pixels,
+                int(round(patch.size * self.dacutmix_min_damage_ratio)),
+            )
+            if damage_pixels >= min_pixels:
+                return y0, y1, x0, x1
+        return None
+
+    def _apply_dacutmix(self, index, pre_img, post_img, label):
+        self.last_dacutmix_info = None
+        for _ in range(max(1, self.dacutmix_donor_tries)):
+            donor_idx = self._sample_donor_index(index)
+            if donor_idx is None:
+                return pre_img, post_img, label
+
+            donor_pre, donor_post, donor_label = self._load_sample(donor_idx)
+            donor_pre, donor_post, donor_label = self.__augment(
+                True, donor_pre, donor_post, donor_label
+            )
+            box = self._find_damage_patch_box(donor_label)
+            if box is None:
+                continue
+
+            y0, y1, x0, x1 = box
+            pre_img = pre_img.copy()
+            post_img = post_img.copy()
+            label = label.copy()
+            pre_img[y0:y1, x0:x1, :] = donor_pre[y0:y1, x0:x1, :]
+            post_img[y0:y1, x0:x1, :] = donor_post[y0:y1, x0:x1, :]
+            label[y0:y1, x0:x1] = donor_label[y0:y1, x0:x1]
+            self.last_dacutmix_info = {
+                "base_idx": index,
+                "base_name": self.data_list[index],
+                "base_event": self.events[index],
+                "donor_idx": donor_idx,
+                "donor_name": self.data_list[donor_idx],
+                "donor_event": self.events[donor_idx],
+                "box": box,
+            }
+            return pre_img, post_img, label
+
+        return pre_img, post_img, label
+
     def __getitem__(self, index):
-        pre_path = os.path.join(self.dataset_path, 'pre-event', self.data_list[index] + '_pre_disaster' + self.suffix)
-        post_path = os.path.join(self.dataset_path, 'post-event', self.data_list[index] + '_post_disaster'  + self.suffix)
-        label_path = os.path.join(self.dataset_path, 'target', self.data_list[index] + '_building_damage'  + self.suffix)
-        pre_img = self.loader(pre_path)[:,:,0:3] 
-        post_img = self.loader(post_path)  
-        
-        # pre_img = np.stack((pre_img,)*3, axis=-1)
-        post_img = np.stack((post_img,)*3, axis=-1)
-        clf_label = self.loader(label_path)
-        
+        self.last_dacutmix_info = None
+        dacutmix_attempted = 0
+        dacutmix_applied = 0
+        pre_img, post_img, clf_label = self._load_sample(index)
 
         if 'train' in self.data_pro_type:
-            pre_img, post_img, clf_label = self.__transforms(True, pre_img, post_img, clf_label)
+            pre_img, post_img, clf_label = self.__augment(True, pre_img, post_img, clf_label)
+            if self.use_dacutmix and random.random() < self.dacutmix_prob:
+                dacutmix_attempted = 1
+                pre_img, post_img, clf_label = self._apply_dacutmix(
+                    index, pre_img, post_img, clf_label
+                )
+                dacutmix_applied = 1 if self.last_dacutmix_info is not None else 0
+            pre_img, post_img, clf_label = self.__normalize_transpose(pre_img, post_img, clf_label)
         else:
             pre_img, post_img, clf_label = self.__transforms(False, pre_img, post_img, clf_label)
             clf_label = np.asarray(clf_label)
@@ -77,6 +199,16 @@ class MultimodalDamageAssessmentDatset(Dataset):
         loc_label[loc_label == 3] = 1
 
         data_idx = self.data_list[index]
+        if self.return_dacutmix_stats:
+            return (
+                pre_img,
+                post_img,
+                loc_label,
+                clf_label,
+                data_idx,
+                dacutmix_attempted,
+                dacutmix_applied,
+            )
         return pre_img, post_img, loc_label, clf_label, data_idx
 
     def __len__(self):
@@ -113,170 +245,5 @@ class MultimodalDamageAssessmentDatset_Inference(Dataset):
         data_idx = self.data_list[index]
         return pre_img, post_img, data_idx
     
-    def __len__(self):
-        return len(self.data_list)
-
-
-class MultimodalDamageAssessmentDatsetWithSAM(Dataset):
-    def __init__(
-        self,
-        dataset_path,
-        data_list,
-        crop_size,
-        sam_mask_path,
-        max_iters=None,
-        type='train',
-        data_loader=img_loader,
-        mask_data_loader=mask_loader,
-        suffix='.tif',
-        sam_mask_suffix='.png',
-        sam_mask_threshold=127
-    ):
-        self.dataset_path = dataset_path
-        self.data_list = data_list
-        self.loader = data_loader
-        self.mask_loader = mask_data_loader
-        self.type = type
-        self.data_pro_type = self.type
-        self.suffix = suffix
-        self.sam_mask_suffix = sam_mask_suffix
-        self.sam_mask_threshold = sam_mask_threshold
-
-        if sam_mask_path is None:
-            raise ValueError("sam_mask_path must be provided when using MultimodalDamageAssessmentDatsetWithSAM.")
-        self.sam_mask_path = sam_mask_path if os.path.isabs(sam_mask_path) else os.path.join(dataset_path, sam_mask_path)
-
-        if max_iters is not None:
-            self.data_list = self.data_list * int(np.ceil(float(max_iters) / len(self.data_list)))
-            self.data_list = self.data_list[0:max_iters]
-        self.crop_size = crop_size
-
-    def _load_paths(self, idx):
-        data_name = self.data_list[idx]
-        pre_path = os.path.join(self.dataset_path, 'pre-event', data_name + '_pre_disaster' + self.suffix)
-        post_path = os.path.join(self.dataset_path, 'post-event', data_name + '_post_disaster' + self.suffix)
-        label_path = os.path.join(self.dataset_path, 'target', data_name + '_building_damage' + self.suffix)
-        sam_mask_path = os.path.join(self.sam_mask_path, data_name + '_building_mask' + self.sam_mask_suffix)
-        return data_name, pre_path, post_path, label_path, sam_mask_path
-
-    @staticmethod
-    def _crop_with_mask(pre_img, post_img, label, sam_mask, crop_size, mean_rgb=[0, 0, 0], ignore_index=255):
-        h, w = label.shape
-
-        H = max(crop_size, h)
-        W = max(crop_size, w)
-
-        pad_pre_image = np.zeros((H, W, 3), dtype=np.float32)
-        pad_post_image = np.zeros((H, W, 3), dtype=np.float32)
-        pad_label = np.ones((H, W), dtype=np.float32) * ignore_index
-        pad_sam_mask = np.zeros((H, W), dtype=np.float32)
-
-        pad_pre_image[:, :, 0] = mean_rgb[0]
-        pad_pre_image[:, :, 1] = mean_rgb[1]
-        pad_pre_image[:, :, 2] = mean_rgb[2]
-        pad_post_image[:, :, 0] = mean_rgb[0]
-        pad_post_image[:, :, 1] = mean_rgb[1]
-        pad_post_image[:, :, 2] = mean_rgb[2]
-
-        h_pad = int(np.random.randint(H - h + 1))
-        w_pad = int(np.random.randint(W - w + 1))
-        pad_pre_image[h_pad:(h_pad + h), w_pad:(w_pad + w), :] = pre_img
-        pad_post_image[h_pad:(h_pad + h), w_pad:(w_pad + w), :] = post_img
-        pad_label[h_pad:(h_pad + h), w_pad:(w_pad + w)] = label
-        pad_sam_mask[h_pad:(h_pad + h), w_pad:(w_pad + w)] = sam_mask
-
-        h_start, h_end, w_start, w_end = 0, crop_size, 0, crop_size
-        for _ in range(10):
-            h_start = random.randrange(0, H - crop_size + 1, 1)
-            h_end = h_start + crop_size
-            w_start = random.randrange(0, W - crop_size + 1, 1)
-            w_end = w_start + crop_size
-
-            temp_label = pad_label[h_start:h_end, w_start:w_end]
-            index, cnt = np.unique(temp_label, return_counts=True)
-            cnt = cnt[index != ignore_index]
-            if len(cnt) > 1 and np.max(cnt) / np.sum(cnt) < 0.75:
-                break
-
-        pre_img = pad_pre_image[h_start:h_end, w_start:w_end, :]
-        post_img = pad_post_image[h_start:h_end, w_start:w_end, :]
-        label = pad_label[h_start:h_end, w_start:w_end]
-        sam_mask = pad_sam_mask[h_start:h_end, w_start:w_end]
-        return pre_img, post_img, label, sam_mask
-
-    def _transforms(self, aug, pre_img, post_img, label, sam_mask):
-        if aug:
-            pre_img, post_img, label, sam_mask = self._crop_with_mask(pre_img, post_img, label, sam_mask, self.crop_size)
-            if random.random() > 0.5:
-                pre_img = np.fliplr(pre_img)
-                post_img = np.fliplr(post_img)
-                label = np.fliplr(label)
-                sam_mask = np.fliplr(sam_mask)
-            if random.random() > 0.5:
-                pre_img = np.flipud(pre_img)
-                post_img = np.flipud(post_img)
-                label = np.flipud(label)
-                sam_mask = np.flipud(sam_mask)
-            k = random.randrange(3) + 1
-            pre_img = np.rot90(pre_img, k).copy()
-            post_img = np.rot90(post_img, k).copy()
-            label = np.rot90(label, k).copy()
-            sam_mask = np.rot90(sam_mask, k).copy()
-
-        pre_img = imutils.normalize_img(pre_img)
-        pre_img = np.transpose(pre_img, (2, 0, 1))
-
-        post_img = imutils.normalize_img(post_img)
-        post_img = np.transpose(post_img, (2, 0, 1))
-
-        # Soft mask processing: instead of hard {0,1} binarization, produce a
-        # [0,1] confidence map with smooth boundaries.  This gives the SGR module
-        # gradient information at mask edges so it can learn to discount uncertain
-        # regions rather than treating every SAM pixel with equal certainty.
-        #
-        # Pipeline:
-        #   1. Normalize raw pixel values to [0, 1]
-        #   2. Binarize at threshold to get the core mask
-        #   3. Compute a signed distance transform from the boundary
-        #   4. Apply a sigmoid to the distance → smooth [0, 1] transition
-        #      (sigma controls transition width; 3px ≈ ~6px soft band)
-        sam_binary = (sam_mask > self.sam_mask_threshold).astype(np.uint8)
-
-        # Distance transform: positive inside, negative outside
-        dist_inside = cv2.distanceTransform(sam_binary, cv2.DIST_L2, 5)
-        dist_outside = cv2.distanceTransform(1 - sam_binary, cv2.DIST_L2, 5)
-        signed_dist = dist_inside - dist_outside
-
-        # Sigmoid softening (sigma=3 → ~6px transition band)
-        sigma = 3.0
-        sam_mask = 1.0 / (1.0 + np.exp(-signed_dist / sigma))
-        sam_mask = sam_mask.astype(np.float32)
-
-        sam_mask = np.expand_dims(sam_mask, axis=0)
-        return pre_img, post_img, label, sam_mask
-
-    def __getitem__(self, index):
-        data_idx, pre_path, post_path, label_path, sam_mask_path = self._load_paths(index)
-
-        if not os.path.exists(sam_mask_path):
-            raise FileNotFoundError(f"SAM mask not found: {sam_mask_path}")
-
-        pre_img = self.loader(pre_path)[:, :, 0:3]
-        post_img = self.loader(post_path)
-        post_img = np.stack((post_img,) * 3, axis=-1)
-        clf_label = self.loader(label_path)
-        sam_mask = self.mask_loader(sam_mask_path)
-
-        if 'train' in self.data_pro_type:
-            pre_img, post_img, clf_label, sam_mask = self._transforms(True, pre_img, post_img, clf_label, sam_mask)
-        else:
-            pre_img, post_img, clf_label, sam_mask = self._transforms(False, pre_img, post_img, clf_label, sam_mask)
-            clf_label = np.asarray(clf_label)
-
-        loc_label = clf_label.copy()
-        loc_label[loc_label == 2] = 1
-        loc_label[loc_label == 3] = 1
-        return pre_img, post_img, sam_mask, loc_label, clf_label, data_idx
-
     def __len__(self):
         return len(self.data_list)

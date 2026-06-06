@@ -87,7 +87,7 @@ Notes
 
 from __future__ import annotations
 
-from typing import Dict, Optional, Tuple
+from typing import Dict, Optional
 
 import torch
 import torch.nn as nn
@@ -226,7 +226,7 @@ class DamagePrototypeContrastiveLoss(nn.Module):
 
     @torch.no_grad()
     def _resize_labels(self, labels: torch.Tensor, H: int, W: int) -> torch.Tensor:
-        """Nearest-neighbour downsample labels to feature resolution."""
+        """Downsample labels to feature resolution with nearest neighbour."""
         if labels.shape[-2:] == (H, W):
             return labels
         labels_f = labels.float().unsqueeze(1)
@@ -234,9 +234,7 @@ class DamagePrototypeContrastiveLoss(nn.Module):
         return labels_d.squeeze(1).long()
 
     @torch.no_grad()
-    def _sample_indices(
-        self, labels_lr: torch.Tensor
-    ) -> Tuple[torch.Tensor, torch.Tensor]:
+    def _sample_indices(self, labels_lr: torch.Tensor):
         """
         Class-balanced pixel index sampling on the flattened (B*H*W) axis.
 
@@ -267,7 +265,9 @@ class DamagePrototypeContrastiveLoss(nn.Module):
 
     @torch.no_grad()
     def _update_prototypes(
-        self, sampled_feats: torch.Tensor, sampled_class_idx: torch.Tensor
+        self,
+        sampled_feats: torch.Tensor,
+        sampled_class_idx: torch.Tensor,
     ):
         """
         EMA prototype update.
@@ -320,7 +320,9 @@ class DamagePrototypeContrastiveLoss(nn.Module):
                 self.assign_count[k] += int(m.sum().item())
 
     def _infonce_loss(
-        self, sampled_feats: torch.Tensor, sampled_class_idx: torch.Tensor
+        self,
+        sampled_feats: torch.Tensor,
+        sampled_class_idx: torch.Tensor,
     ) -> torch.Tensor:
         """
         InfoNCE / softmax cross-entropy against prototypes.
@@ -406,11 +408,14 @@ class DamagePrototypeContrastiveLoss(nn.Module):
             scalar loss tensor. Caller is responsible for applying the
             `effective_weight(current_iter, base_weight)` schedule.
         """
-        # 1) Project + L2-normalise features (gradient flows here)
-        feat_proj = self.proj(feats)                                 # (B, D, H, W)
+        # 1) Project + L2-normalise features (gradient flows here).
+        # Under AMP the backbone feature may be fp16 while the projection head
+        # stays fp32 because DPCL is computed outside autocast. Cast the input
+        # explicitly so Conv2d sees matching dtypes.
+        feat_proj = self.proj(feats.float())                         # (B, D, H, W)
         feat_proj = F.normalize(feat_proj, dim=1)
 
-        # 2) Resize labels to feature resolution (nearest)
+        # 2) Resize labels to feature resolution.
         H, W = feat_proj.shape[-2:]
         labels_lr = self._resize_labels(labels, H, W)                # (B, H, W)
 

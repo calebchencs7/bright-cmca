@@ -58,7 +58,6 @@ def main():
         "--device",             DEVICE,
 
         # ODL is a training-only loss — no extra inference flags needed.
-        # To compare with SGR, add: --sam_mask_dir <mask_dir> --use_sgr
     ])
 
     print(f"\nDone. Results saved to: {OUTPUT_DIR}")
