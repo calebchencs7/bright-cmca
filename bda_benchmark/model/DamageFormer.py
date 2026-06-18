@@ -70,12 +70,12 @@ class ResBlock(nn.Module):
 
 
 class DamageFormer(nn.Module):
-    def __init__(self):
+    def __init__(self, num_classes=4, weights=Swin_T_Weights.DEFAULT):
         super(DamageFormer, self).__init__()
 
         # if it is multimodal task (if not, please use pure-siamese architecture)
-        self.encoder_1 = SwinTransformerFeatureExtractor(swin_transformer = swin_t(weights=Swin_T_Weights), depths=[2, 2, 6, 2]) # getattr(mix_transformer, backbone)()
-        self.encoder_2 = SwinTransformerFeatureExtractor(swin_transformer = swin_t(weights=Swin_T_Weights), depths=[2, 2, 6, 2]) # getattr(mix_transformer, backbone)()
+        self.encoder_1 = SwinTransformerFeatureExtractor(swin_transformer = swin_t(weights=weights), depths=[2, 2, 6, 2]) # getattr(mix_transformer, backbone)()
+        self.encoder_2 = SwinTransformerFeatureExtractor(swin_transformer = swin_t(weights=weights), depths=[2, 2, 6, 2]) # getattr(mix_transformer, backbone)()
 
         self.fusion_layer_1 = ResBlock(in_channels=1440, out_channels=256, stride=1, downsample=nn.Conv2d(in_channels=1440, out_channels=256, kernel_size=1))
         self.fusion_layer_2 = ResBlock(in_channels=1440, out_channels=256, stride=1, downsample=nn.Conv2d(in_channels=1440, out_channels=256, kernel_size=1))
@@ -83,13 +83,22 @@ class DamageFormer(nn.Module):
        
         
         self.clf_1 = nn.Conv2d(in_channels=256, out_channels=2, kernel_size=1)
-        self.clf_2 = nn.Conv2d(in_channels=256, out_channels=4, kernel_size=1)
+        self.clf_2 = nn.Conv2d(in_channels=256, out_channels=num_classes, kernel_size=1)
 
     def _upsample_add(self, x, y):
         _, _, H, W = y.size()
         return F.interpolate(x, size=(H, W), mode='bilinear') + y
     
-    def forward(self, pre_data, post_data):
+    @staticmethod
+    def _split_inputs(x, post=None):
+        if post is not None:
+            return x, post, True
+        mid = x.shape[1] // 2
+        return x[:, :mid], x[:, mid:], False
+
+    def forward(self, pre_data, post_data=None):
+        pre_data, post_data, return_loc = self._split_inputs(pre_data, post_data)
+
         _, pre_low_level_feat_1, pre_low_level_feat_2, pre_low_level_feat_3, pre_output = \
             self.encoder_1(pre_data)
         _, post_low_level_feat_1, post_low_level_feat_2, post_low_level_feat_3, post_output = \
@@ -128,4 +137,6 @@ class DamageFormer(nn.Module):
         output_loc = F.interpolate(output_loc, size=pre_data.size()[-2:], mode='bilinear')
         output_dam =  self.clf_2(final_feat_2)
         output_dam = F.interpolate(output_dam, size=post_data.size()[-2:], mode='bilinear')
-        return output_loc, output_dam 
+        if return_loc:
+            return output_loc, output_dam
+        return output_dam

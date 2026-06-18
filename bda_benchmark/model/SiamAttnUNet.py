@@ -99,7 +99,16 @@ class SiamAttnUNet(nn.Module):
 
         self.final = nn.Conv2d(64, num_classes, kernel_size=1)
         
-    def forward(self, x1, x2):
+    @staticmethod
+    def _split_inputs(x, post=None):
+        if post is not None:
+            return x, post
+        mid = x.shape[1] // 2
+        return x[:, :mid], x[:, mid:]
+
+    def forward(self, x1, x2=None):
+        x1, x2 = self._split_inputs(x1, x2)
+
         # Pre-disaster feature extraction
         enc1_1 = self.encoder1_pre(x1)
         enc2_1 = self.encoder2_pre(self.pool(enc1_1))

@@ -1,27 +1,19 @@
-# run_unet_ordinal.py — UNet + Ordinal Damage Loss (ODL)
-# =======================================================
-# Trains UNet with ordinal damage loss only.
-#
-# Loss = CE + 0.75 * Lovász + ordinal_weight * OrdinalBCE
-#
-# Ordinal loss decomposes 3-class damage into 2 binary thresholds:
-#   - threshold1: P(damage >= minor)
-#   - threshold2: P(damage >= major)
-# This penalizes 2-rank errors (Intact↔Destroyed) more than 1-rank errors.
+# run_siamattnunet_cmca_dacutmix.py -- SiamAttnUNet-CMCA + DACutMix
 
 import os
-import sys
 import subprocess
+import sys
 
-ROOT = r"D:\Project\haoChen\BRIGHT"
+
+ROOT = os.environ.get("BRIGHT_ROOT", r"E:\haoChen\BRIGHT")
 BDA_ROOT = os.path.join(ROOT, "bda_benchmark")
 
 DATA_PATH = os.path.join(ROOT, "data")
 SPLIT_DIR = os.path.join(BDA_ROOT, "dataset", "splitname", "standard_ML")
-SAVE_DIR = os.path.join(ROOT, "checkpoints", "unet_ordinal")
+SAVE_DIR = os.path.join(ROOT, "checkpoints", "siamattnunet_cmca_dacutmix")
 TRAIN_SCRIPT = os.path.join(BDA_ROOT, "script", "standard_ML", "train_UNet.py")
 
-DEVICE = "cuda"
+DEVICE = os.environ.get("BRIGHT_DEVICE", "cuda:0")
 
 os.makedirs(SAVE_DIR, exist_ok=True)
 
@@ -30,6 +22,7 @@ def run(cmd):
     env = os.environ.copy()
     prev = env.get("PYTHONPATH", "")
     env["PYTHONPATH"] = BDA_ROOT if not prev else BDA_ROOT + os.pathsep + prev
+    env["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
     print("RUN:", " ".join(f'"{x}"' if " " in x else x for x in cmd))
     subprocess.run(cmd, check=True, cwd=ROOT, env=env)
 
@@ -37,7 +30,6 @@ def run(cmd):
 run([
     sys.executable, TRAIN_SCRIPT,
 
-    # Data
     "--dataset", "BRIGHT",
     "--train_dataset_path", DATA_PATH,
     "--train_data_list_path", os.path.join(SPLIT_DIR, "train_set.txt"),
@@ -46,8 +38,7 @@ run([
     "--test_dataset_path", DATA_PATH,
     "--test_data_list_path", os.path.join(SPLIT_DIR, "test_set.txt"),
 
-    # Training — same as paper baseline
-    "--train_batch_size", "16",
+    "--train_batch_size", "8",
     "--eval_batch_size", "4",
     "--num_workers", "16",
     "--crop_size", "640",
@@ -56,25 +47,26 @@ run([
     "--weight_decay", "5e-3",
     "--lr_policy", "constant",
 
-    # Model
-    "--model_type", "UNet",
+    "--model_type", "SiamAttnUNetCMCA",
     "--model_param_path", SAVE_DIR,
 
-    # Ordinal Damage Loss — the only addition vs baseline
-    "--use_ordinal_loss",
-    "--ordinal_weight", "0.1",
-    # No warmup needed: ODL weight 0.1 is only ~7% of total loss, won't destabilize training
-    # Total training is only 50K steps, every step counts
-    "--ordinal_warmup_iters", "0",
+    "--damage_class_ids", "2,3",
+    "--use_dacutmix",
+    "--dacutmix_prob", "0.25",
+    "--dacutmix_min_damage_pixels", "200",
+    "--dacutmix_min_damage_ratio", "0.05",
+    "--dacutmix_patch_min_ratio", "0.12",
+    "--dacutmix_patch_max_ratio", "0.35",
+    "--dacutmix_box_tries", "10",
+    "--dacutmix_donor_tries", "10",
 
-    # Logging
     "--eval_interval", "500",
     "--curve_log_interval", "10",
     "--curve_save_interval", "500",
 
-    # Performance
     "--use_amp",
     "--amp_dtype", "fp16",
+    "--grad_clip_norm", "1.0",
     "--pin_memory",
     "--persistent_workers",
     "--prefetch_factor", "2",
