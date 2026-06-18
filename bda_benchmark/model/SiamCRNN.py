@@ -14,14 +14,6 @@ import torch.nn as nn
 from torchvision.models.feature_extraction import create_feature_extractor
 
 
-def _resnet18(pretrained=True):
-    try:
-        weights = torchvision.models.ResNet18_Weights.DEFAULT if pretrained else None
-        return torchvision.models.resnet18(weights=weights)
-    except AttributeError:
-        return torchvision.models.resnet18(pretrained=pretrained)
-
-
 class ResBlock(nn.Module):
     def __init__(self, in_channels, out_channels, stride=1, downsample=None):
         super(ResBlock, self).__init__()
@@ -52,13 +44,13 @@ class ResBlock(nn.Module):
 
 
 class SiamCRNN(nn.Module):
-    def __init__(self, num_classes=4, pretrained=True):
+    def __init__(self):
         super(SiamCRNN, self).__init__()
         expansion = 1
 
        
-        self.encoder_1 = _resnet18(pretrained=pretrained)
-        self.encoder_2 = _resnet18(pretrained=pretrained)
+        self.encoder_1 = torchvision.models.resnet18(pretrained=True)
+        self.encoder_2 = torchvision.models.resnet18(pretrained=True)
         return_nodes = {
             'layer1': 'feat1',
             'layer2': 'feat2',
@@ -96,22 +88,13 @@ class SiamCRNN(nn.Module):
         
 
         self.main_clf_loc = nn.Conv2d(in_channels=128, out_channels=2, kernel_size=1)
-        self.main_clf_clf = nn.Conv2d(in_channels=128, out_channels=num_classes, kernel_size=1)
+        self.main_clf_clf = nn.Conv2d(in_channels=128, out_channels=4, kernel_size=1)
 
     def _upsample_add(self, x, y):
         _, _, H, W = y.size()
         return F.interpolate(x, size=(H, W), mode='bilinear') + y
 
-    @staticmethod
-    def _split_inputs(x, post=None):
-        if post is not None:
-            return x, post, True
-        mid = x.shape[1] // 2
-        return x[:, :mid], x[:, mid:], False
-
-    def forward(self, pre_data, post_data=None):
-        pre_data, post_data, return_loc = self._split_inputs(pre_data, post_data)
-
+    def forward(self, pre_data, post_data):
         pre_features = self.extractor_1(pre_data)
         post_features = self.extractor_2(post_data)
         pre_low_level_feat_1, pre_low_level_feat_2, pre_low_level_feat_3, pre_output = pre_features["feat1"], pre_features["feat2"], pre_features["feat3"], pre_features["feat4"]
@@ -161,9 +144,7 @@ class SiamCRNN(nn.Module):
         output_loc = F.interpolate(output_loc, size=pre_data.size()[-2:], mode='bilinear')
         output_clf = self.main_clf_clf(p1)
         output_clf = F.interpolate(output_clf, size=pre_data.size()[-2:], mode='bilinear')
-        if return_loc:
-            return output_loc, output_clf
-        return output_clf
+        return output_loc, output_clf
 
 
 class ConvLSTMCell(nn.Module):
