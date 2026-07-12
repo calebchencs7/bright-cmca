@@ -84,13 +84,21 @@ def build_backbone(model_type, in_channels, num_classes):
         from model.DeepLabV3Plus import DeepLabV3Plus
         return DeepLabV3Plus(in_channels=in_channels, num_classes=num_classes)
 
+    if mt in ("deeplabv3pluscmca", "deeplabv3+cmca"):
+        from model.DeepLabV3PlusCMCA import DeepLabV3PlusCMCA
+        return DeepLabV3PlusCMCA(in_channels=in_channels, num_classes=num_classes)
+
     if mt == "siamattnunet":
         from model.SiamAttnUNet import SiamAttnUNet
         return SiamAttnUNet(in_channels=3, num_classes=num_classes)
 
+    if mt == "siamcrnncmca":
+        from model.SiamCRNNCMCA import SiamCRNNCMCA
+        return SiamCRNNCMCA(num_classes=num_classes)
+
     if mt == "siamcrnn":
         from model.SiamCRNN import SiamCRNN
-        return SiamCRNN()
+        return SiamCRNN(num_classes=num_classes)
 
     raise ValueError(f"Unknown model_type: {model_type}")
 

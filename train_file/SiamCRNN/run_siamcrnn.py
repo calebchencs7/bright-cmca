@@ -1,4 +1,4 @@
-# run_siamattnunet_cmca_dacutmix.py -- SiamAttnUNet-CMCA + DACutMix
+# run_siamcrnn.py -- SiamCRNN baseline
 
 import os
 import subprocess
@@ -10,7 +10,7 @@ BDA_ROOT = os.path.join(ROOT, "bda_benchmark")
 
 DATA_PATH = os.path.join(ROOT, "data")
 SPLIT_DIR = os.path.join(BDA_ROOT, "dataset", "splitname", "standard_ML")
-SAVE_DIR = os.path.join(ROOT, "checkpoints", "siamattnunet_cmca_dacutmix")
+SAVE_DIR = os.path.join(ROOT, "checkpoints", "siamcrnn")
 TRAIN_SCRIPT = os.path.join(BDA_ROOT, "script", "standard_ML", "train_UNet.py")
 
 DEVICE = os.environ.get("BRIGHT_DEVICE", "cuda:0")
@@ -38,27 +38,17 @@ run([
     "--test_dataset_path", DATA_PATH,
     "--test_data_list_path", os.path.join(SPLIT_DIR, "test_set.txt"),
 
-    "--train_batch_size", "8",
-    "--eval_batch_size", "4",
-    "--num_workers", "16",
+    "--train_batch_size", "4",
+    "--eval_batch_size", "2",
+    "--num_workers", "8",
     "--crop_size", "640",
     "--max_iters", "800000",
     "--learning_rate", "1e-4",
     "--weight_decay", "5e-3",
     "--lr_policy", "constant",
 
-    "--model_type", "SiamAttnUNetCMCA",
+    "--model_type", "SiamCRNN",
     "--model_param_path", SAVE_DIR,
-
-    "--damage_class_ids", "2,3",
-    "--use_dacutmix",
-    "--dacutmix_prob", "0.25",
-    "--dacutmix_min_damage_pixels", "200",
-    "--dacutmix_min_damage_ratio", "0.05",
-    "--dacutmix_patch_min_ratio", "0.12",
-    "--dacutmix_patch_max_ratio", "0.35",
-    "--dacutmix_box_tries", "10",
-    "--dacutmix_donor_tries", "10",
 
     "--eval_interval", "500",
     "--curve_log_interval", "10",

@@ -56,7 +56,6 @@ run([
 
     "--use_amp",
     "--amp_dtype", "fp16",
-    "--grad_clip_norm", "1.0",
     "--pin_memory",
     "--persistent_workers",
     "--prefetch_factor", "2",
