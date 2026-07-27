@@ -6,7 +6,22 @@
 \usepackage{cite}
 \usepackage{graphicx}
 \usepackage{url}
-\usepackage[hidelinks,bookmarksnumbered=true,bookmarksopen=true]{hyperref}
+% Leave citation numbers unwrapped so scholarly PDF readers can resolve them.
+\makeatletter
+\newcommand*{\hyper@nopatch@bib}{}
+\makeatother
+\usepackage[
+    colorlinks=true,
+    citecolor=black,
+    linkcolor=black,
+    urlcolor=blue,
+    bookmarksnumbered=true,
+    bookmarksopen=true,
+    pdftitle={Cross-Modal Change Attention and Damage-Aware CutMix for Multimodal Building Damage Assessment},
+    pdfauthor={Hao Chen},
+    pdfsubject={Multimodal building damage assessment using pre-event optical and post-event SAR imagery},
+    pdfkeywords={building damage assessment, multimodal remote sensing, optical imagery, synthetic aperture radar, cross-modal attention, CutMix}
+]{hyperref}
 \usepackage{bookmark}
 
 \graphicspath{{images/}{../figure/}}
@@ -36,13 +51,59 @@ Building damage assessment, multimodal remote sensing, optical imagery, syntheti
 \section{Introduction}
 \label{sec:introduction}
 
-% TODO: Write this section after the Methodology and Experiments sections are stable.
-% A JSTARS-style introduction should motivate all-weather disaster response,
-% summarize the optical/SAR fusion gap, identify cross-event generalization and
-% damaged-class scarcity as the two main challenges, and then list the
-% contributions of CMCA and DA-CutMix.
+\IEEEPARstart{R}{apid} building damage assessment (BDA) is a critical component of emergency response after earthquakes, floods, storms, wildfires, explosions, and armed conflicts. Building-level damage maps support search-and-rescue prioritization, loss estimation, and relief allocation, yet field surveys are often slow, dangerous, and spatially incomplete. Earth observation (EO) offers a scalable alternative by repeatedly imaging large affected areas. Consequently, optical, synthetic aperture radar (SAR), and multitemporal remote sensing have long been investigated for post-disaster damage mapping~\cite{dong2013review,plank2014rapid,ge2020sarreview}.
 
-\section{Methodology}
+The availability of very-high-resolution (VHR) imagery and large annotated datasets has shifted BDA from handcrafted indicators toward data-driven localization and multiclass damage recognition. The xBD benchmark enabled systematic evaluation across multiple hazards and geographic regions~\cite{gupta2019xbd}. Subsequent methods have explored joint localization and classification, multitemporal feature interaction, object-based semantic change detection, and operational generalization~\cite{gupta2021rescuenet,shen2022bdanet,zheng2021changeos,wiguna2024evaluation}. These studies demonstrate the potential of deep neural networks, but most large-scale BDA systems still depend on paired pre- and post-event optical observations.
+
+Optical imagery provides intuitive spectral and textural evidence, but usable post-event acquisitions can be delayed by clouds, smoke, precipitation, or the absence of daylight. SAR actively illuminates the surface and therefore offers day-and-night, largely weather-independent observation. Multitemporal SAR studies have used intensity changes and interferometric coherence, while PolSAR studies have analyzed damage-induced changes in scattering mechanisms~\cite{plank2014rapid,ge2020sarreview,chen2013tsunami,zhao2013airbornepolsar,karimzadeh2017multisensor,natsuaki2018coherence,chen2016polsar}. Single post-event VHR SAR studies further demonstrate the operational value of radar data when a suitable pre-event SAR acquisition is unavailable~\cite{macchiarulo2025vhrsar}. More recent work has combined optical and SAR data with statistical fusion or deep networks~\cite{brunner2010earthquake,jiang2020belief,adriano2021multimodal,zhang2025m3icnet}. In particular, the BRIGHT benchmark provides open, globally distributed VHR pre-event optical and post-event SAR image pairs over 14 disaster events, together with pixel-level damage labels~\cite{chen2025bright}. It creates a realistic setting in which detailed pre-disaster optical information can be paired with rapidly available post-disaster SAR observations.
+
+This setting nevertheless poses a difficult heterogeneous change-understanding problem. Optical values describe reflected solar radiation, whereas SAR amplitudes depend on microwave scattering, viewing geometry, surface roughness, and dielectric properties. Even after geometric coregistration, corresponding optical and SAR pixels need not have similar appearance. Direct channel concatenation can therefore entangle true structural damage with modality-induced differences. Heterogeneous change-detection studies have addressed this issue through image translation, common feature spaces, and progressive modality alignment~\cite{jiang2020dhff,xing2023progressive}. Optical--SAR building extraction has likewise benefited from explicitly modeling shared and modality-specific information~\cite{li2023progressive}. However, these approaches do not directly address multiclass building damage assessment on globally diverse VHR events.
+
+A second challenge is the joint effect of class imbalance and cross-event distribution shift. Damaged and destroyed buildings occupy far fewer pixels than background and intact buildings, and their visual or scattering signatures vary with hazard mechanism, construction type, sensor, and geography. Extreme imbalance has been documented in optical BDA~\cite{wang2022imbalanced}, while event-disjoint evaluations show that strong models can deteriorate markedly on unseen locations~\cite{gerard2024baseline,wiguna2024evaluation}. Recent multi-hazard methods also emphasize the need to separate damage evidence from event-specific context~\cite{hafner2025disasteradaptive}. Generic geometric or radiometric augmentation does not explicitly increase exposure to rare damage pixels, nor does it force damage patterns to be learned across different event backgrounds.
+
+To address these issues, this paper proposes a Cross-Modal Change Attention (\cmca) module and a Damage-Aware CutMix (\dacutmix) training strategy for multimodal building damage assessment. \cmca\ performs explicit optical-to-SAR feature comparison at the bottleneck level, using pre-event optical features as spatial queries and post-event SAR features as keys and values. \dacutmix\ extends CutMix~\cite{yun2019cutmix} to multimodal damage segmentation by sampling damage-rich donor patches from different disaster events and pasting them synchronously into the optical image, SAR image, and label map. The two components are lightweight and can be attached to multiple segmentation backbones.
+
+The main contributions of this paper are summarized as follows.
+\begin{itemize}
+    \item We propose \cmca, a lightweight cross-modal attention module that replaces simple optical/SAR concatenation with explicit change-aware feature interaction.
+    \item We introduce \dacutmix, an event-aware and damage-aware augmentation strategy that increases rare damage-class exposure while preserving optical--SAR--label alignment.
+    \item We evaluate the proposed components on the BRIGHT benchmark with six representative backbones, including CNN-, transformer-, Siamese-, and Mamba-based models, and analyze both overall and per-event robustness.
+\end{itemize}
+
+\section{Related Work}
+\label{sec:related_work}
+
+\subsection{Remote Sensing for Building Damage Assessment}
+
+Traditional BDA methods derive damage cues from mono- or multitemporal EO observations. Optical approaches use spectral, textural, geometric, and object-level differences, whereas SAR approaches exploit backscatter intensity, interferometric coherence, and polarimetric scattering~\cite{dong2013review,plank2014rapid,ge2020sarreview}. Multitemporal PolSAR studies associated changes in double-bounce and volume scattering with tsunami- or earthquake-induced structural damage~\cite{chen2013tsunami,chen2016polsar}. Other methods combined intensity and coherence from multiple sensors~\cite{karimzadeh2017multisensor}, although building-level coherence is constrained by spatial averaging, building size, temporal decorrelation, and acquisition geometry~\cite{natsuaki2018coherence}. When pre-event SAR is unavailable, post-event PolSAR methods use scattering and texture cues to separate collapsed buildings from intact but obliquely oriented structures~\cite{zhao2013airbornepolsar}; recent VHR SAR studies have also explored learning building-level classifiers across multiple earthquake regions~\cite{macchiarulo2025vhrsar}. At the individual-building level, Brunner \emph{et al.} predicted an intact post-event SAR signature from pre-event VHR optical imagery and compared it with the observed response~\cite{brunner2010earthquake}, while belief-fusion methods combined superpixel evidence from spaceborne optical and SAR data~\cite{jiang2020belief}. These studies established the value of SAR for rapid response, but also expose dependencies on sensor-specific features, ancillary building data, and acquisition configurations.
+
+Deep learning reduces the dependence on handcrafted damage descriptors. xBD and the xView2 challenge established a large optical bitemporal benchmark with building footprints and ordinal damage labels~\cite{gupta2019xbd}. RescueNet jointly learned building segmentation and damage assessment~\cite{gupta2021rescuenet}; BDANet used multiscale fusion, cross-directional attention, and class-focused CutMix~\cite{shen2022bdanet}; and ChangeOS cast BDA as object-based semantic change detection and evaluated transfer from natural to human-made disasters~\cite{zheng2021changeos}. Later studies examined realistic emergency-response testing and multi-hazard adaptation, highlighting the remaining difficulty of unseen events and intermediate damage classes~\cite{wiguna2024evaluation,hafner2025disasteradaptive}.
+
+Multimodal BDA is less mature because paired VHR optical/SAR imagery and labels are scarce. Adriano \emph{et al.} evaluated single-modal, cross-modal, and multimodal data-availability scenarios and showed the feasibility of pre-event optical/post-event SAR mapping~\cite{adriano2021multimodal}. M3ICNet subsequently studied cross-modal and cross-resolution feature interaction for optical--SAR damage detection~\cite{zhang2025m3icnet}. BRIGHT substantially broadens this direction through an open, event-diverse VHR benchmark~\cite{chen2025bright}. Our work is positioned in this supervised BRIGHT setting and targets two complementary limitations: heterogeneous feature comparison and rare damage-class learning.
+
+\subsection{Multimodal Optical--SAR Fusion}
+
+Optical and SAR sensing mechanisms are complementary but heterogeneous. SpaceNet 6 promoted all-weather building mapping with paired VHR optical and SAR observations~\cite{shermeyer2020spacenet6}, and progressive fusion learning later extracted modality-invariant structural information for joint optical/SAR building segmentation~\cite{li2023progressive}. These studies concern static building footprints rather than disaster-induced semantic change, but they show that learned fusion should preserve both shared structure and modality-specific information.
+
+Heterogeneous change detection more directly studies how to distinguish actual scene changes from cross-sensor discrepancies. Deep homogeneous feature fusion separates semantic content from sensor style before comparison~\cite{jiang2020dhff}, whereas progressive modality alignment alternates feature alignment and change-map refinement~\cite{xing2023progressive}. M3ICNet performs multilevel interaction across optical and SAR branches while preserving their native resolutions~\cite{zhang2025m3icnet}. These methods demonstrate that direct pixel differencing is unsuitable for heterogeneous imagery; however, image translation or global feature alignment may also suppress task-relevant damage evidence, and most existing benchmarks target binary land-cover change rather than four-class BDA.
+
+Attention offers a content-adaptive alternative: query--key similarity controls where information is retrieved across feature sets~\cite{vaswani2017attention}. Change-guided attention uses coarse semantic change priors to improve multiscale feature fusion~\cite{han2023cgnet}. Our \cmca\ differs in purpose and direction. It uses pre-event optical building features as queries and post-event SAR features as keys and values at the semantic bottleneck, producing an optical-conditioned SAR representation for damage reasoning rather than a generic fused context.
+
+\subsection{Deep Change-Detection Architectures}
+
+Deep change detection has evolved from convolutional Siamese networks toward explicit long-range spatio-temporal modeling. Early fully convolutional Siamese architectures established end-to-end feature differencing for paired remote sensing images~\cite{daudt2018fcsiam}. SiamCRNN subsequently combined convolutional feature extraction with recurrent interaction to handle multisource VHR imagery~\cite{chen2020siamcrnn}. Transformer-based methods address the limited receptive field of convolution by modeling nonlocal relationships. BIT compresses bitemporal features into semantic tokens and reasons about their temporal interaction~\cite{chen2022bit}, while DamFormer extends Siamese Transformer encoding and multitemporal fusion to building localization and damage classification~\cite{chen2022damformer}.
+
+State-space models provide another route to long-range context. Mamba introduces input-dependent selective state transitions with linear sequence scaling~\cite{gu2024mamba}, and VMamba adapts selective scanning to two-dimensional visual features~\cite{liu2024vmamba}. ChangeMamba further tailors spatial and temporal scans to binary change detection, semantic change detection, and BDA~\cite{chen2024changemamba}. Related remote sensing variants explore omnidirectional dense prediction and combined local--global change cues~\cite{zhao2024rsmamba,zhang2025cdmamba}. These developments motivate evaluating \cmca\ across CNN-, Transformer-, recurrent-, and Mamba-based backbones. Unlike a backbone-specific decoder, however, \cmca\ is designed as a compact fusion module whose contribution can be isolated under different architectures.
+
+\subsection{Class Imbalance and Data Augmentation}
+
+Dense prediction commonly exhibits foreground--background and long-tailed class imbalance. Loss-level methods such as focal loss down-weight easy dominant examples~\cite{lin2017focal}, while long-tailed segmentation methods rebalance class-dependent feature or logit variation~\cite{wang2023blv}. In BDA, the problem is compounded by the small spatial extent and event-specific appearance of damaged buildings. Wang \emph{et al.} explicitly studied extremely imbalanced satellite BDA~\cite{wang2022imbalanced}, and event-disjoint xBD experiments linked poor transfer to unequal class distributions across disasters~\cite{gerard2024baseline}. Thus, balancing only the global loss does not ensure that rare damage patterns are observed under diverse event contexts.
+
+Sample-mixing augmentation provides a complementary data-level solution. CutMix pastes rectangular regions between images and mixes their supervision~\cite{yun2019cutmix}; ClassMix selects semantic regions for segmentation consistency~\cite{olsson2021classmix}; and Copy-Paste transfers object masks to increase object and rare-category diversity~\cite{ghiasi2021copypaste}. For optical BDA, BDANet applied CutMix specifically to difficult damage levels and showed that class-focused mixing was more effective than indiscriminate mixing~\cite{shen2022bdanet}. These findings motivate targeted augmentation, but they do not account for the three-way synchronization of pre-event optical data, post-event SAR data, and dense damage labels.
+
+The proposed \dacutmix\ is tailored to this multimodal and cross-event setting. Donor patches are sampled from a different disaster event and accepted only when they contain sufficient damaged or destroyed pixels. The same box is then pasted into both sensor streams and the label map. Consequently, the method increases rare-class exposure, varies the surrounding event context, and preserves optical--SAR--label correspondence.
+
+\section{Proposed Method}
 \label{sec:methodology}
 
 This section describes the proposed framework for multimodal building damage assessment. The method contains two complementary components: Cross-Modal Change Attention (\cmca), which improves optical/SAR feature fusion at the model level, and Damage-Aware CutMix (\dacutmix), which improves damage-class exposure and cross-event robustness at the data level. The overall technical roadmap is shown in Fig.~\ref{fig:roadmap}.
@@ -173,7 +234,7 @@ The same spatial box is pasted across optical, SAR, and label layers, preserving
 \subsection{Training Objective and Implementation Details}
 \label{subsec:training}
 
-The main segmentation objective combines pixel-wise cross-entropy with Lovasz-Softmax loss:
+The main segmentation objective combines pixel-wise cross-entropy with Lovasz-Softmax loss~\cite{berman2018lovasz}:
 \begin{equation}
     \mathcal{L} =
     \mathcal{L}_{\mathrm{CE}}
@@ -182,9 +243,9 @@ The main segmentation objective combines pixel-wise cross-entropy with Lovasz-So
 \end{equation}
 Unless otherwise stated, no auxiliary ordinal or contrastive losses are enabled for the \cmca\ and \dacutmix\ ablations.
 
-The default training configuration follows the benchmark setting used in the implementation. Models are trained with AdamW using a learning rate of $1\times10^{-4}$ and a weight decay of $5\times10^{-3}$. The crop size is 640, the training batch size is 16, and the maximum training budget is 800,000 samples. For \dacutmix, the damage-class set is $\mathcal{C}_{d}=\{2,3\}$, $n_{\min}=200$, $\tau=0.05$, and up to 10 donor samples and 10 candidate boxes per donor are tested before falling back to the un-mixed target crop. The patch height and width are sampled independently between 0.12 and 0.35 of the crop size in the main runs, and the mixing probability is treated as a hyperparameter in the ablation study.
+The default training configuration follows the benchmark setting used in the implementation. Models are trained with AdamW~\cite{loshchilov2019adamw} using a learning rate of $1\times10^{-4}$ and a weight decay of $5\times10^{-3}$. The crop size is 640, the training batch size is 16, and the maximum training budget is 800,000 samples. For \dacutmix, the damage-class set is $\mathcal{C}_{d}=\{2,3\}$, $n_{\min}=200$, $\tau=0.05$, and up to 10 donor samples and 10 candidate boxes per donor are tested before falling back to the un-mixed target crop. The patch height and width are sampled independently between 0.12 and 0.35 of the crop size in the main runs. The mixing probability is not fixed across all backbones; it is selected from $\{0.25,0.30\}$ on the validation setting and reported explicitly in the ablation study.
 
-\section{Experiments and Results}
+\section{Experiments}
 \label{sec:experiments}
 
 \subsection{Dataset and Experimental Protocol}
@@ -227,17 +288,17 @@ and mIoU is the average IoU over the four semantic classes. $F1_{\mathrm{loc}}$ 
 \subsection{Implementation Details}
 \label{subsec:exp_implementation}
 
-All methods use the same input format and data split. The pre-event optical image and post-event SAR image are concatenated into a six-channel tensor after synchronized geometric augmentation and normalization. Unless otherwise stated, models are trained for 800,000 samples with a crop size of 640, a batch size of 16, AdamW optimizer, learning rate $1\times10^{-4}$, and weight decay $5\times10^{-3}$. The loss function follows~\eqref{eq:training_loss}. For \dacutmix, donor patches are sampled from different disaster events with damaged-class set $\{2,3\}$, minimum damage pixels $n_{\min}=200$, minimum damage ratio $\tau=0.05$, and patch side length sampled from 0.12 to 0.35 of the crop size. The application probability $p$ is varied in the ablation study.
+All methods use the same input format and data split. The pre-event optical image and post-event SAR image are concatenated into a six-channel tensor after synchronized geometric augmentation and normalization. Unless otherwise stated, models are trained for 800,000 samples with a crop size of 640, a batch size of 16, AdamW optimizer, learning rate $1\times10^{-4}$, and weight decay $5\times10^{-3}$. The loss function follows~\eqref{eq:training_loss}. For \dacutmix, donor patches are sampled from different disaster events with damaged-class set $\{2,3\}$, minimum damage pixels $n_{\min}=200$, minimum damage ratio $\tau=0.05$, and patch side length sampled from 0.12 to 0.35 of the crop size. The application probability $p$ is selected from $\{0.25,0.30\}$ on the validation setting; the compact \dacutmix\ rows in Table~\ref{tab:overall_ablation} report the selected setting for each backbone.
 
 \subsection{Compared Variants}
 \label{subsec:variants}
 
-We evaluate the two proposed components under five representative segmentation backbones: UNet, DamageFormer, SiamAttnUNet, SiamCRNN, and DeepLabV3Plus. For each backbone, the baseline denotes the original model trained without \cmca\ or \dacutmix. The ``+\cmca'' setting replaces the original optical/SAR fusion with the proposed cross-modal attention module when the backbone architecture supports a paired-branch design. The ``+\dacutmix'' setting applies the proposed event-aware and damage-aware CutMix during training only. The ``+\cmca+\dacutmix'' setting combines the model-level and data-level components.
+We evaluate the two proposed components under six representative segmentation backbones: UNet~\cite{ronneberger2015unet}; DamageFormer, the benchmark adaptation of DamFormer~\cite{chen2022damformer} with Swin-T encoders~\cite{liu2021swin}; SiamAttnUNet~\cite{adriano2021multimodal}; SiamCRNN~\cite{chen2020siamcrnn}; DeepLabV3Plus~\cite{chen2018deeplabv3plus}; and ChangeMamba~\cite{chen2024changemamba}. For each backbone, the baseline denotes the original model trained without \cmca\ or \dacutmix. The ``+\cmca'' setting replaces the original optical/SAR fusion with the proposed cross-modal attention module when the backbone architecture supports a paired-branch design. The ``+\dacutmix'' setting applies the proposed event-aware and damage-aware CutMix during training only. The ``+\cmca+\dacutmix'' setting combines the model-level and data-level components. When a compact final comparison reports ``+\cmca+\dacutmix'' without an explicit probability, it denotes the validation-selected CutMix probability rather than a single probability shared by all backbones.
 
 \subsection{Ablation Study}
 \label{subsec:ablation}
 
-Table~\ref{tab:overall_ablation} summarizes the overall ablation results on the standard test split. The table is organized by backbone so that the individual and combined effects of \cmca\ and \dacutmix\ can be compared under the same training protocol.
+Table~\ref{tab:overall_ablation} summarizes the compact ablation results on the standard test split. The table is organized by backbone so that the baseline, \dacutmix-only, \cmca-only, and combined \cmca+\dacutmix\ settings can be compared directly. For rows involving \dacutmix, the reported result uses the validation-selected probability from $\{0.25,0.30\}$; the probability is omitted from the method name to keep the main table focused on component-level comparisons.
 
 \begin{table*}[!t]
 \caption{Overall Ablation Results on the BRIGHT Benchmark. Values Are Reported in Percentage.}
@@ -250,58 +311,65 @@ Table~\ref{tab:overall_ablation} summarizes the overall ablation results on the 
 \toprule
 Method & F1$_{\mathrm{loc}}$ & F1$_{\mathrm{clf}}$ & OA & mIoU & Background & Intact & Damaged & Destroyed \\
 \midrule
-UNet & 88.32 & 70.91 & 95.52 & 64.74 & 96.28 & 71.62 & 37.48 & 53.59 \\
-UNet + \dacutmix\ 0.25 & 88.65 & 70.18 & 95.54 & 64.44 & 96.28 & 72.36 & 36.27 & 52.84 \\
-UNet + \dacutmix\ 0.30 & 88.07 & 70.89 & 95.48 & 64.46 & 96.22 & 71.43 & 38.05 & 52.15 \\
-UNet + \cmca & 88.68 & \textbf{72.65} & 95.59 & 65.39 & 96.29 & 72.79 & \underline{39.30} & 53.20 \\
-UNet + \cmca\ + \dacutmix\ 0.25 & \underline{89.09} & 72.03 & \textbf{95.82} & \underline{66.07} & \textbf{96.52} & \underline{73.29} & \textbf{40.53} & \underline{53.93} \\
-UNet + \cmca\ + \dacutmix\ 0.30 & \textbf{89.18} & \underline{72.43} & \underline{95.81} & \textbf{66.16} & \underline{96.50} & \textbf{73.58} & 39.08 & \textbf{55.49} \\
+UNet & 88.32 & 70.91 & 95.52 & 64.74 & 96.28 & 71.62 & 37.48 & \underline{53.59} \\
+UNet + \dacutmix & 88.07 & 70.89 & 95.48 & 64.46 & 96.22 & 71.43 & 38.05 & 52.15 \\
+UNet + \cmca & \underline{88.68} & \textbf{72.65} & \underline{95.59} & \underline{65.39} & \underline{96.29} & \underline{72.79} & \textbf{39.30} & 53.20 \\
+UNet + \cmca\ + \dacutmix & \textbf{89.18} & \underline{72.43} & \textbf{95.81} & \textbf{66.16} & \textbf{96.50} & \textbf{73.58} & \underline{39.08} & \textbf{55.49} \\
 \midrule
-DamageFormer & 89.88 & 72.61 & 96.00 & 66.84 & 96.70 & 74.62 & 39.97 & 56.06 \\
-DamageFormer + \dacutmix\ 0.25 & 89.91 & 72.25 & \underline{96.04} & 66.79 & \underline{96.75} & \underline{74.68} & 39.03 & \underline{56.70} \\
-DamageFormer + \dacutmix\ 0.30 & \underline{89.94} & \underline{73.05} & \textbf{96.09} & \textbf{67.20} & \textbf{96.77} & \textbf{74.94} & \textbf{41.40} & 55.70 \\
-DamageFormer + \cmca & 89.90 & 71.96 & 95.97 & 66.55 & 96.72 & 74.35 & 38.61 & 56.53 \\
-DamageFormer + \cmca\ + \dacutmix\ 0.25 & \textbf{90.00} & 72.39 & 96.00 & 66.65 & 96.74 & 74.62 & 39.49 & 55.74 \\
-DamageFormer + \cmca\ + \dacutmix\ 0.30 & 89.91 & \textbf{73.07} & 96.00 & \underline{67.14} & 96.71 & 74.54 & \underline{40.17} & \textbf{57.12} \\
+DamageFormer & 89.88 & 72.61 & \underline{96.00} & 66.84 & 96.70 & \underline{74.62} & 39.97 & 56.06 \\
+DamageFormer + \dacutmix & \textbf{89.94} & \underline{73.05} & \textbf{96.09} & \textbf{67.20} & \textbf{96.77} & \textbf{74.94} & \textbf{41.40} & 55.70 \\
+DamageFormer + \cmca & 89.90 & 71.96 & 95.97 & 66.55 & \underline{96.72} & 74.35 & 38.61 & \underline{56.53} \\
+DamageFormer + \cmca\ + \dacutmix & \underline{89.91} & \textbf{73.07} & \underline{96.00} & \underline{67.14} & 96.71 & 74.54 & \underline{40.17} & \textbf{57.12} \\
 \midrule
-SiamAttnUNet & 88.26 & 71.79 & 95.51 & 65.03 & 96.21 & 72.06 & 38.24 & 53.60 \\
-SiamAttnUNet + \dacutmix\ 0.25 & 88.03 & \underline{71.99} & 95.53 & 65.27 & 96.15 & 72.00 & \underline{39.08} & 53.83 \\
-SiamAttnUNet + \dacutmix\ 0.30 & 87.92 & 71.85 & 95.49 & 65.28 & 96.11 & 71.95 & 37.45 & 55.62 \\
-SiamAttnUNet + \cmca & \underline{88.60} & 71.51 & 95.56 & 64.81 & \underline{96.32} & 72.12 & 38.81 & 52.01 \\
-SiamAttnUNet + \cmca\ + \dacutmix\ 0.25 & 88.21 & 71.59 & \underline{95.61} & \underline{65.71} & 96.26 & \underline{72.15} & 37.56 & \textbf{56.86} \\
-SiamAttnUNet + \cmca\ + \dacutmix\ 0.30 & \textbf{88.77} & \textbf{72.88} & \textbf{95.71} & \textbf{66.26} & \textbf{96.39} & \textbf{72.87} & \textbf{39.95} & \underline{55.85} \\
+SiamAttnUNet & \underline{88.26} & 71.79 & \underline{95.51} & 65.03 & \underline{96.21} & \underline{72.06} & 38.24 & 53.60 \\
+SiamAttnUNet + \dacutmix & 87.92 & 71.85 & 95.49 & \underline{65.28} & 96.11 & 71.95 & 37.45 & \underline{55.62} \\
+SiamAttnUNet + \cmca & 88.08 & \underline{72.15} & 95.49 & 65.05 & 96.19 & 71.67 & \textbf{39.50} & 52.84 \\
+SiamAttnUNet + \cmca\ + \dacutmix & \textbf{88.44} & \textbf{72.67} & \textbf{95.67} & \textbf{66.28} & \textbf{96.33} & \textbf{72.55} & \underline{38.94} & \textbf{57.30} \\
 \midrule
-SiamCRNN & 89.11 & 72.12 & 95.83 & 66.13 & \underline{96.49} & 73.63 & \underline{40.22} & 54.17 \\
-SiamCRNN + \dacutmix\ 0.25 & 89.05 & 72.15 & \underline{95.85} & 66.36 & \underline{96.49} & \underline{73.67} & 39.20 & \underline{56.09} \\
-SiamCRNN + \dacutmix\ 0.30 & \textbf{89.30} & 72.29 & \textbf{95.87} & 66.33 & \textbf{96.55} & \textbf{73.79} & 39.62 & 55.38 \\
-SiamCRNN + \cmca & 88.85 & \underline{72.85} & 95.75 & 66.25 & 96.42 & 73.12 & \textbf{41.26} & 54.21 \\
-SiamCRNN + \cmca\ + \dacutmix\ 0.25 & 89.04 & \textbf{73.13} & 95.75 & \textbf{66.52} & 96.41 & 73.49 & 40.10 & 56.06 \\
-SiamCRNN + \cmca\ + \dacutmix\ 0.30 & \underline{89.15} & 72.30 & 95.82 & \underline{66.50} & \underline{96.49} & 73.63 & 39.07 & \textbf{56.83} \\
+SiamCRNN & \textbf{89.11} & 72.12 & \underline{95.83} & 66.13 & \textbf{96.49} & \underline{73.63} & \underline{40.22} & 54.17 \\
+SiamCRNN + \dacutmix & \underline{89.05} & 72.15 & \textbf{95.85} & \underline{66.36} & \textbf{96.49} & \textbf{73.67} & 39.20 & \textbf{56.09} \\
+SiamCRNN + \cmca & 88.85 & \underline{72.85} & 95.75 & 66.25 & \underline{96.42} & 73.12 & \textbf{41.26} & 54.21 \\
+SiamCRNN + \cmca\ + \dacutmix & 89.04 & \textbf{73.13} & 95.75 & \textbf{66.52} & 96.41 & 73.49 & 40.10 & \underline{56.06} \\
 \midrule
 DeepLabV3Plus & 87.36 & 69.91 & 95.39 & 63.85 & 96.05 & 70.82 & 37.06 & 51.45 \\
-DeepLabV3Plus + \dacutmix\ 0.25 & 87.68 & \textbf{71.77} & 95.53 & \underline{65.25} & 96.10 & 71.81 & \underline{39.80} & 53.30 \\
-DeepLabV3Plus + \dacutmix\ 0.30 & 86.59 & 68.24 & 95.37 & 63.46 & 95.93 & 70.30 & 37.56 & 50.04 \\
-DeepLabV3Plus + \cmca & 87.71 & 69.76 & 95.56 & 64.83 & 96.23 & 71.14 & 38.18 & \underline{53.76} \\
-DeepLabV3Plus + \cmca\ + \dacutmix\ 0.25 & \textbf{88.79} & \underline{71.22} & \textbf{95.80} & \textbf{65.79} & \textbf{96.44} & \textbf{73.32} & 39.26 & \textbf{54.12} \\
-DeepLabV3Plus + \cmca\ + \dacutmix\ 0.30 & \underline{88.45} & 70.87 & \underline{95.72} & 65.20 & \underline{96.36} & \underline{72.89} & \textbf{40.20} & 51.35 \\
+DeepLabV3Plus + \dacutmix & 87.68 & \textbf{71.77} & 95.53 & \underline{65.25} & 96.10 & \underline{71.81} & \textbf{39.80} & 53.30 \\
+DeepLabV3Plus + \cmca & \underline{87.71} & 69.76 & \underline{95.56} & 64.83 & \underline{96.23} & 71.14 & 38.18 & \underline{53.76} \\
+DeepLabV3Plus + \cmca\ + \dacutmix & \textbf{88.79} & \underline{71.22} & \textbf{95.80} & \textbf{65.79} & \textbf{96.44} & \textbf{73.32} & \underline{39.26} & \textbf{54.12} \\
+\midrule
+ChangeMamba & \underline{89.95} & 73.18 & 95.83 & 66.73 & 96.42 & 73.66 & 40.74 & 56.09 \\
+ChangeMamba + \dacutmix & 89.75 & 73.54 & \underline{95.89} & 67.04 & \underline{96.47} & 73.88 & \underline{42.21} & 55.60 \\
+ChangeMamba + \cmca & 89.93 & \textbf{74.41} & 95.87 & \underline{67.32} & 96.45 & \underline{73.95} & \textbf{42.55} & \underline{56.34} \\
+ChangeMamba + \cmca\ + \dacutmix & \textbf{90.12} & \underline{74.31} & \textbf{95.92} & \textbf{67.43} & \textbf{96.54} & \textbf{74.12} & 41.82 & \textbf{57.25} \\
 \bottomrule
 \end{tabular}
 \renewcommand{\arraystretch}{1.0}
 \end{table*}
 
-For UNet, \cmca\ improves mIoU from 64.74\% to 65.39\%, with a notable gain of 1.82 percentage points on the damaged class. This indicates that explicit optical-to-SAR feature interaction helps the network recover damage-sensitive structural cues that are weakly exploited by direct channel concatenation. Standalone \dacutmix\ does not improve the UNet baseline in terms of mIoU, but it becomes effective when combined with \cmca. The best UNet setting, \cmca+\dacutmix\ with $p=0.30$, reaches 66.16\% mIoU, improving the baseline by 1.42 percentage points. It also improves $F1_{\mathrm{loc}}$ by 0.86 percentage points and $F1_{\mathrm{clf}}$ by 1.52 percentage points, suggesting that the combined method benefits both building localization and damage severity recognition.
+For UNet, \cmca\ improves mIoU from 64.74\% to 65.39\%, with a notable gain of 1.82 percentage points on the damaged class. This indicates that explicit optical-to-SAR feature interaction helps the network recover damage-sensitive structural cues that are weakly exploited by direct channel concatenation. Standalone \dacutmix\ does not improve the UNet baseline in terms of mIoU, but it becomes effective when combined with \cmca. The best UNet setting, \cmca+\dacutmix\ with $p=0.30$, reaches 66.16\% mIoU, improving the baseline by 1.42 percentage points. It also gives the highest per-event average mIoU of 51.59 among the UNet variants. Therefore, the validation-selected \cmca+\dacutmix\ setting for UNet uses $p=0.30$.
 
-DeepLabV3Plus provides another convolutional encoder--decoder baseline and shows a clear benefit from the proposed components. Standalone \dacutmix\ with $p=0.25$ improves mIoU from 63.85\% to 65.25\% and gives the highest $F1_{\mathrm{clf}}$ in this group. \cmca\ alone improves mIoU to 64.83\%, while the combined \cmca+\dacutmix\ setting with $p=0.25$ achieves the best mIoU of 65.79\%, corresponding to a 1.94-point gain over the baseline. This setting also gives the best $F1_{\mathrm{loc}}$, OA, background IoU, intact IoU, and destroyed-class IoU for DeepLabV3Plus. The $p=0.30$ combined setting instead gives the best damaged-class IoU, increasing it from 37.06\% to 40.20\%, which indicates that a larger mixing probability may favor harder damage pixels while slightly reducing destroyed-class consistency.
+DeepLabV3Plus provides another convolutional encoder--decoder baseline and shows a clear benefit from the proposed components. Standalone \dacutmix\ with $p=0.25$ improves mIoU from 63.85\% to 65.25\% and gives the highest $F1_{\mathrm{clf}}$ in this group. \cmca\ alone improves mIoU to 64.83\%, while the combined \cmca+\dacutmix\ setting with $p=0.25$ achieves the best mIoU of 65.79\%, corresponding to a 1.94-point gain over the baseline. This setting also gives the best $F1_{\mathrm{loc}}$, OA, background IoU, intact IoU, destroyed-class IoU, and per-event average mIoU of 49.08 for DeepLabV3Plus. The $p=0.30$ combined setting instead gives the best damaged-class IoU, increasing it from 37.06\% to 40.20\%, which indicates that a larger mixing probability may favor harder damage pixels while slightly reducing destroyed-class consistency. We therefore select $p=0.25$ for the compact DeepLabV3Plus+\cmca+\dacutmix\ setting.
 
-The stronger backbones reveal a more nuanced pattern. For DamageFormer, standalone \dacutmix\ with $p=0.30$ gives the best mIoU in this group, increasing mIoU from 66.84\% to 67.20\% and damaged-class IoU from 39.97\% to 41.40\%. The combined DamageFormer setting with $p=0.30$ does not exceed the standalone \dacutmix\ mIoU, but it achieves the best destroyed-class IoU in the group, improving it from 56.06\% to 57.12\%, and also gives the highest $F1_{\mathrm{clf}}$ of 73.07\%. This suggests that the two components may emphasize different damage categories depending on the backbone.
+The stronger backbones reveal a more nuanced pattern. For DamageFormer, standalone \dacutmix\ with $p=0.30$ gives the best overall mIoU in this group, increasing mIoU from 66.84\% to 67.20\% and damaged-class IoU from 39.97\% to 41.40\%. However, the per-event averages show that the baseline and $p=0.25$ setting are more stable across events, with average mIoU values of 52.04 and 52.02, respectively, compared with 51.68 for $p=0.30$. The combined DamageFormer setting with $p=0.30$ does not exceed the standalone \dacutmix\ mIoU, but it achieves the best destroyed-class IoU in the group, improving it from 56.06\% to 57.12\%, and also gives the highest $F1_{\mathrm{clf}}$ of 73.07\%. This suggests that the two components may emphasize different damage categories depending on the backbone; for DamageFormer, $p=0.30$ is preferable for overall mIoU, while $p=0.25$ or the baseline behavior is more conservative for event-level robustness.
 
-For SiamAttnUNet, the combined \cmca+\dacutmix\ setting with $p=0.30$ improves mIoU from 65.03\% to 66.26\% and raises $F1_{\mathrm{clf}}$ from 71.79\% to 72.88\%. It also improves damaged-class IoU by 1.71 percentage points. The $p=0.25$ combined setting gives the best destroyed-class IoU for this backbone, increasing it from 53.60\% to 56.86\%. For SiamCRNN, the baseline is already competitive, but the proposed components still improve damage recognition. \cmca\ alone raises damaged-class IoU from 40.22\% to 41.26\%, while \cmca+\dacutmix\ with $p=0.25$ gives the best mIoU and $F1_{\mathrm{clf}}$, reaching 66.52\% and 73.13\%, respectively. The $p=0.30$ combined setting gives the best destroyed-class IoU for SiamCRNN, improving it by 2.66 percentage points over the baseline.
+For SiamAttnUNet, \cmca\ alone raises $F1_{\mathrm{clf}}$ from 71.79\% to 72.15\% and damaged-class IoU from 38.24\% to 39.50\%, while leaving overall mIoU nearly unchanged at 65.05\%. The combined \cmca+\dacutmix\ setting with $p=0.25$ achieves the best overall mIoU of 66.28\%, a 1.25-point gain over the baseline, and improves $F1_{\mathrm{clf}}$ to 72.67\% and destroyed-class IoU to 57.30\%. Across the 13 available per-event results, this combined setting averages 50.73\% mIoU, improves the baseline average by 1.90 points, and obtains the best result on five events. Standalone \dacutmix\ with $p=0.30$ has the highest per-event average of 51.31\%, indicating that the setting with the best global test mIoU need not maximize the unweighted event average. We therefore use $p=0.25$ for the compact SiamAttnUNet+\cmca+\dacutmix\ row. For SiamCRNN, the baseline is already competitive, but the proposed components still improve damage recognition. \cmca\ alone raises damaged-class IoU from 40.22\% to 41.26\%, while \cmca+\dacutmix\ with $p=0.25$ gives the best mIoU, $F1_{\mathrm{clf}}$, and per-event average mIoU, reaching 66.52\%, 73.13\%, and 51.11, respectively. The $p=0.30$ combined setting gives the best destroyed-class IoU for SiamCRNN, but the validation-selected compact setting uses $p=0.25$.
+
+ChangeMamba further tests whether the proposed components remain useful for a Mamba-based long-range context model. The baseline reaches 66.73\% mIoU, while \dacutmix\ with $p=0.30$ improves it to 67.04\%. \cmca\ alone gives a stronger gain, increasing mIoU to 67.32\% and damaged-class IoU from 40.74\% to 42.55\%. The combined ChangeMamba+\cmca+\dacutmix\ setting with $p=0.30$ achieves the best mIoU of 67.43\% and the best destroyed-class IoU of 57.25\%, suggesting that explicit cross-modal comparison remains complementary to the global context modeling capacity of ChangeMamba.
 
 \subsection{Per-Event Robustness}
 \label{subsec:per_event}
 
 We further inspect per-event mIoU to assess whether the gains are concentrated on a small number of events or distributed across disaster scenarios. In the UNet ablation, the \cmca+\dacutmix\ setting with $p=0.30$ obtains the best per-event mIoU on 10 out of the 15 evaluated events, and its average per-event gain over the UNet baseline is 3.50 percentage points. The $p=0.25$ combined setting is the best on four additional events, while standalone \cmca\ is best on one event. These results suggest that the proposed components are especially useful for improving event-level robustness rather than only optimizing the global pixel distribution.
 
-The per-event behavior also shows that the optimal mixing probability is backbone-dependent. For DamageFormer, standalone \cmca\ gives the best event-level mIoU on five events and the \cmca+\dacutmix\ setting with $p=0.25$ is best on four events, even though standalone \dacutmix\ with $p=0.30$ gives the best global mIoU. For SiamAttnUNet, standalone \dacutmix\ with $p=0.30$ wins on five events, while \cmca\ and \cmca+\dacutmix\ with $p=0.25$ each win on three events. For SiamCRNN, \dacutmix\ with $p=0.30$ and \cmca+\dacutmix\ with $p=0.25$ each obtain the best result on four events. For DeepLabV3Plus, \cmca+\dacutmix\ with $p=0.25$ is the most stable event-level setting, winning on seven out of the 15 evaluated events and yielding an average per-event gain of 2.29 percentage points over the DeepLabV3Plus baseline. This observation motivates treating \dacutmix\ probability as a tunable training hyperparameter rather than a fixed constant.
+The per-event behavior also shows that the optimal mixing probability is backbone-dependent. DamageFormer illustrates the clearest trade-off: standalone \dacutmix\ with $p=0.30$ gives the best global mIoU, whereas the baseline and $p=0.25$ variants are more stable across events. SiamAttnUNet shows a related but distinct trade-off: the compact combined row uses $p=0.25$ and gives the highest global mIoU, whereas standalone \dacutmix\ with $p=0.30$ gives the highest unweighted event average. For DeepLabV3Plus, \cmca+\dacutmix\ with $p=0.25$ wins on seven out of the 15 evaluated events and yields an average per-event gain of 2.29 percentage points over the baseline. For ChangeMamba, the combined \cmca+\dacutmix\ setting with $p=0.30$ gives the highest reported per-event average mIoU of 51.82 and obtains the best result on five events. Overall, the final compact ``+\cmca+\dacutmix'' setting should not be interpreted as a fixed $p=0.30$ configuration. Instead, it denotes a validation-selected probability: $p=0.30$ for UNet+\cmca\ and ChangeMamba+\cmca, $p=0.25$ for SiamAttnUNet+\cmca, SiamCRNN+\cmca, and DeepLabV3Plus+\cmca, and a separate overall/event-level trade-off for DamageFormer.
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+This paper presented \cmca\ and \dacutmix\ for multimodal building damage assessment with pre-event optical and post-event SAR imagery. \cmca\ introduces explicit optical-to-SAR feature interaction at the bottleneck level, while \dacutmix\ improves rare damage-class exposure by pasting damage-rich cross-event patches synchronously across the optical image, SAR image, and label map. Experiments on the BRIGHT benchmark show that the proposed components are effective across multiple segmentation backbones, including CNN-, Siamese-, transformer-, and Mamba-based models.
+
+The results indicate that the two components are complementary but backbone-dependent. \cmca\ consistently improves damage-sensitive feature fusion, whereas the best \dacutmix\ probability varies across architectures and events. This suggests that all-weather BDA benefits from treating optical/SAR fusion and damage-aware data augmentation as coupled design choices. Future work will investigate more adaptive patch selection, uncertainty-aware event generalization, and stronger exploitation of SAR-specific scattering priors.
+
+\bibliographystyle{IEEEtran}
+\bibliography{bright-cmca-references}
 
 \end{document}

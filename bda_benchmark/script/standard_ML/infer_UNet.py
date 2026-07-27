@@ -54,6 +54,12 @@ def build_backbone(model_type, in_channels, num_classes):
     if mt == "damageformer":
         from model.DamageFormer import DamageFormer
         return DamageFormer(num_classes=num_classes)
+    if mt in ("changemamba", "mambabda", "mambabda_tiny", "mambabdatiny"):
+        from model.ChangeMamba import ChangeMamba
+        return ChangeMamba(in_channels=in_channels, num_classes=num_classes)
+    if mt in ("changemambacmca", "mambabdacmca", "mambabda_tiny_cmca"):
+        from model.ChangeMamba import ChangeMambaCMCA
+        return ChangeMambaCMCA(in_channels=in_channels, num_classes=num_classes)
     if mt in ("deeplabv3plus", "deeplabv3+"):
         from model.DeepLabV3Plus import DeepLabV3Plus
         return DeepLabV3Plus(in_channels=in_channels, num_classes=num_classes)
@@ -148,7 +154,9 @@ class Inference:
         return torch.device(device_arg)
 
     def _forward(self, input_data):
-        return self.backbone(input_data)
+        if getattr(self.backbone, "supports_loc_head", False):
+            return self.backbone(input_data, return_loc=True)
+        return None, self.backbone(input_data)
 
     def run_inference(self):
         print("Starting inference...")
@@ -167,7 +175,7 @@ class Inference:
                 file_name = file_name[0]
 
                 input_data = torch.cat([pre, post], dim=1)
-                logits = self._forward(input_data)
+                loc_logits, logits = self._forward(input_data)
 
                 output = torch.argmax(logits, dim=1).cpu().numpy().astype(np.uint8)
                 output = output.squeeze(0)
@@ -179,8 +187,12 @@ class Inference:
                 labels_loc_np = labels_loc.squeeze().cpu().numpy()
 
                 # Localization F1 (binary: building vs background)
-                output_loc = output.copy()
-                output_loc[output_loc > 0] = 1
+                if loc_logits is not None:
+                    output_loc = torch.argmax(loc_logits, dim=1).cpu().numpy().astype(np.uint8)
+                    output_loc = output_loc.squeeze(0)
+                else:
+                    output_loc = output.copy()
+                    output_loc[output_loc > 0] = 1
                 self.evaluator_loc.add_batch(labels_loc_np, output_loc)
 
                 # Per-building damage evaluation

@@ -80,6 +80,14 @@ def build_backbone(model_type, in_channels, num_classes):
         from model.DamageFormer import DamageFormer
         return DamageFormer(num_classes=num_classes)
 
+    if mt in ("changemamba", "mambabda", "mambabda_tiny", "mambabdatiny"):
+        from model.ChangeMamba import ChangeMamba
+        return ChangeMamba(in_channels=in_channels, num_classes=num_classes)
+
+    if mt in ("changemambacmca", "mambabdacmca", "mambabda_tiny_cmca"):
+        from model.ChangeMamba import ChangeMambaCMCA
+        return ChangeMambaCMCA(in_channels=in_channels, num_classes=num_classes)
+
     if mt in ("deeplabv3plus", "deeplabv3+"):
         from model.DeepLabV3Plus import DeepLabV3Plus
         return DeepLabV3Plus(in_channels=in_channels, num_classes=num_classes)
@@ -236,6 +244,12 @@ class Trainer:
                       f"warmup={self.ordinal_warmup_iters} iters linear ramp)")
             else:
                 print(f"Ordinal Damage Loss enabled (weight={self.ordinal_weight}, no warmup)")
+
+        # ---- Building localization auxiliary loss (optional) ----
+        self.use_loc_loss = bool(args.use_loc_loss)
+        self.loc_loss_weight = max(0.0, float(args.loc_loss_weight))
+        if self.use_loc_loss:
+            print(f"Localization auxiliary loss enabled (weight={self.loc_loss_weight})")
 
         # ---- Damage Prototype Contrastive Learning (optional) ----
         self.use_dpcl = bool(args.use_dpcl)
@@ -474,6 +488,7 @@ class Trainer:
         self,
         input_data,
         return_features=False,
+        return_loc=False,
     ):
         """
         If `return_features` is True, also returns the dec3 mid-decoder
@@ -484,6 +499,9 @@ class Trainer:
             feat_dec3: (B, 256, H/4, W/4)   only if return_features=True
         """
         feat = None
+
+        if return_loc:
+            return self.backbone(input_data, return_loc=True)
 
         if return_features:
             logits, feat = self.backbone(input_data, return_features=True)
@@ -637,9 +655,12 @@ class Trainer:
                 )
                 with amp_ctx:
                     feat_dec3 = None
+                    loc_logits = None
                     need_dec3 = self.dpcl is not None
 
-                    if need_dec3:
+                    if self.use_loc_loss:
+                        loc_logits, logits = self._forward(input_data, return_loc=True)
+                    elif need_dec3:
                         logits, feat_dec3 = self._forward(
                             input_data, return_features=True
                         )
@@ -656,6 +677,18 @@ class Trainer:
                         feat_dec3=feat_dec3,
                     )
                 )
+
+                loc_loss = logits.new_tensor(0.0)
+                if self.use_loc_loss and loc_logits is not None:
+                    loc_loss_logits = loc_logits.float()
+                    loc_ce = F.cross_entropy(
+                        loc_loss_logits, labels_loc, ignore_index=255
+                    )
+                    loc_lovasz = L.lovasz_softmax(
+                        F.softmax(loc_loss_logits, dim=1), labels_loc, ignore=255
+                    )
+                    loc_loss = loc_ce + 0.5 * loc_lovasz
+                    total_loss = total_loss + self.loc_loss_weight * loc_loss
 
                 if not torch.isfinite(total_loss).item():
                     print(
@@ -695,6 +728,8 @@ class Trainer:
                     if self.use_ordinal:
                         eff_w = self._effective_ordinal_weight(itera)
                         msg += f" ord={ord_loss.item():.4f}(w={eff_w:.4f})"
+                    if self.use_loc_loss:
+                        msg += f" loc={loc_loss.item():.4f}(w={self.loc_loss_weight:.4f})"
                     if self.dpcl is not None:
                         eff_w_dpcl = self.dpcl.effective_weight(itera, self.dpcl_weight)
                         msg += f" dpcl={dpcl_loss.item():.4f}(w={eff_w_dpcl:.4f})"
@@ -814,14 +849,21 @@ class Trainer:
                 input_data, labels_loc, labels_clf, data_idx = self._prepare_batch(
                     data, return_ids=True
                 )
-                logits = self._forward(input_data)
+                loc_logits = None
+                if self.use_loc_loss:
+                    loc_logits, logits = self._forward(input_data, return_loc=True)
+                else:
+                    logits = self._forward(input_data)
 
                 labels_loc_np = labels_loc.cpu().numpy()
                 labels_clf_np = labels_clf.cpu().numpy()
                 pred_clf = logits.data.cpu().numpy().argmax(axis=1)
 
-                pred_loc = pred_clf.copy()
-                pred_loc[pred_loc > 0] = 1
+                if loc_logits is not None:
+                    pred_loc = loc_logits.data.cpu().numpy().argmax(axis=1)
+                else:
+                    pred_loc = pred_clf.copy()
+                    pred_loc[pred_loc > 0] = 1
 
                 self.evaluator_loc.add_batch(labels_loc_np, pred_loc)
                 self.evaluator_clf.add_batch(
@@ -955,6 +997,11 @@ def main():
     parser.add_argument("--damage_class_ids", type=str, default="2,3",
                         help="Comma-separated class ids treated as damaged for "
                              "DACutMix and damage-balanced sampling.")
+    parser.add_argument("--use_loc_loss", action="store_true",
+                        help="Enable auxiliary building localization loss for "
+                             "decoupled BDA models that expose a loc head.")
+    parser.add_argument("--loc_loss_weight", type=float, default=1.0,
+                        help="Weight for optional localization auxiliary loss.")
 
     # DACutMix (Damage-Aware CutMix) — all opt-in.
     parser.add_argument("--use_dacutmix", action="store_true",

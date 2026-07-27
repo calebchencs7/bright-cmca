@@ -1,5 +1,13 @@
 # Fdb version 4
-["pdflatex"] 1783570468.25232 "main.tex" "main.pdf" "main" 1783570470.18065 0
+["bibtex main"] 1785137005.29158 "main.aux" "main.bbl" "main" 1785137007.5816 0
+  "./bright-cmca-references.bib" 1784624324.12966 82166 aa8801f181ac5c3714a0b4a2e2f42c4c ""
+  "/usr/local/texlive/2026/texmf-dist/bibtex/bst/ieeetran/IEEEtran.bst" 1440712899 57748 7c8250ecf02814ce6ddc0cdbb63df1dd ""
+  "main.aux" 1785137007.33964 19469 9bc436277e4749aafebb1630639679b8 "pdflatex"
+  (generated)
+  "main.bbl"
+  "main.blg"
+  (rewritten before read)
+["pdflatex"] 1785137005.40528 "main.tex" "main.pdf" "main" 1785137007.58176 0
   "/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/local/texlive/2026/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/tfm/adobe/times/ptmb7t.tfm" 1136768653 2172 fd0c924230362ff848a33632ed45dc23 ""
@@ -78,11 +86,14 @@
   "/usr/local/texlive/2026/texmf-dist/tex/latex/cite/cite.sty" 1425427964 26218 19edeff8cdc2bcb704e8051dc55eb5a7 ""
   "/usr/local/texlive/2026/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty" 1579991033 13886 d1306dcf79a944f6988e688c1785f9ce ""
   "/usr/local/texlive/2026/texmf-dist/tex/latex/etoolbox/etoolbox.sty" 1759437024 46885 8953c67ffba03252c6090aa19568b8ba ""
+  "/usr/local/texlive/2026/texmf-dist/tex/latex/graphics-cfg/color.cfg" 1459978653 1213 620bba36b25224fa9b7e1ccb4ecb76fd ""
   "/usr/local/texlive/2026/texmf-dist/tex/latex/graphics-cfg/graphics.cfg" 1465944070 1224 978390e9c2234eab29404bc21b268d1e ""
   "/usr/local/texlive/2026/texmf-dist/tex/latex/graphics-def/pdftex.def" 1759176675 19626 23e2822b9b2b5005f4c549ca98b9334d ""
+  "/usr/local/texlive/2026/texmf-dist/tex/latex/graphics/color.sty" 1748806692 7245 a7e8457a46cda4920df85d975267efb4 ""
   "/usr/local/texlive/2026/texmf-dist/tex/latex/graphics/graphics.sty" 1748806692 18363 69bb4f5538964bfea50d1e6d89cbe69f ""
   "/usr/local/texlive/2026/texmf-dist/tex/latex/graphics/graphicx.sty" 1748806692 8118 43b99e52946c33a23f5f43b52d5cc5ec ""
   "/usr/local/texlive/2026/texmf-dist/tex/latex/graphics/keyval.sty" 1748806692 2671 d9941f4bf4750e9b0603c9a2ec54693b ""
+  "/usr/local/texlive/2026/texmf-dist/tex/latex/graphics/mathcolor.ltx" 1667332637 2885 9c645d672ae17285bba324998918efd8 ""
   "/usr/local/texlive/2026/texmf-dist/tex/latex/graphics/trig.sty" 1748806692 4023 e66acf578d6b564c4670fb57ff336a7a ""
   "/usr/local/texlive/2026/texmf-dist/tex/latex/hycolor/hycolor.sty" 1580250785 17914 4c28a13fc3d975e6e81c9bea1d697276 ""
   "/usr/local/texlive/2026/texmf-dist/tex/latex/hyperref/hpdftex.def" 1769721417 48140 0d317d7fb0c7460a10b7b2713db57305 ""
@@ -108,8 +119,9 @@
   "images/DA-CutMix.png" 1781683202.47846 1611337 22946a0459d1f7facacc114fcf458525 ""
   "images/Technology Roadmap.png" 1781861673.6426 1356918 0daac0a84357ec7fc8bc4ea506c1382c ""
   "images/dacutmix_example.png" 1782116508.76661 1397929 809bc13f3cd250a1274d002e79293175 ""
-  "main.aux" 1783570470.10876 12094 f96a5c4e3af15c9d243a47050909aa6f "pdflatex"
-  "main.tex" 1783570455.48537 26274 d5b5ce3e1510a9eb6695f125953eb1e2 ""
+  "main.aux" 1785137007.33964 19469 9bc436277e4749aafebb1630639679b8 "pdflatex"
+  "main.bbl" 1785137005.40334 13868 ede2d47c1d72f19c1d60a92bfc425b77 "bibtex main"
+  "main.tex" 1785136992.83828 44739 f59318fcab3b802d2172f48405d5c78d ""
   (generated)
   "main.aux"
   "main.log"

@@ -1,0 +1,56 @@
+This is BibTeX, Version 0.99e (TeX Live 2026)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: main.aux
+The style file: IEEEtran.bst
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Database file #1: bright-cmca-references.bib
+-- IEEEtran.bst version 1.14 (2015/08/26) by Michael Shell.
+-- http://www.michaelshell.org/tex/ieeetran/bibtex/
+-- See the "IEEEtran_bst_HOWTO.pdf" manual for usage information.
+
+Done.
+You've used 47 entries,
+            4087 wiz_defined-function locations,
+            1071 strings with 18098 characters,
+and the built_in function-call counts, 43210 in all, are:
+= -- 3379
+> -- 1305
+< -- 384
++ -- 722
+- -- 250
+* -- 2091
+:= -- 5979
+add.period$ -- 95
+call.type$ -- 47
+change.case$ -- 47
+chr.to.int$ -- 921
+cite$ -- 47
+duplicate$ -- 3002
+empty$ -- 3319
+format.name$ -- 284
+if$ -- 10200
+int.to.chr$ -- 0
+int.to.str$ -- 47
+missing$ -- 539
+newline$ -- 164
+num.names$ -- 47
+pop$ -- 1305
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 2
+skip$ -- 3334
+stack$ -- 0
+substring$ -- 2282
+swap$ -- 2575
+text.length$ -- 77
+text.prefix$ -- 0
+top$ -- 5
+type$ -- 47
+warning$ -- 0
+while$ -- 188
+width$ -- 49
+write$ -- 476

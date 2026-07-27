@@ -1,0 +1,247 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="ZTZIdxHhBILnI-qunCNZ">
+    <mxGraphModel dx="1438" dy="929" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2mjWDL48pMtxHN7BRu5--3" edge="1" parent="1" source="2mjWDL48pMtxHN7BRu5--1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="2mjWDL48pMtxHN7BRu5--2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="S1 获取灾前光学影像、灾后SAR影像、&lt;br&gt;建筑损伤标签及灾害事件标识" vertex="1">
+          <mxGeometry height="40" width="240" x="240" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--8" edge="1" parent="1" source="2mjWDL48pMtxHN7BRu5--2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="2mjWDL48pMtxHN7BRu5--4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="S2 同步裁剪、翻转、旋转并归一化，构造多模态训练样本" vertex="1">
+          <mxGeometry height="40" width="240" x="240" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--9" edge="1" parent="1" source="2mjWDL48pMtxHN7BRu5--4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="2mjWDL48pMtxHN7BRu5--5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="S3 从不同灾害事件选择供体样本，筛选包含损伤像素的候选区域" vertex="1">
+          <mxGeometry height="40" width="240" x="240" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--10" edge="1" parent="1" source="2mjWDL48pMtxHN7BRu5--5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="2mjWDL48pMtxHN7BRu5--6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="S4 将同一时间框同时粘贴至光学影像，SAR影像和标签，形成DA-CutMix样本" vertex="1">
+          <mxGeometry height="40" width="240" x="240" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--11" edge="1" parent="1" source="2mjWDL48pMtxHN7BRu5--6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="2mjWDL48pMtxHN7BRu5--7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--6" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="S5 双分支编码光学与SAR特征，在瓶颈层执行跨模态变化注意力" vertex="1">
+          <mxGeometry height="40" width="240" x="240" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="S6 融合变化特征1并解码得到建筑损伤分级图，训练后用于无增强推理" vertex="1">
+          <mxGeometry height="40" width="240" x="240" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--33" connectable="0" parent="1" style="group;fontFamily=宋体;fontStyle=1;fontSize=14;" value="" vertex="1">
+          <mxGeometry height="200" width="1020" x="560" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--36" edge="1" parent="2mjWDL48pMtxHN7BRu5--33" source="2mjWDL48pMtxHN7BRu5--12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;fontFamily=宋体;fontStyle=1;fontSize=14;" target="2mjWDL48pMtxHN7BRu5--14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--12" parent="2mjWDL48pMtxHN7BRu5--33" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontStyle=1;fontSize=14;" value="灾前光学影像" vertex="1">
+          <mxGeometry height="50" width="126.18556701030928" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--37" edge="1" parent="2mjWDL48pMtxHN7BRu5--33" source="2mjWDL48pMtxHN7BRu5--13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=宋体;fontStyle=1;fontSize=14;" target="2mjWDL48pMtxHN7BRu5--21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--13" parent="2mjWDL48pMtxHN7BRu5--33" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontStyle=1;fontSize=14;" value="灾后SAR影像" vertex="1">
+          <mxGeometry height="50" width="126.18556701030928" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--16" edge="1" parent="2mjWDL48pMtxHN7BRu5--33" source="2mjWDL48pMtxHN7BRu5--14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=宋体;fontStyle=1;fontSize=14;" target="2mjWDL48pMtxHN7BRu5--15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--14" parent="2mjWDL48pMtxHN7BRu5--33" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontStyle=1;fontSize=14;" value="光学编码第1层" vertex="1">
+          <mxGeometry height="50" width="126.18556701030928" x="168.24742268041237" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--19" edge="1" parent="2mjWDL48pMtxHN7BRu5--33" source="2mjWDL48pMtxHN7BRu5--15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=宋体;fontStyle=1;fontSize=14;" target="2mjWDL48pMtxHN7BRu5--18">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--15" parent="2mjWDL48pMtxHN7BRu5--33" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontStyle=1;fontSize=14;" value="光学编码第2层" vertex="1">
+          <mxGeometry height="50" width="126.18556701030928" x="336.49484536082474" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--17" parent="2mjWDL48pMtxHN7BRu5--33" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontFamily=宋体;fontStyle=1;fontSize=14;" value="···" vertex="1">
+          <mxGeometry height="6.25" width="31.54639175257732" x="465.83505154639175" y="12.5" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--27" edge="1" parent="2mjWDL48pMtxHN7BRu5--33" source="2mjWDL48pMtxHN7BRu5--18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=宋体;fontStyle=1;fontSize=14;" target="2mjWDL48pMtxHN7BRu5--26">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--18" parent="2mjWDL48pMtxHN7BRu5--33" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontStyle=1;fontSize=14;" value="光学编码第n层" vertex="1">
+          <mxGeometry height="50" width="126.18556701030928" x="504.74226804123714" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--20" edge="1" parent="2mjWDL48pMtxHN7BRu5--33" source="2mjWDL48pMtxHN7BRu5--21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=宋体;fontStyle=1;fontSize=14;" target="2mjWDL48pMtxHN7BRu5--23">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--21" parent="2mjWDL48pMtxHN7BRu5--33" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontStyle=1;fontSize=14;" value="SAR编码第1层" vertex="1">
+          <mxGeometry height="50" width="126.18556701030928" x="168.24742268041237" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--22" edge="1" parent="2mjWDL48pMtxHN7BRu5--33" source="2mjWDL48pMtxHN7BRu5--23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=宋体;fontStyle=1;fontSize=14;" target="2mjWDL48pMtxHN7BRu5--25">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--23" parent="2mjWDL48pMtxHN7BRu5--33" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontStyle=1;fontSize=14;" value="SAR编码第2层" vertex="1">
+          <mxGeometry height="50" width="126.18556701030928" x="336.49484536082474" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--24" parent="2mjWDL48pMtxHN7BRu5--33" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontFamily=宋体;fontStyle=1;fontSize=14;" value="···" vertex="1">
+          <mxGeometry height="6.25" width="31.54639175257732" x="465.83505154639175" y="162.5" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--28" edge="1" parent="2mjWDL48pMtxHN7BRu5--33" source="2mjWDL48pMtxHN7BRu5--25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=宋体;fontStyle=1;fontSize=14;" target="2mjWDL48pMtxHN7BRu5--26">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--25" parent="2mjWDL48pMtxHN7BRu5--33" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontStyle=1;fontSize=14;" value="SAR编码第n层" vertex="1">
+          <mxGeometry height="50" width="126.18556701030928" x="504.74226804123714" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--30" edge="1" parent="2mjWDL48pMtxHN7BRu5--33" source="2mjWDL48pMtxHN7BRu5--26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=宋体;fontStyle=1;fontSize=14;" target="2mjWDL48pMtxHN7BRu5--29">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--26" parent="2mjWDL48pMtxHN7BRu5--33" style="whiteSpace=wrap;html=1;aspect=fixed;fontFamily=宋体;fontStyle=1;fontSize=14;" value="跨模态变化注意力CMCA&lt;br&gt;输出变化特征" vertex="1">
+          <mxGeometry height="84.12371134020619" width="84.12371134020619" x="672.9896907216495" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--32" edge="1" parent="2mjWDL48pMtxHN7BRu5--33" source="2mjWDL48pMtxHN7BRu5--29" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=宋体;fontStyle=1;fontSize=14;" target="2mjWDL48pMtxHN7BRu5--31">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--29" parent="2mjWDL48pMtxHN7BRu5--33" style="whiteSpace=wrap;html=1;aspect=fixed;fontFamily=宋体;fontStyle=1;fontSize=14;" value="特征融合&lt;br&gt;与解码器" vertex="1">
+          <mxGeometry height="84.12371134020619" width="84.12371134020619" x="799.1752577319588" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--31" parent="2mjWDL48pMtxHN7BRu5--33" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontStyle=1;fontSize=14;" value="建筑损伤分级图" vertex="1">
+          <mxGeometry height="62.5" width="94.63917525773196" x="925.360824742268" y="60.75" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--41" edge="1" parent="1" source="2mjWDL48pMtxHN7BRu5--38" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=宋体;fontStyle=1;fontSize=14;" target="2mjWDL48pMtxHN7BRu5--40">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--38" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontStyle=1;fontSize=14;" value="光学瓶颈特征Fopt" vertex="1">
+          <mxGeometry height="50" width="120" x="560" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--43" edge="1" parent="1" source="2mjWDL48pMtxHN7BRu5--39" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=宋体;fontStyle=1;fontSize=14;" target="2mjWDL48pMtxHN7BRu5--42">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--39" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontStyle=1;fontSize=14;" value="SAR瓶颈特征Fsar" vertex="1">
+          <mxGeometry height="50" width="120" x="560" y="542.94" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--53" edge="1" parent="1" source="2mjWDL48pMtxHN7BRu5--40" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=宋体;fontStyle=1;fontSize=14;" target="2mjWDL48pMtxHN7BRu5--52">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--40" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontStyle=1;fontSize=14;" value="1✖️1卷积生成查询Q" vertex="1">
+          <mxGeometry height="50" width="120" x="720" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--47" edge="1" parent="1" source="2mjWDL48pMtxHN7BRu5--42" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=宋体;fontStyle=1;fontSize=14;" target="2mjWDL48pMtxHN7BRu5--45">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--48" edge="1" parent="1" source="2mjWDL48pMtxHN7BRu5--42" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=宋体;fontStyle=1;fontSize=14;" target="2mjWDL48pMtxHN7BRu5--46">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--42" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontStyle=1;fontSize=14;" value="空间降采样&lt;br&gt;降低计算量" vertex="1">
+          <mxGeometry height="50" width="120" x="720" y="542.94" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--54" edge="1" parent="1" source="2mjWDL48pMtxHN7BRu5--45" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=宋体;fontStyle=1;fontSize=14;" target="2mjWDL48pMtxHN7BRu5--52">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--45" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontStyle=1;fontSize=14;" value="1✖️1卷积生成键K" vertex="1">
+          <mxGeometry height="50" width="120" x="880" y="507.94" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--55" edge="1" parent="1" source="2mjWDL48pMtxHN7BRu5--46" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=宋体;fontStyle=1;fontSize=14;" target="2mjWDL48pMtxHN7BRu5--52">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--46" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontStyle=1;fontSize=14;" value="1✖️1卷积生成值V" vertex="1">
+          <mxGeometry height="50" width="120" x="880" y="574.94" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--57" edge="1" parent="1" source="2mjWDL48pMtxHN7BRu5--52" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=宋体;fontStyle=1;fontSize=14;" target="2mjWDL48pMtxHN7BRu5--56">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--52" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;fontFamily=宋体;fontStyle=1;fontSize=14;" value="注意力计算&lt;br&gt;得到与光学特征对齐的SAR响应" vertex="1">
+          <mxGeometry height="84.12371134020619" width="84.12371134020619" x="1080" y="452.94" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--59" edge="1" parent="1" source="2mjWDL48pMtxHN7BRu5--56" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=宋体;fontStyle=1;fontSize=14;" target="2mjWDL48pMtxHN7BRu5--58">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--56" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontStyle=1;fontSize=14;" value="与光学特征拼接并卷积融合" vertex="1">
+          <mxGeometry height="50" width="120" x="1200" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--58" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontStyle=1;fontSize=14;" value="输出跨模态变化增强特征" vertex="1">
+          <mxGeometry height="50" width="120" x="1360" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--73" edge="1" parent="1" source="2mjWDL48pMtxHN7BRu5--60" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=13;fontFamily=宋体;" target="2mjWDL48pMtxHN7BRu5--65">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--60" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontStyle=1;fontSize=13;" value="基础样本&lt;br&gt;事件A" vertex="1">
+          <mxGeometry height="50" width="120" x="560" y="710" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--63" edge="1" parent="1" source="2mjWDL48pMtxHN7BRu5--61" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontStyle=1;fontSize=13;fontFamily=宋体;" target="2mjWDL48pMtxHN7BRu5--62">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--61" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontStyle=1;fontSize=13;" value="供体样本&lt;div&gt;事件B≠A&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="120" x="560" y="840" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--74" edge="1" parent="1" source="2mjWDL48pMtxHN7BRu5--62" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=13;fontFamily=宋体;" target="2mjWDL48pMtxHN7BRu5--65">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--75" edge="1" parent="1" source="2mjWDL48pMtxHN7BRu5--62" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=13;fontFamily=宋体;" target="2mjWDL48pMtxHN7BRu5--66">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--76" edge="1" parent="1" source="2mjWDL48pMtxHN7BRu5--62" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=13;fontFamily=宋体;" target="2mjWDL48pMtxHN7BRu5--64">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--62" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;fontFamily=宋体;fontStyle=1;fontSize=13;" value="供体标签筛选损伤像素数 ≥ max(nmin, τ|B|)&lt;div&gt;作为候选框B&lt;/div&gt;" vertex="1">
+          <mxGeometry height="84.12371134020619" width="84.12371134020619" x="715.88" y="822.94" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--70" edge="1" parent="1" source="2mjWDL48pMtxHN7BRu5--64" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontStyle=1;fontSize=13;fontFamily=宋体;" target="2mjWDL48pMtxHN7BRu5--68">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--64" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontStyle=1;fontSize=13;" value="替换同一框灾前光学区域" vertex="1">
+          <mxGeometry height="50" width="120" x="920" y="690" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--71" edge="1" parent="1" source="2mjWDL48pMtxHN7BRu5--65" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontStyle=1;fontSize=13;fontFamily=宋体;" target="2mjWDL48pMtxHN7BRu5--68">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--65" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontStyle=1;fontSize=13;" value="替换同一框灾后SAR区域" vertex="1">
+          <mxGeometry height="50" width="120" x="920" y="770" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--72" edge="1" parent="1" source="2mjWDL48pMtxHN7BRu5--66" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontStyle=1;fontSize=13;fontFamily=宋体;" target="2mjWDL48pMtxHN7BRu5--68">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--66" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontStyle=1;fontSize=13;" value="替换同一框损伤标签区域" vertex="1">
+          <mxGeometry height="50" width="120" x="920" y="840" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--68" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontStyle=1;fontSize=13;" value="混合训练样本" vertex="1">
+          <mxGeometry height="50" width="120" x="1120" y="770" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--83" edge="1" parent="1" source="2mjWDL48pMtxHN7BRu5--77" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=宋体;fontStyle=1;fontSize=14;" target="2mjWDL48pMtxHN7BRu5--78">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--77" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontStyle=1;fontSize=14;" value="训练集启用DA-CutMix方法训练CMCA" vertex="1">
+          <mxGeometry height="50" width="120" x="560" y="990" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--84" edge="1" parent="1" source="2mjWDL48pMtxHN7BRu5--78" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=宋体;fontStyle=1;fontSize=14;" target="2mjWDL48pMtxHN7BRu5--79">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--78" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontStyle=1;fontSize=14;" value="损失函数&lt;br&gt;交叉熵 + Lovasz" vertex="1">
+          <mxGeometry height="50" width="120" x="720" y="990" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--85" edge="1" parent="1" source="2mjWDL48pMtxHN7BRu5--79" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=宋体;fontStyle=1;fontSize=14;" target="2mjWDL48pMtxHN7BRu5--80">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--79" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontStyle=1;fontSize=14;" value="验证集选择模型权重" vertex="1">
+          <mxGeometry height="50" width="120" x="880" y="990" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--86" edge="1" parent="1" source="2mjWDL48pMtxHN7BRu5--80" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=宋体;fontStyle=1;fontSize=14;" target="2mjWDL48pMtxHN7BRu5--81">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--80" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontStyle=1;fontSize=14;" value="保存方法参数" vertex="1">
+          <mxGeometry height="50" width="120" x="1040" y="990" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--87" edge="1" parent="1" source="2mjWDL48pMtxHN7BRu5--81" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=宋体;fontStyle=1;fontSize=14;" target="2mjWDL48pMtxHN7BRu5--82">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--81" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontStyle=1;fontSize=14;" value="方法应用阶段输入原始光学/SAR，不执行DA-CutMix" vertex="1">
+          <mxGeometry height="50" width="120" x="660" y="1080" as="geometry" />
+        </mxCell>
+        <mxCell id="2mjWDL48pMtxHN7BRu5--82" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontStyle=1;fontSize=14;" value="输出像素级建筑损伤分级图" vertex="1">
+          <mxGeometry height="50" width="120" x="880" y="1080" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
