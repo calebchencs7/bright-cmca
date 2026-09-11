@@ -1,0 +1,1424 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/hg9dun",
+    "id": "hg9dun",
+    "slide": 6,
+    "layoutId": "a3589779-6b67-4ddb-87f5-c8c1eeb66327",
+    "layoutName": "Title Slide",
+    "layoutType": "title",
+    "masterLayoutId": "ad4ede6b-54e6-4ad5-9a5a-b133745c6305",
+    "masterLayoutName": "Master",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "theme": {
+    "colorSchemeName": "ChatGPT",
+    "colors": {
+      "accent1": "#156082",
+      "accent2": "#E97132",
+      "accent3": "#196B24",
+      "accent4": "#0F9ED5",
+      "accent5": "#A02B93",
+      "accent6": "#4EA72E",
+      "bg1": "#FFFFFF",
+      "bg2": "#000000",
+      "tx1": "#1F1F1F",
+      "tx2": "#FFFFFF",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#0E2841",
+      "lt2": "#E8E8E8",
+      "hlink": "#467886",
+      "folHlink": "#96607D"
+    },
+    "typefaces": [
+      "Helvetica Neue",
+      "PingFang SC"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "a3589779-6b67-4ddb-87f5-c8c1eeb66327",
+      "name": "Title Slide",
+      "type": "title",
+      "parentLayoutId": "ad4ede6b-54e6-4ad5-9a5a-b133745c6305",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "ad4ede6b-54e6-4ad5-9a5a-b133745c6305",
+      "name": "Master",
+      "type": "master",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/3etczq5c",
+      "id": "1",
+      "name": "Google-Shape-532-p58-2",
+      "bbox": [
+        1184.18,
+        659.24,
+        54.48,
+        25.33
+      ],
+      "composeSource": {
+        "run": 1,
+        "path": "0.0"
+      },
+      "geometry": "rect",
+      "text": "06",
+      "textPreview": "06",
+      "resolvedFontSize": 13.33,
+      "resolvedTextStyle": {
+        "anchor": 3,
+        "fontSize": 13.33,
+        "typeface": "Helvetica Neue",
+        "color": "#000000",
+        "alignment": "right",
+        "verticalAlignment": "bottom",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "06"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "06",
+          "lineSpacingPercent": 112000,
+          "resolvedTextStyle": {
+            "anchor": 3,
+            "fontSize": 13.33,
+            "typeface": "Helvetica Neue",
+            "color": "#000000",
+            "alignment": "right",
+            "verticalAlignment": "bottom",
+            "wrap": "square",
+            "autoFit": "none",
+            "insets": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "06",
+              "fontSize": 14,
+              "typeface": "PingFang SC",
+              "color": "#4B5563"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ]
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/oz2d8vmx",
+      "id": "2",
+      "name": "Google-Shape-533-p58-3",
+      "bbox": [
+        41.33,
+        36.17,
+        1197.33,
+        67.64
+      ],
+      "composeSource": {
+        "run": 1,
+        "path": "0.1"
+      },
+      "geometry": "rect",
+      "text": "案例 1｜先给“失败现象”，再让 AI 扩展假设",
+      "textPreview": "案例 1｜先给“失败现象”，再让 AI 扩展假设",
+      "resolvedFontSize": 38.67,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 38.67,
+        "typeface": "Helvetica Neue",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "案例 1｜先给“失败现象”，再让 AI 扩展假设"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "案例 1｜先给“失败现象”，再让 AI 扩展假设",
+          "lineSpacingPercent": 100000,
+          "resolvedTextStyle": {
+            "anchor": 1,
+            "fontSize": 38.67,
+            "typeface": "Helvetica Neue",
+            "color": "#000000",
+            "alignment": "left",
+            "verticalAlignment": "top",
+            "wrap": "square",
+            "autoFit": "none",
+            "insets": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "案例 1｜先给“失败现象”，再让 AI 扩展假设",
+              "fontSize": 48,
+              "typeface": "PingFang SC",
+              "color": "#000000",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ]
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/p0be10ni",
+      "id": "3",
+      "name": "Rounded-Rectangle-1-4",
+      "bbox": [
+        41.68,
+        350.56,
+        580.99,
+        138.67
+      ],
+      "composeSource": {
+        "run": 1,
+        "path": "0.2"
+      },
+      "geometry": "roundRect",
+      "fillColor": "#F2F2F2"
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/e90v2l4v",
+      "id": "4",
+      "name": "Content-Placeholder-10-5",
+      "bbox": [
+        72.89,
+        376.69,
+        523.56,
+        92.16
+      ],
+      "composeSource": {
+        "run": 1,
+        "path": "0.3"
+      },
+      "geometry": "rect",
+      "text": "低质量问题",
+      "textPreview": "低质量问题",
+      "resolvedFontSize": 32,
+      "resolvedTextStyle": {
+        "fontSize": 32,
+        "typeface": "Helvetica Neue",
+        "color": "#000000",
+        "alignment": "left",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "低质量问题"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "低质量问题",
+          "lineSpacingPercent": 112000,
+          "resolvedTextStyle": {
+            "fontSize": 32,
+            "typeface": "Helvetica Neue",
+            "color": "#000000",
+            "alignment": "left",
+            "autoFit": "none",
+            "insets": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "低质量问题",
+              "fontSize": 26,
+              "typeface": "PingFang SC",
+              "color": "#D94C4C",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ]
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/fa9cvq5g",
+      "id": "5",
+      "name": "Content-Placeholder-15-6",
+      "bbox": [
+        72.89,
+        506.94,
+        549.78,
+        102.67
+      ],
+      "composeSource": {
+        "run": 1,
+        "path": "0.4"
+      },
+      "geometry": "rect",
+      "text": "“请给我 10 个创新点。”\n输出看似丰富，却无法比较、验证，也容易重复已有工作。\n",
+      "textPreview": "“请给我 10 个创新点。” | 输出看似丰富，却无法比较、验证，也容易重复已有工作。 |",
+      "resolvedFontSize": 21.33,
+      "resolvedTextStyle": {
+        "fontSize": 21.33,
+        "typeface": "Helvetica Neue",
+        "color": "#000000",
+        "alignment": "left",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 3,
+        "lines": [
+          {
+            "index": 1,
+            "text": "“请给我 10 个创新点。”"
+          },
+          {
+            "index": 2,
+            "text": "输出看似丰富，却无法比较、验证，也容易重复已有工作。"
+          },
+          {
+            "index": 3,
+            "text": ""
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "“请给我 10 个创新点。”",
+          "lineSpacingPercent": 112000,
+          "resolvedTextStyle": {
+            "fontSize": 21.33,
+            "typeface": "Helvetica Neue",
+            "color": "#000000",
+            "alignment": "left",
+            "autoFit": "none",
+            "insets": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "“请给我 10 个创新点。”",
+              "fontSize": 20,
+              "typeface": "PingFang SC",
+              "color": "#4B5563"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "输出看似丰富，却无法比较、验证，也容易重复已有工作。",
+          "lineSpacingPercent": 112000,
+          "resolvedTextStyle": {
+            "fontSize": 21.33,
+            "typeface": "Helvetica Neue",
+            "color": "#000000",
+            "alignment": "left",
+            "autoFit": "none",
+            "insets": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "输出看似丰富，却无法比较、验证，也容易重复已有工作。",
+              "fontSize": 18,
+              "typeface": "PingFang SC",
+              "color": "#4B5563"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ]
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/gb2d4vml",
+      "id": "6",
+      "name": "Rounded-Rectangle-7-7",
+      "bbox": [
+        657.3,
+        350.56,
+        580.99,
+        138.67
+      ],
+      "composeSource": {
+        "run": 1,
+        "path": "0.5"
+      },
+      "geometry": "roundRect",
+      "fillColor": "#F2F2F2"
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/1cbux0n6",
+      "id": "7",
+      "name": "Content-Placeholder-10-8",
+      "bbox": [
+        688.51,
+        376.69,
+        523.56,
+        92.16
+      ],
+      "composeSource": {
+        "run": 1,
+        "path": "0.6"
+      },
+      "geometry": "rect",
+      "text": "可研究的问题",
+      "textPreview": "可研究的问题",
+      "resolvedFontSize": 32,
+      "resolvedTextStyle": {
+        "fontSize": 32,
+        "typeface": "Helvetica Neue",
+        "color": "#000000",
+        "alignment": "left",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "可研究的问题"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "可研究的问题",
+          "lineSpacingPercent": 112000,
+          "resolvedTextStyle": {
+            "fontSize": 32,
+            "typeface": "Helvetica Neue",
+            "color": "#000000",
+            "alignment": "left",
+            "autoFit": "none",
+            "insets": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "可研究的问题",
+              "fontSize": 26,
+              "typeface": "PingFang SC",
+              "color": "#3D8DFF",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ]
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/y54vep4z",
+      "id": "8",
+      "name": "Content-Placeholder-15-9",
+      "bbox": [
+        688.51,
+        506.94,
+        549.78,
+        102.67
+      ],
+      "composeSource": {
+        "run": 1,
+        "path": "0.7"
+      },
+      "geometry": "rect",
+      "text": "“根据失败现象，给 3 个机制假设。”\n每个假设必须给最小实现、对照、风险与证伪条件。\n",
+      "textPreview": "“根据失败现象，给 3 个机制假设。” | 每个假设必须给最小实现、对照、风险与证伪条件。 |",
+      "resolvedFontSize": 21.33,
+      "resolvedTextStyle": {
+        "fontSize": 21.33,
+        "typeface": "Helvetica Neue",
+        "color": "#000000",
+        "alignment": "left",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 3,
+        "lines": [
+          {
+            "index": 1,
+            "text": "“根据失败现象，给 3 个机制假设。”"
+          },
+          {
+            "index": 2,
+            "text": "每个假设必须给最小实现、对照、风险与证伪条件。"
+          },
+          {
+            "index": 3,
+            "text": ""
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "“根据失败现象，给 3 个机制假设。”",
+          "lineSpacingPercent": 112000,
+          "resolvedTextStyle": {
+            "fontSize": 21.33,
+            "typeface": "Helvetica Neue",
+            "color": "#000000",
+            "alignment": "left",
+            "autoFit": "none",
+            "insets": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "“根据失败现象，给 3 个机制假设。”",
+              "fontSize": 20,
+              "typeface": "PingFang SC",
+              "color": "#4B5563"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "每个假设必须给最小实现、对照、风险与证伪条件。",
+          "lineSpacingPercent": 112000,
+          "resolvedTextStyle": {
+            "fontSize": 21.33,
+            "typeface": "Helvetica Neue",
+            "color": "#000000",
+            "alignment": "left",
+            "autoFit": "none",
+            "insets": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "每个假设必须给最小实现、对照、风险与证伪条件。",
+              "fontSize": 18,
+              "typeface": "PingFang SC",
+              "color": "#4B5563"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ]
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/z6dw7alk",
+      "id": "9",
+      "name": "Content-Placeholder-15-10",
+      "bbox": [
+        42.09,
+        121.52,
+        1197.33,
+        171.05
+      ],
+      "composeSource": {
+        "run": 1,
+        "path": "0.8"
+      },
+      "geometry": "rect",
+      "text": "一个好提示词要包含 5 件事\n任务背景 · 已观察到的失败 · 不允许改变的约束 · 需要的对照实验 · 证伪条件\n",
+      "textPreview": "一个好提示词要包含 5 件事 | 任务背景 · 已观察到的失败 · 不允许改变的约束 · 需要的对照实验 · 证伪条件 |",
+      "resolvedFontSize": 21.33,
+      "resolvedTextStyle": {
+        "fontSize": 21.33,
+        "typeface": "Helvetica Neue",
+        "color": "#000000",
+        "alignment": "left",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 3,
+        "lines": [
+          {
+            "index": 1,
+            "text": "一个好提示词要包含 5 件事"
+          },
+          {
+            "index": 2,
+            "text": "任务背景 · 已观察到的失败 · 不允许改变的约束 · 需要的对照实验 · 证伪条件"
+          },
+          {
+            "index": 3,
+            "text": ""
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "一个好提示词要包含 5 件事",
+          "lineSpacingPercent": 112000,
+          "spaceAfter": 500,
+          "resolvedTextStyle": {
+            "fontSize": 21.33,
+            "typeface": "Helvetica Neue",
+            "color": "#000000",
+            "alignment": "left",
+            "autoFit": "none",
+            "insets": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "一个好提示词要包含 5 件事",
+              "fontSize": 24,
+              "typeface": "PingFang SC",
+              "color": "#000000",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "任务背景 · 已观察到的失败 · 不允许改变的约束 · 需要的对照实验 · 证伪条件",
+          "lineSpacingPercent": 112000,
+          "resolvedTextStyle": {
+            "fontSize": 21.33,
+            "typeface": "Helvetica Neue",
+            "color": "#000000",
+            "alignment": "left",
+            "autoFit": "none",
+            "insets": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "任务背景 · 已观察到的失败 · 不允许改变的约束 · 需要的对照实验 · 证伪条件",
+              "fontSize": 22,
+              "typeface": "PingFang SC",
+              "color": "#4B5563"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ]
+    },
+    {
+      "order": 10,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/vidgvadc",
+      "id": "10",
+      "bbox": [
+        42,
+        278,
+        1197,
+        255
+      ],
+      "geometry": "roundRect",
+      "text": "任务：灾前光学 + 灾后 SAR 的四类建筑损伤分割\n失败：简单拼接增益有限；受损/毁坏类别稀少\n约束：不重做解码器；推理开销尽量不变；必须可消融\n请提出 3 个可证伪机制假设。每个输出：\n① 为什么可能有效  ② 最小改动  ③ 必要对照  ④ 失败风险  ⑤ 证伪条件",
+      "textPreview": "任务：灾前光学 + 灾后 SAR 的四类建筑损伤分割 | 失败：简单拼接增益有限；受损/毁坏类别稀少 | 约束：不重做解码器；推理开销尽量不变；必须可消融 | 请提出 3 个可证伪机制假设。每个输出： | ① 为什么可能有效  ② 最小改动  ③ 必要对照  ④ 失败风险 ...",
+      "resolvedFontSize": 18,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 18,
+        "typeface": "PingFang SC",
+        "color": "#111827",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "insets": {
+          "top": 18,
+          "right": 18,
+          "bottom": 18,
+          "left": 18
+        }
+      },
+      "textLayout": {
+        "lineCount": 5,
+        "lines": [
+          {
+            "index": 1,
+            "text": "任务：灾前光学 + 灾后 SAR 的四类建筑损伤分割"
+          },
+          {
+            "index": 2,
+            "text": "失败：简单拼接增益有限；受损/毁坏类别稀少"
+          },
+          {
+            "index": 3,
+            "text": "约束：不重做解码器；推理开销尽量不变；必须可消融"
+          },
+          {
+            "index": 4,
+            "text": "请提出 3 个可证伪机制假设。每个输出："
+          },
+          {
+            "index": 5,
+            "text": "① 为什么可能有效  ② 最小改动  ③ 必要对照  ④ 失败风险  ⑤ 证伪条件"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "任务：灾前光学 + 灾后 SAR 的四类建筑损伤分割",
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "typeface": "PingFang SC",
+            "color": "#111827"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "任务：灾前光学 + 灾后 SAR 的四类建筑损伤分割",
+              "fontSize": 18,
+              "typeface": "PingFang SC",
+              "color": "#111827"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "失败：简单拼接增益有限；受损/毁坏类别稀少",
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "typeface": "PingFang SC",
+            "color": "#111827"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "失败：简单拼接增益有限；受损/毁坏类别稀少",
+              "fontSize": 18,
+              "typeface": "PingFang SC",
+              "color": "#111827"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 3,
+          "text": "约束：不重做解码器；推理开销尽量不变；必须可消融",
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "typeface": "PingFang SC",
+            "color": "#111827"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "约束：不重做解码器；推理开销尽量不变；必须可消融",
+              "fontSize": 18,
+              "typeface": "PingFang SC",
+              "color": "#111827"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 4,
+          "text": "请提出 3 个可证伪机制假设。每个输出：",
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "typeface": "PingFang SC",
+            "color": "#111827"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "请提出 3 个可证伪机制假设。每个输出：",
+              "fontSize": 18,
+              "typeface": "PingFang SC",
+              "color": "#111827"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 5,
+          "text": "① 为什么可能有效  ② 最小改动  ③ 必要对照  ④ 失败风险  ⑤ 证伪条件",
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "typeface": "PingFang SC",
+            "color": "#111827"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "① 为什么可能有效  ② 最小改动  ③ 必要对照  ④ 失败风险  ⑤ 证伪条件",
+              "fontSize": 18,
+              "typeface": "PingFang SC",
+              "color": "#111827"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "fillColor": "#F7F8FA",
+      "lineColor": "#B8BCC4",
+      "lineWidth": 1
+    }
+  ],
+  "composeRuns": [
+    {
+      "index": 1,
+      "frame": {
+        "left": 0,
+        "top": 0,
+        "width": 1280,
+        "height": 720
+      },
+      "baseUnit": 1,
+      "root": {
+        "path": "0",
+        "kind": "layers",
+        "name": "codex-grid-layout-library#slide-11",
+        "requestedSize": {
+          "width": {
+            "mode": "fill",
+            "value": 1
+          },
+          "height": {
+            "mode": "fill",
+            "value": 1
+          }
+        },
+        "intrinsicSize": {
+          "width": 1239.42,
+          "height": 684.57
+        },
+        "frame": {
+          "left": 0,
+          "top": 0,
+          "width": 1280,
+          "height": 720
+        },
+        "children": [
+          {
+            "path": "0.0",
+            "kind": "text",
+            "name": "Google-Shape-532-p58-2",
+            "position": {
+              "left": 1184.18,
+              "top": 659.24
+            },
+            "requestedSize": {
+              "width": {
+                "mode": "fixed",
+                "value": 54.48
+              },
+              "height": {
+                "mode": "fixed",
+                "value": 25.33
+              }
+            },
+            "intrinsicSize": {
+              "width": 54.48,
+              "height": 25.33
+            },
+            "frame": {
+              "left": 1184.18,
+              "top": 659.24,
+              "width": 54.48,
+              "height": 25.33
+            },
+            "snappedFrame": {
+              "left": 1184.18,
+              "top": 659.24,
+              "width": 54.48,
+              "height": 25.33
+            },
+            "children": [],
+            "text": "06",
+            "transform": "none",
+            "element": {
+              "aid": "sh/3etczq5c",
+              "id": "1",
+              "kind": "shape"
+            }
+          },
+          {
+            "path": "0.1",
+            "kind": "text",
+            "name": "Google-Shape-533-p58-3",
+            "position": {
+              "left": 41.33,
+              "top": 36.17
+            },
+            "requestedSize": {
+              "width": {
+                "mode": "fixed",
+                "value": 1197.33
+              },
+              "height": {
+                "mode": "fixed",
+                "value": 67.64
+              }
+            },
+            "intrinsicSize": {
+              "width": 1197.33,
+              "height": 67.64
+            },
+            "frame": {
+              "left": 41.33,
+              "top": 36.17,
+              "width": 1197.33,
+              "height": 67.64
+            },
+            "snappedFrame": {
+              "left": 41.33,
+              "top": 36.17,
+              "width": 1197.33,
+              "height": 67.64
+            },
+            "children": [],
+            "text": "案例 1｜先给“失败现象”，再让 AI 扩展假设",
+            "transform": "none",
+            "element": {
+              "aid": "sh/oz2d8vmx",
+              "id": "2",
+              "kind": "shape"
+            }
+          },
+          {
+            "path": "0.2",
+            "kind": "shape",
+            "name": "Rounded-Rectangle-1-4",
+            "position": {
+              "left": 41.68,
+              "top": 350.56
+            },
+            "requestedSize": {
+              "width": {
+                "mode": "fixed",
+                "value": 580.99
+              },
+              "height": {
+                "mode": "fixed",
+                "value": 138.67
+              }
+            },
+            "intrinsicSize": {
+              "width": 580.99,
+              "height": 138.67
+            },
+            "frame": {
+              "left": 41.68,
+              "top": 350.56,
+              "width": 580.99,
+              "height": 138.67
+            },
+            "snappedFrame": {
+              "left": 41.68,
+              "top": 350.56,
+              "width": 580.99,
+              "height": 138.67
+            },
+            "children": [],
+            "geometry": "roundRect",
+            "element": {
+              "aid": "sh/p0be10ni",
+              "id": "3",
+              "kind": "shape"
+            }
+          },
+          {
+            "path": "0.3",
+            "kind": "text",
+            "name": "Content-Placeholder-10-5",
+            "position": {
+              "left": 72.89,
+              "top": 376.69
+            },
+            "requestedSize": {
+              "width": {
+                "mode": "fixed",
+                "value": 523.56
+              },
+              "height": {
+                "mode": "fixed",
+                "value": 92.16
+              }
+            },
+            "intrinsicSize": {
+              "width": 523.56,
+              "height": 92.16
+            },
+            "frame": {
+              "left": 72.89,
+              "top": 376.69,
+              "width": 523.56,
+              "height": 92.16
+            },
+            "snappedFrame": {
+              "left": 72.89,
+              "top": 376.69,
+              "width": 523.56,
+              "height": 92.16
+            },
+            "children": [],
+            "text": "低质量问题",
+            "transform": "none",
+            "element": {
+              "aid": "sh/e90v2l4v",
+              "id": "4",
+              "kind": "shape"
+            }
+          },
+          {
+            "path": "0.4",
+            "kind": "text",
+            "name": "Content-Placeholder-15-6",
+            "position": {
+              "left": 72.89,
+              "top": 506.94
+            },
+            "requestedSize": {
+              "width": {
+                "mode": "fixed",
+                "value": 549.78
+              },
+              "height": {
+                "mode": "fixed",
+                "value": 102.67
+              }
+            },
+            "intrinsicSize": {
+              "width": 549.78,
+              "height": 102.67
+            },
+            "frame": {
+              "left": 72.89,
+              "top": 506.94,
+              "width": 549.78,
+              "height": 102.67
+            },
+            "snappedFrame": {
+              "left": 72.89,
+              "top": 506.94,
+              "width": 549.78,
+              "height": 102.67
+            },
+            "children": [],
+            "text": "“请给我 10 个创新点。”\n输出看似丰富，却无法比较、验证，也容易重复已有工作。\n",
+            "transform": "none",
+            "element": {
+              "aid": "sh/fa9cvq5g",
+              "id": "5",
+              "kind": "shape"
+            }
+          },
+          {
+            "path": "0.5",
+            "kind": "shape",
+            "name": "Rounded-Rectangle-7-7",
+            "position": {
+              "left": 657.3,
+              "top": 350.56
+            },
+            "requestedSize": {
+              "width": {
+                "mode": "fixed",
+                "value": 580.99
+              },
+              "height": {
+                "mode": "fixed",
+                "value": 138.67
+              }
+            },
+            "intrinsicSize": {
+              "width": 580.99,
+              "height": 138.67
+            },
+            "frame": {
+              "left": 657.3,
+              "top": 350.56,
+              "width": 580.99,
+              "height": 138.67
+            },
+            "snappedFrame": {
+              "left": 657.3,
+              "top": 350.56,
+              "width": 580.99,
+              "height": 138.67
+            },
+            "children": [],
+            "geometry": "roundRect",
+            "element": {
+              "aid": "sh/gb2d4vml",
+              "id": "6",
+              "kind": "shape"
+            }
+          },
+          {
+            "path": "0.6",
+            "kind": "text",
+            "name": "Content-Placeholder-10-8",
+            "position": {
+              "left": 688.51,
+              "top": 376.69
+            },
+            "requestedSize": {
+              "width": {
+                "mode": "fixed",
+                "value": 523.56
+              },
+              "height": {
+                "mode": "fixed",
+                "value": 92.16
+              }
+            },
+            "intrinsicSize": {
+              "width": 523.56,
+              "height": 92.16
+            },
+            "frame": {
+              "left": 688.51,
+              "top": 376.69,
+              "width": 523.56,
+              "height": 92.16
+            },
+            "snappedFrame": {
+              "left": 688.51,
+              "top": 376.69,
+              "width": 523.56,
+              "height": 92.16
+            },
+            "children": [],
+            "text": "可研究的问题",
+            "transform": "none",
+            "element": {
+              "aid": "sh/1cbux0n6",
+              "id": "7",
+              "kind": "shape"
+            }
+          },
+          {
+            "path": "0.7",
+            "kind": "text",
+            "name": "Content-Placeholder-15-9",
+            "position": {
+              "left": 688.51,
+              "top": 506.94
+            },
+            "requestedSize": {
+              "width": {
+                "mode": "fixed",
+                "value": 549.78
+              },
+              "height": {
+                "mode": "fixed",
+                "value": 102.67
+              }
+            },
+            "intrinsicSize": {
+              "width": 549.78,
+              "height": 102.67
+            },
+            "frame": {
+              "left": 688.51,
+              "top": 506.94,
+              "width": 549.78,
+              "height": 102.67
+            },
+            "snappedFrame": {
+              "left": 688.51,
+              "top": 506.94,
+              "width": 549.78,
+              "height": 102.67
+            },
+            "children": [],
+            "text": "“根据失败现象，给 3 个机制假设。”\n每个假设必须给最小实现、对照、风险与证伪条件。\n",
+            "transform": "none",
+            "element": {
+              "aid": "sh/y54vep4z",
+              "id": "8",
+              "kind": "shape"
+            }
+          },
+          {
+            "path": "0.8",
+            "kind": "text",
+            "name": "Content-Placeholder-15-10",
+            "position": {
+              "left": 42.09,
+              "top": 121.52
+            },
+            "requestedSize": {
+              "width": {
+                "mode": "fixed",
+                "value": 1197.33
+              },
+              "height": {
+                "mode": "fixed",
+                "value": 171.05
+              }
+            },
+            "intrinsicSize": {
+              "width": 1197.33,
+              "height": 171.05
+            },
+            "frame": {
+              "left": 42.09,
+              "top": 121.52,
+              "width": 1197.33,
+              "height": 171.05
+            },
+            "snappedFrame": {
+              "left": 42.09,
+              "top": 121.52,
+              "width": 1197.33,
+              "height": 171.05
+            },
+            "children": [],
+            "text": "一个好提示词要包含 5 件事\n任务背景 · 已观察到的失败 · 不允许改变的约束 · 需要的对照实验 · 证伪条件\n",
+            "transform": "none",
+            "element": {
+              "aid": "sh/z6dw7alk",
+              "id": "9",
+              "kind": "shape"
+            }
+          }
+        ],
+        "padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        },
+        "alignItems": "stretch",
+        "justifyItems": "stretch",
+        "contentFrame": {
+          "left": 0,
+          "top": 0,
+          "width": 1280,
+          "height": 720
+        },
+        "items": [
+          {
+            "path": "0.0",
+            "frame": {
+              "left": 1184.18,
+              "top": 659.24,
+              "width": 54.48,
+              "height": 25.33
+            }
+          },
+          {
+            "path": "0.1",
+            "frame": {
+              "left": 41.33,
+              "top": 36.17,
+              "width": 1197.33,
+              "height": 67.64
+            }
+          },
+          {
+            "path": "0.2",
+            "frame": {
+              "left": 41.68,
+              "top": 350.56,
+              "width": 580.99,
+              "height": 138.67
+            }
+          },
+          {
+            "path": "0.3",
+            "frame": {
+              "left": 72.89,
+              "top": 376.69,
+              "width": 523.56,
+              "height": 92.16
+            }
+          },
+          {
+            "path": "0.4",
+            "frame": {
+              "left": 72.89,
+              "top": 506.94,
+              "width": 549.78,
+              "height": 102.67
+            }
+          },
+          {
+            "path": "0.5",
+            "frame": {
+              "left": 657.3,
+              "top": 350.56,
+              "width": 580.99,
+              "height": 138.67
+            }
+          },
+          {
+            "path": "0.6",
+            "frame": {
+              "left": 688.51,
+              "top": 376.69,
+              "width": 523.56,
+              "height": 92.16
+            }
+          },
+          {
+            "path": "0.7",
+            "frame": {
+              "left": 688.51,
+              "top": 506.94,
+              "width": 549.78,
+              "height": 102.67
+            }
+          },
+          {
+            "path": "0.8",
+            "frame": {
+              "left": 42.09,
+              "top": 121.52,
+              "width": 1197.33,
+              "height": 171.05
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

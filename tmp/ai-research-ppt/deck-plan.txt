@@ -1,0 +1,54 @@
+Communication job
+By the end, a mixed research audience should be able to reproduce a safe, evidence-driven AI research workflow because one real project is unpacked from observation to paper.
+
+Audience and tone
+- Chinese-speaking researchers and students; assume they know research basics but not advanced AI prompting.
+- Practical, candid, non-promotional. AI accelerates the loop; the researcher owns claims, evidence, and decisions.
+
+Narrative arc (about 30 minutes)
+1. Open: AI changes iteration speed, not scientific accountability.
+2. Establish the case: multimodal building damage assessment with BRIGHT.
+3. Idea case: observation -> constrained prompt -> hypothesis tree -> falsifiable design -> human screening.
+4. Literature case: question matrix -> search strings -> evidence cards -> gap synthesis.
+5. Coding and experiments: smallest interface patch -> 2x2 ablation -> multi-backbone/event checks.
+6. Visualization: decide the sentence before the chart; show both aggregate and event-level behavior.
+7. Writing: claim-evidence-warrant, paragraph rewrite, and claim audit.
+8. Close: reusable prompt contract and a concrete next action.
+
+Slide list and pacing
+01 Title (0.5 min)
+02 AI accelerates the loop; the researcher keeps three decisions (1.2)
+03 Five stations in the workflow (0.8)
+04 Case background: all-weather building damage assessment (1.2)
+05 The project started from two stubborn bottlenecks (1.2)
+06 Idea case: begin with a failed observation, not “give me an innovation” (1.5)
+07 The prompt turns observation into a hypothesis tree (2.0)
+08 Convert each idea into a falsifiable design (1.5)
+09 Human screening removes seductive but weak ideas (1.2)
+10 Literature case: ask four questions before searching (1.2)
+11 Search in layers; do not ask one tool for the final answer (1.3)
+12 One paper becomes one evidence card (1.5)
+13 The matrix exposes the defensible gap (1.5)
+14 Coding case: ask AI to patch the smallest interface (1.8)
+15 Experiments: force each claim to have a comparison (1.5)
+16 Results: global gain and event robustness tell different stories (1.5)
+17 Visualization: write the takeaway sentence first (1.2)
+18 Raw spreadsheet to evidence slide (1.3)
+19 Writing: build paragraphs with claim-evidence-warrant (1.2)
+20 Before/after: make a claim precise without making it bigger (1.5)
+21 Reliability boundary: four checks before accepting AI output (1.2)
+22 Reusable prompt contract (1.3)
+23 Close: AI makes the loop faster; humans make it science (0.8)
+
+Visual system
+- Codex Grid: white canvas, black type, pale gray evidence surfaces, blue accent.
+- Use PingFang SC for Chinese; scientific figures stay in their original color.
+- Alternate sparse message, two-column explanation, full-width evidence, timeline, and chart silhouettes.
+- No tool-logo collage; tools are named only as replaceable examples.
+
+Case evidence
+- BRIGHT overview and framework figures.
+- CMCA, DA-CutMix, and technology-roadmap figures.
+- Actual implementation excerpts from UNetCMCA.py and make_data_loader.py.
+- Ablation results and per-event robustness discussion from latex/main.tex and the workbook renders.
+

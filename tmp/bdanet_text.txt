@@ -1,0 +1,1286 @@
+
+===== PAGE 1 =====
+IEEE TRANSACTIONS ON GEOSCIENCE AND REMOTE SENSING, VOL. 60, 2022 5402114
+BDANet: Multiscale Convolutional Neural Network
+With Cross-Directional Attention for Building
+Damage Assessment From Satellite Images
+Yu S h e n , Sijie Zhu , Taojiannan Y ang , Graduate Student Member , IEEE , Chen Chen , Member , IEEE,
+Delu Pan , Jianyu Chen, Member , IEEE,L i a n gX i a o , Member , IEEE, and Qian Du , Fellow, IEEE
+Abstract— Fast and effective responses are required when
+a natural disaster (e.g., earthquake and hurricane) strikes.
+Building damage assessment from satellite imagery is critical
+before relief effort is deployed. With a pair of predisaster and
+postdisaster satellite images, building damage assessment aims at
+predicting the extent of damage to buildings. With the powerful
+ability of feature representation, deep neural networks have
+been successfully applied to building damage assessment. Most
+existing works simply concatenate predisaster and postdisaster
+images as input of a deep neural network without considering
+their correlations. In this article, we propose a novel two-stage
+convolutional neural network for building damage assessment,
+called BDANet. In the ﬁrst stage, a U-Net is used to extract
+the locations of buildings. Then, the network weights from
+the ﬁrst stage are shared in the second stage for building
+damage assessment. In the second stage, a two-branch multi-
+scale U-Net is employed as the backbone, where predisaster
+and postdisaster images are fed into the network separately.
+A cross-directional attention module is proposed to explore
+the correlations between predisaster and postdisaster images.
+Moreover, CutMix data augmentation is exploited to tackle the
+challenge of difﬁcult classes. The proposed method achieves state-
+Manuscript received January 4, 2021; revised March 28, 2021; accepted
+May 3, 2021. Date of publication May 27, 2021; date of current version
+January 5, 2022. This work was supported in part by the National Major
+Research and Development Program of China under Grant 2016YFC1400903,
+in part by the National Natural Science Foundation of China under
+Grant 61871226, in part by the Key Special Project for Introduced Talents
+Team of Southern Marine Scienc e and Engineering Guangdong Labora-
+tory (Guangzhou) under Grant GML2019ZD0602, and in part by the Jiangsu
+Provincial Social Developing Pr oject under Grant BE2018727. This work was
+done when Y u Shen was a visiting student at the University of North Carolina
+at Charlotte. (Corresponding authors: Ji anyu Chen; Liang Xiao.)
+Y u Shen is with the State Key Laboratory of Satellite Ocean Environment
+Dynamics, Second Institute of Oceanography, Ministry of Natural Resources,
+Hangzhou 310012, China, also with the S chool of Computer Science and
+Engineering, Nanjing University of Science and Technology, Nanjing 210094,
+China, and also with the Southern Mari ne Science and Engineering Guang-
+dong Laboratory, Guangzhou 511458, China.
+Sijie Zhu, Taojiannan Y ang, and Chen Chen are with the Department
+of Electrical and Computer Engineering, University of North Carolina at
+Charlotte, Charlotte, NC 28223 USA.
+Delu Pan and Jianyu Chen are with the State Key Laboratory of Satellite
+Ocean Environment Dynamics, Second Institute of Oceanography, Ministry
+of Natural Resources, Hangzhou 310012, China, and also with the Southern
+Marine Science and Engineerin g Guangdong Laboratory, Guangzhou 511458,
+China (e-mail: chenjianyu@sio.org.cn).
+Liang Xiao is with the School of Computer Science and Engineering,
+Nanjing University of Science and Technology, Nanjing 210094, China
+(e-mail: xiaoliang@njust.edu.cn).
+Qian Du is with the Department of Electrical and Computer Engineering,
+Mississippi State University, Starkville, MS 39762 USA.
+Digital Object Identiﬁer 10.1109/TGRS.2021.3080580
+of-the-art performance on a large-scale dataset—xBD. The code
+is available at https://github.com/ShaneShen/BDANet-Building-
+Damage-Assessment.
+Index Terms — Building damage assessment, convolutional
+neural network (CNN), cross-directional attention (CDA), Cut-
+Mix, multiscale feature fusion (MFF), satellite image.
+I. I NTRODUCTION
+N
+A TURAL disasters, such as earthquakes, ﬂoods, and
+tsunami, can cause serious social and economic devasta-
+tion. When a natural disaster st rikes, accurate and immediate
+responses are required in humanitarian assistance and disas-
+ter response (HADR) for saving thousands of lives [1]–[4].
+Before these responses, rescue planning and preparations are
+conducted based on the damage analysis. With the rapid
+development of remote sensing technology, high-resolution
+satellite images are now available for damage assessment.
+Traditionally, these images of disaster areas are analyzed
+by experts, which may be time-consuming if the areas are
+large. Therefore, automatic info rmation extraction from satel-
+lite images, such as building segmentation and damage assess-
+ment, is imperative under time-critical situations.
+Building damage assessment plays a pivotal role in HADR,
+which aims at predicting the damage level for each pixel
+based on building segmentation. It can be divided into two
+categories according to the use of predisaster images. For the
+methods only using postdisaster images, the damage assess-
+ment is considered as a segmentation task [5], [6]. However,
+without predisaster images, building assessment errors may
+be inevitable since postdisaster images cannot provide precise
+contours of intact building objects. With predisaster images,
+well-shaped buildings can be utilized for damage assessment.
+Note the problem of damage assessment with paired images
+shares some similarities with change detection, as both tasks
+aim to ﬁnd the changed regions according to two images
+acquired at different time [7]–[9]. Compared with change
+detection, building damage assessment is a more challenging
+task because it is required to classify different damage levels.
+Moreover, the unchanged objects (undamaged buildings) are
+required in building damage assessment, which is not consid-
+ered in change detection.
+Recently, deep learning-based methods, such as convolu-
+tional neural networks (CNNs), have shown their effectiveness
+1558-0644 © 2021 I EEE. Personal u se is perm itted, but republication/redistri bution requires IEEE permission.
+See https://www.ieee.org/publications/rights/index.html for more information.
+Authorized licensed use limited to: Shanghai Normal University. Downloaded on July 02,2026 at 13:31:16 UTC from IEEE Xplore.  Restrictions apply. 
+
+===== PAGE 2 =====
+5402114 IEEE TRANSACTIONS ON GEOSCIENCE AND REMOTE SENSING, VOL. 60, 2022
+Fig. 1. Pair of images and their annotations from the xBD dataset.
+in various tasks. With a set of labeled data, deep learning-based
+methods can automatically learn image feature representations
+from low level to high level, without selecting handcrafted
+image features. Many researcher s have leveraged deep neural
+networks for building damage assessment and achieved signif-
+icant progress [10]–[12]. Xu et al. [11] investigated the capa-
+bility of CNN for building damage detection by identifying
+damaged and undamaged buildings. Weber and Kane [12]
+considered building damage asse ssment as a semantic segmen-
+tation task, in which damage levels are assigned to different
+class labels.
+With a pair of predisaster and postdisaster images for build-
+ing damage assessment, a key que stion is how to effectively
+model the correlations between these images. Standard prac-
+tice is to use a two-branch CNN-like architecture with feature
+fusion schemes. For instance, Hao et al. [13] concatenated the
+features from predisaster and postdisaster images and fed them
+into a CNN-based framework. Gupta and Shah [14] developed
+a framework that uses the difference between predisaster and
+postdisaster features as input of the deep neural network,
+which is denoted as RescueNe t. More recently, an attention
+mechanism has been used with deep neural networks for
+remote sensing images processing [15], [16], which is a
+strategy of allocating larger weights to informative parts of
+an image/feature. For instan ce, the average pooling is applied
+to extract the channel attention information for remote sensing
+image segmentation [17], and a nonlocal-based attention mod-
+ule is utilized in the network to explore the spatial relations
+of satellite images in [13].
+Another challenge of building damage assessment from
+satellite imagery lies in the visual similarity between certain
+classes (e.g., no damage and minor damage). These classes are
+considered difﬁcult classes. To illustrate this problem, we use
+the xBD [18] dataset that is the largest dataset for building
+damage assessment to date, as an example. Fig. 1 shows a pair
+TABLE I
+CLASSIFICA TION CONFUSION MAT R I X(%) OF RES NET-50
+BASELINE ON THE X BD T ESTING SET
+of images from this dataset. Based on visual observation, it is
+difﬁcult to distinguish between classes, such as no damage
+and minor damage , due to a similar appearance. Table I
+reports the classiﬁcation results of ResNet-50 on xBD. From
+the classiﬁcation confusion matrix, about 24.2% of minor
+damage are misclassiﬁed as no damage. One effective strategy
+to cope with difﬁcult classes and improve the model perfor-
+mance is data augmentation [19], [20]. Data augmentation has
+been widely used as a preprocessing technique to artiﬁcially
+increase the size of the dataset in segmentation tasks [21].
+Recently, CutMix [22] is proposed as a new data augmentation
+technique, which generates a new image by combining two
+image samples, to enhance the generalization ability of neural
+networks. CutMix directly cuts and pastes image patches from
+one image to another, which can be easily used in many tasks.
+Motivated by the above observations, we introduce a
+two-stage CNN-based framework, named BDANet, for build-
+ing damage assessment. First, a single U-Net [23] is used for
+building segmentation (Stage 1). U-Net is an encoder–decoder
+network architecture that has been widely used in segmentation
+tasks, e.g., in [24]. The results of building segmentation are
+used to guide the locations of building damages in the second
+stage. Then, a two-branch multiscale CNN (U-Net structure)
+is applied for damage assessment (Stage 2). By using the
+network weights from building segmentation, the network
+in Stage 2 can be trained more efﬁciently. Due to the
+scale variance of building objects, we introduce a multiscale
+feature fusion (MFF) module in the encoder layer, which
+enables the network to aggregate features from multiple scales.
+In addition, a cross-directional attention (CDA) module is
+proposed to explore the correlations between features from
+predisaster and postdisaster images. By leveraging channel-
+wise and spatialwise correlations, the network can fuse and
+enhance the features from predisaster and postdisaster images.
+Moreover, to tackle difﬁcult classes, CutMix is employed for
+data augmentation. Speciﬁcally, we only apply CutMix to
+difﬁcult classes to make the network pay more attention to
+those classes, thereby learning more robust representations
+for their separation. In the experiments, we show that this
+strategy yields superior classiﬁcation performance over simply
+adopting CutMix for all classes.
+The contributions of this article are summarized as follows.
+1) We present a two-stage CNN-based learning framework
+for building segmentation (Stage 1) and damage assess-
+ment (Stage 2). The building segmentation helps the
+network to locate the building objects. The proposed
+framework achieves state-of-the-art performance on a
+Authorized licensed use limited to: Shanghai Normal University. Downloaded on July 02,2026 at 13:31:16 UTC from IEEE Xplore.  Restrictions apply. 
+
+===== PAGE 3 =====
+SHEN et al. : BDANet: MULTISCALE CNN WITH CDA 5402114
+large-scale building dam age assessment benchmark—
+xBD [18].
+2) To reduce the inﬂuence of scale variance of buildings,
+an MFF module is introduced to learn features from
+multiple scales.
+3) A CDA module is proposed to effectively aggregate the
+features from predisaster and postdisaster images. With
+the attention module, informative channel and spatial
+information can be extracted to enhance the feature
+representation.
+4) We also unveil the challenge of difﬁcult classes in
+building damage assessment and explore an effective
+data augmentation strategy, CutMix [22], to cope with
+this challenge.
+The remainder of this article is organized as follows.
+Section II gives an overview of related works. Section III
+presents the details of the proposed BDANet for building dam-
+age assessment. Section IV provides comprehensive experi-
+mental results and parameter analysis. Finally, the conclusion
+i sd r a w ni nS e c t i o nV .
+II. R
+ELA TED WORK
+A. Building Damage Assessment
+Building damage-based analysis, including detection, seg-
+mentation, and assessment, are vital topics in HADR.
+Recently, many algorithms have been developed for building
+damage analysis [25]–[27]. For instance, in [26], to detect the
+damaged building objects after an earthquake, change features,
+including texture, color, statistical similarity, and correlation
+descriptors are all analyzed before applying a support vector
+machine (SVM) classiﬁer. Zhu et al. [28] proposed an instance
+segmentation network, named MSNet, for building damage
+detection. In [29], a multiple kernel learning framework is
+proposed. To improve the performance of building damage
+detection, the CNN feature and 3-D cloud point feature
+are integrated into the framework. In [30], an unsupervised
+anomaly detection method is developed to automatically detect
+the location of damaged buildings.
+Different from building damag e detection and segmentation,
+building damage assessment aims at identifying the damage
+level of building objects after natural disasters. Depending on
+whether to use predisaster i mages, building damage assess-
+ment can be divided into two categories. One category only
+uses postdisaster images, and the other uses paired predis-
+aster and postdisaster images for damage assessment. Many
+previous works focus on using only postdisaster images. For
+example, in [31], SVM is used to assess the building damage
+after the earthquake with QuickBird satellite images. In [32],
+the object-based analysis is in tegrated with machine learning
+methods to preserve the boundary and detailed information of
+remote sensing satellite images in damaged buildings. How-
+ever, without predisaster images, building assessment errors
+can be easily made because postdisaster images cannot pro-
+vide precise boundaries/contours of complete building objects.
+Therefore, researchers resort to using a pair of satellite images
+(predisaster and postdisaster) for building damage assessment.
+Cooner et al. [33] extracted textural and structural features
+from both predisaster and postdisaster images, which improved
+the performance of earthquake damage assessment. Due to
+the limited amount of labeled data, some works simplify
+the damage assessment task as b inary classiﬁcation, which
+assigns damage and no damage labels to building objects.
+For example, Xu et al. [11] compared the performance of
+different CNN models in detecting damaged buildings in the
+Haiti earthquake.
+Recently, researchers start to differentiate more building
+damage levels for better disaster analysis. Different from
+the binary classiﬁcation, the e xtent of damage is considered,
+such as minor damage and major damage. In [6], the level
+of building damage after the earthquake is evaluated by a
+framework integrating CNN and ordinal regression. In [34],
+to reduce the uncertainty in predicting building damage levels,
+building objects in the center of an image patch are considered,
+while the surrounding buildings are occluded by negating the
+pixels. Hence, the model can focus on the buildings in the
+center of an image patch.
+B. U-Net
+U-Net is a CNN-based network that was ﬁrst proposed for
+biomedical image segmentation [23]. Compared with tradi-
+tional CNN-based architectures, U-Net introduced downsam-
+pling and upsampling to aggregate features from multiple
+scales. By adopting the skip connection, features from low
+and high levels are integrated to enhance the learning abil-
+ity of the network [35]. Due to these advantages, U-Nets
+have been widely used in image segmentation [36] and
+classiﬁcation [37].
+U-Net-based architectures have also been applied in remote
+sensing image processing. For instance, in [38], U-Net is intro-
+duced for very-high-resolution remote sensing image segmen-
+tation. In [39], U-Net is integrated with multiscale strategy for
+building instance extraction. In [40], U-Net is used as a feature
+extraction method for building segmentation, which provides
+promising results. Moreover, U-Net-based architectures have
+been applied in a variety of tasks, such as road extraction [41]
+and change detection [42]. However, the U-Net architecture
+is simple and cannot be directly used in building damage
+assessment.
+C. Attention-Based Models
+Attention-based models [43], [44] have been widely used
+in computer vision tasks, which learn to put more emphasis
+on important information of ima ges/features. Recently, many
+attention-based models have been developed and achieved
+great success in remote sensing image processing tasks, such
+as image classiﬁcation and segmentation [39], [45]. In [17],
+a channel-attention mechanism is integrated with a fully con-
+volutional network (FCN) for high-resolution aerial image seg-
+mentation. In [46], a foreground-aware network is developed,
+which incorporates both spatial and channel attention models
+to improve foreground modeling, for geospatial object seg-
+mentation. In [47], an attention embedding module is designed
+to embed attention from high-level layers into low-level ones
+Authorized licensed use limited to: Shanghai Normal University. Downloaded on July 02,2026 at 13:31:16 UTC from IEEE Xplore.  Restrictions apply. 
+
+===== PAGE 4 =====
+5402114 IEEE TRANSACTIONS ON GEOSCIENCE AND REMOTE SENSING, VOL. 60, 2022
+Fig. 2. Overview of the proposed framework (BDANet) . The U-Net structure is used in both stages. It cons ists of two stages: (a) Stage 1: building segmen tation
+and (b) Stage 2: damage assessment.
+to enrich the semantic information for satellite image seg-
+mentation. In [48], a self-attention mechanism that considers
+both spatial-dipartite context aggregation information and the
+relative position encoding information is proposed for remote
+sensing scene classiﬁcation.
+Attention-based models are barely applied in building dam-
+age assessment. In [13], a nonlocal attention model [44] is
+adopted to capture long-range spatial information of predisas-
+ter and postdisaster images. However, the computational cost
+of the nonlocal mechanism is v ery high because the attention
+map is calculated based on high-resolution features.
+D. Data Augmentation Strategies
+Data augmentation has been widely used as a preprocessing
+technique to artiﬁcially increase the size of the dataset in
+computer vision tasks [21], [49], [50]. Data augmentation
+methods usually employ image transformations, such as image
+ﬂip, rotation, and crop, to improve the model generalization
+performance. Manually annotating remote sensing images is
+difﬁcult and time-consuming. As a result, labeled remote
+sensing data are usually limited. To facilitate the training of
+deep neural networks, data augmentation is critical in deep
+learning-based remote sensing image processing.
+Recently, various data augmentation techniques have
+emerged and shown their efﬁciency. Cutout [51] randomly
+masks out square regions of input to force the network to
+pay attention to diverse image regions, thereby improving the
+feature representation capability of CNNs. Some works focus
+on synthesizing image samples to expand the size of training
+data. Cubuk et al. [20] proposed a search algorithm for image
+augmentation, which enables the network to ﬁnd the best
+validation accuracy. In [52], Mi xup is introduced to regularize
+the neural network by using a linear combination of pairs of
+samples and labels. Different from the Mixup strategy that
+merges two images with the linear summation, CutMix [22]
+directly cuts and pastes image patches from one image to
+another, which can be used in segmentation tasks.
+At present, most deep learning-based methods still follow
+the architectures of change detection and seldom consider
+the completeness of building objects. Furthermore, due to
+the similarities between certain classes, it is difﬁcult for the
+network to distinguish their differences. To deal with these
+problems, a two-stage framework is proposed for building
+damage assessment. The MMF and CDA models are proposed
+to enhance the feature representation. Moreover, the CutMix
+strategy is employed to alleviate the difﬁculty of classifying
+hard classes.
+III. P
+ROPOSED METHOD
+Fig. 2 presents an overview of the proposed BDANet, which
+consists of two stages: building segmentation (Stage 1) and
+damage assessment (Stage 2). In Stage 1, a single U-Net
+branch (i.e., the upper one) is used for building segmentation.
+This U-Net branch uses only predisaster images as input and
+produces segmentation masks of building objects. In Stage 2,
+the predisaster and postdisaster images are fed into two
+Authorized licensed use limited to: Shanghai Normal University. Downloaded on July 02,2026 at 13:31:16 UTC from IEEE Xplore.  Restrictions apply. 
+
+===== PAGE 5 =====
+SHEN et al. : BDANet: MULTISCALE CNN WITH CDA 5402114
+network branches separately. To further enhance the feature
+representations, the MFF module and the CDA module are
+introduced. We describe the details of the proposed damage
+assessment framework and its components in the following.
+A. Two-Stage Framework
+Although the building damage assessment task shares some
+similarities with the change detection task, there are several
+key differences. First, building damage assessment not only
+requires detecting the changes b ut also needs to classify their
+damage levels. Second, the undamaged buildings also need
+to be detected, which are usually unnecessary in change
+detection. Change detection-based networks mainly follow a
+three-branch architecture, wh ich contains a dual-branch for
+image pairs learning and a fu sion branch for change detec-
+tion [53], [54]. These networks are designed for learning the
+differences of image pairs, while unchanged objects (e.g.,
+undamaged buildings) are ignored. Due to these problems,
+directly using networks for change detection cannot satisfy
+the needs of building damage a ssessment. Therefore, in this
+article, a two-stage learning framework is proposed for build-
+ing damage assessment.
+Stage 1 (Building Segmentation): As shown in Fig. 2(a),
+to locate the building objects, only predisaster images are
+used as input to the network in this stage. The network is
+separately trained for building object segmentation in this
+stage. Compared with postdisaster images, building objects
+in predisaster images are int act and well-shaped. The net-
+work is designed based on the architecture of U-Net [23].
+In the encoder part, a ResNet [55] is used as the backbone
+to extract deep features. By usi ng the strided convolution,
+the input image is ﬁrst downsampled into half of the original
+resolution. With the network b ecoming deeper, feature maps
+are projected into a higher dim ension for high-level feature
+extraction. In the decoder part, the resolution of features is
+gradually recovered to the original input size by upsampling.
+To capture the details of target objects, skip connections are
+utilized in the network [see Fig. 2(a)]. Before each upsampling
+operation, the low-level feature maps from the encoder layer
+are concatenated with the high- level feature maps. The output
+of the network is a binary segmentation map indicating the
+building distribution in a satellite image. Similar to some
+segmentation tasks, the cross-entropy loss is used in this stage,
+which is formulated as
+L =−
+N∑
+i
+yi log ˆyi +
+(
+1 − yi )
+log
+(
+1 − ˆyi )
+(1)
+where L quantiﬁes the overall loss by comparing the target
+label yi with predicted label ˆ yi and N represents the number
+of training pixels.
+The objective of Stage 1 is locating the building objects.
+As many buildings are damaged in postdisaster images, it is
+difﬁcult for the network in Stage 2 to perform building seg-
+mentation and damage assessment at the same time. Therefore,
+to guide the assessment process of Stage 2, a single U-Net
+using only predisaster images is ﬁrst applied to identify the
+locations of buildings.
+Stage 2 (Damage Assessment): In Stage 2, both predisaster
+and postdisaster images are fed into a two-branch network.
+The backbone network for damage assessment is the same
+as that for building segmentation. The convolutional kernels
+are shared in both branches. Ther efore, the parameter weights
+obtained from Stage 1 are used here for weights initialization.
+A ss h o w ni nF i g .2 ( b ) ,t h ef e a ture maps from two branches
+are concatenated in the dconv4 layer. Then, the output of
+damage assessment is generated after a convolutional layer.
+The cross-entropy loss is also applied in Stage 2. Let the output
+of building segmentation be P
+b ∈ R2×H×W ,w h e r eH and W
+denote the height and width of the output, respectively. Then,
+the segmentation results can be expressed as
+P
+B = arg max(Pb) (2)
+where PB ∈{ 0, 1}1×H×W with 1 representing for buildings
+and 0 for background.
+Let the output of damage assessment be Pd ∈ RC×H×W ,
+where C denotes the number of damage levels. To guide the
+building locations, the ﬁnal output P is represented as
+P = arg max(PB · Pd) (3)
+where · denotes the elementwise multiplication.
+B. MFF Module
+As the scale of buildings vari es in images captured from
+various disasters and regions, learning a robust representation
+of building objects under various scales is important. To this
+end, an MFF module is introduced in the encoder of the
+network. The input image is processed with three different
+scales: 1× input resolution (original size), 0 .5× input resolu-
+tion, and 0.25× input resolution. Features from different scales
+are extracted by a convolutional block and then embedded in
+the encoder of the network, as shown in Fig. 2(b). Speciﬁcally,
+the MFF contains three stream s. The ﬁrst stream uses images
+with the original resolution. In this stream, a convolutional
+layer with stride 2 is used to generate feature maps with half
+of the input size. This stream is the same as the ﬁrst layer
+of ResNet, which is used as the backbone of the proposed
+framework. The 0 .5× resolution images are used as input of
+the second stream. The size of feature maps of this stream
+keeps the same with 0 .5× resolution images. Then, feature
+maps from 1 × and 0.5× streams are concatenated for further
+processing. To keep a similar setting of the number of channels
+as the ResNet, a dimension reduction is conducted on the
+concatenated feature map. In t he third stream, the feature
+map of 0 .25× resolution is concatenated with the second
+convolutional block of ResNet. In this way, features from three
+different image scales are embedded in the network, which
+enables the network to learn robust features.
+C. CDA Module
+To further explore the correlations between predisaster and
+postdisaster features, a CDA module is developed. Inspired by
+the squeeze and excitation (SE) block [56], the proposed CDA
+module focuses on recalibrating features from the channel
+and spatial dimensions. Moreover, the channel and spatial
+Authorized licensed use limited to: Shanghai Normal University. Downloaded on July 02,2026 at 13:31:16 UTC from IEEE Xplore.  Restrictions apply. 
+
+===== PAGE 6 =====
+5402114 IEEE TRANSACTIONS ON GEOSCIENCE AND REMOTE SENSING, VOL. 60, 2022
+Fig. 3. Framework of the proposed CDA module.
+TABLE II
+PARAMETERS OF THE BDAN ET
+information from predisaster an d postdisaster features is aggre-
+gated together in a cross manner and then embedded in the
+network, respectively. The details are depicted in Fig. 3. Let
+Upre ∈ RE×h×w and Upost ∈ RE×h×w be the feature maps
+obtained from the two branches o f U-Net, respectively, where
+E denotes the number of channels of feature maps, and h and
+w are the height and width of feature maps, respectively. Then,
+the channel information can be extracted by
+Icha = σ
+(
+Pg
+([
+Upre, Upost
+]))
+(4)
+where [Upre, Upost] denotes the concatenation of feature maps,
+Pg(·) represents the global average pooling, σ(·) is the sigmoid
+function, and Icha is a feature vector of E channels after
+dimension reduction from 2 E. Then, the new features from
+two branches can be formulated as
+U cha
+pre = Icha ∗Upost + Upre
+U cha
+post = Icha ∗Upre + Upost (5)
+where ∗ denotes the channelwise multiplication between the
+input feature maps and vector Icha. The output of channel
+feature fusion is then used in the spatial feature fusion.
+We concatenate U cha
+pre and U cha
+post and feed them into a 1 × 1
+convolution Pconv as
+Ispa = σ
+(
+Pconv
+([
+U cha
+pre , U cha
+post
+]))
+(6)
+where Pconv([U cha
+pre , U cha
+post]) ∈ R1×H×W . Then, the output fea-
+tures are
+U spa
+pre = Ispa · U cha
+post + Upre
+U spa
+post = Ispa · U cha
+pre + Upost (7)
+where Ispa · U cha
+post and Ispa · U cha
+pre denote the spatial elementwise
+multiplication. As a result, channel and spatial information
+from predisaster and postdisaster branches is effectively aggre-
+gated in the CDA module. It is worth noting that the proposed
+CDA module consists of only simple convolution and matrix
+operations, which is easy to implement and integrate with
+existing CNN architectures.
+Therefore, the overall architecture of BDANet is established.
+The detailed parameters are listed in Table II.
+D. Data Augmentation With CutMix
+As discussed in Section I, several damage levels are difﬁcult
+to distinguish from each other due to their similarities in
+satellite images. To address this challenge, we leverage the
+CutMix [22] data augmentation scheme to increase the sample
+sizes of difﬁcult classes, for be tter feature representations.
+Speciﬁcally, image patches are cut from samples that contain
+difﬁcult classes (i.e., minor and major damage classes for
+the xBD dataset based on the results in Table I) and then
+pasted into any random sample images. The CutMix procedure
+is illustrated in Fig. 4. Let {X
+pre
+A , Xpost
+A }∈ Rc×H×W and
+YA ∈ RH×W be a randomly selected training sample (an image
+pair) and label, and ( Xpre
+B , Xpost
+B , YB ) be a randomly selected
+sample from difﬁcult classes, where c is the channel number
+of images. Then, the CutMix operation in this task can be
+deﬁned as
+ˆXpre = M · Xpre
+A + (1 − M) · Xpre
+B
+ˆXpost = M · Xpost
+A + (1 − M) · Xpost
+B
+ˆY = M · YA + (1 − M) · YB (8)
+Authorized licensed use limited to: Shanghai Normal University. Downloaded on July 02,2026 at 13:31:16 UTC from IEEE Xplore.  Restrictions apply. 
+
+===== PAGE 7 =====
+SHEN et al. : BDANet: MULTISCALE CNN WITH CDA 5402114
+Fig. 4. Data augmentation with CutMix for difﬁcult classes.
+TABLE III
+XBD D ATA S E TSPLITS AND ANNOT A TION NUMBERS
+where M ∈ R1×W×H denotes a binary mask indicating
+where to cut out and ﬁll in from two image samples, and
+( ˆXpre, ˆXpost, ˆY) represents the generat ed new sample. With the
+increased sample size using Cut Mix, the network is forced to
+pay more attention to these difﬁcult classes and learn more
+robust representations.
+IV . E
+XPERIMENTS
+A. Dataset and Evaluation
+To evaluate the effectiveness of our proposed method,
+the xBD dataset [18] is used in the experiments. The xBD
+dataset is the only publicly available large-scale dataset of
+satellite images for building segmentation and damage assess-
+ment at present. It was sourced from the DigitalGlobe Open
+Program,
+1 which was released for sudden major disaster
+events. Speciﬁcally, the Open Data Program was chosen for
+its availability of high-resolution imagery from many disparate
+regions of the world. In this dataset, 19 different disasters (such
+as hurricanes, ﬂoods, wildﬁre, and earthquakes) are selected
+at various locations with more than 800 000 building anno-
+tations. The dataset consists of image pairs (predisaster and
+postdisaster) of size 1024 × 1024 pixels. Each image contains
+three spectral bands (red, green, and blue) and has a resolution
+of 0.8 m/pixel. The damage assessment contains four levels,
+including no damage, minor damage, major damage, and
+destroyed. The training and testing sets are listed in Table III.
+It is worth mentioning that the data are imbalanced, and the
+damage level is highly skewed toward no damage. The number
+of each damage level’s polygons is reported in Table IV.
+The experimental results are evaluated by using the F1 score
+(F1
+b) for building segmentation and the harmonic mean of
+classwise damage classiﬁcation F1 ( F1d ) for building damage
+assessment, which are deﬁned as
+F1b = 2TP
+2TP + FP + FN
+F1d = n
+∑n
+i=1 1/F1Ci
+(9)
+1https://www.digitalglobe.com/ecosystem/open-data
+TABLE IV
+DAMAGE LEVEL ANNOT A TIONS AND THE DISTRIBUTION
+respectively, where TP, FP, and FN are the number of true-
+positive, false-positive, and false-negative pixels of segmen-
+tation results, respectively, 1 /F1Ci denotes the F1 score of
+each damage level for damage assessment, and Ci denotes the
+damage level. F1 score is a challenging evaluation index as it
+heavily penalizes the overﬁtting to over-represented classes.
+The overall score F1
+s [18] comprehensively evaluates the
+performance of building segmentation and damage assessment,
+which is formulated by a weighted average of F1b and F1d
+F1s = 0.3 × F1b + 0.7 × F1d. (10)
+B. Implementation Details
+We implement the proposed framework using Pytorch.
+Experiments are conducted on a computer with an Intel
+i9-9920X CPU and two NVIDIA TIT AN-V GPUs. Images
+are cropped to a size of 512 × 512 pixels for training. The
+prediction for the testing set is performed on the original
+size of images (1024 × 1024). Apart from CutMix, basic
+data augmentation is conducted in the training phase, such
+as ﬂip and rotation. Due to GPU memory limitation, we use
+ResNet-50 as the backbone for all compared networks with
+pretrained weights loaded from the PyTorch library. The
+number of channels in each convolutional block is [64, 256,
+512, 1024, 2048]. In the decoder, the number of channels in
+each convolutional block is [512, 256, 96, 32]. The number of
+convolutional channels is the same as Stage 1 and Stage 2. The
+cross-entropy loss is used for both building segmentation and
+damage assessment. The optimization method is Adam. In the
+building segmentation stage, the learning rate is 0.00015, and
+the number of the epoch is 120. In the damage assessment
+stage, the learning rate is 0.0002, and the number of the
+epoch is 25.
+C. Results Analysis
+To validate the effectiveness of the proposed framework,
+we employ several state-of-the-art methods for comparison
+on xBD.
+1) Two change detection-based networks, including
+WNet [53] and U-Net ++ [57], are evaluated for
+building damage assessment.
+2) The RescueNet [14] uses a dilated ResNet-50 as the
+backbone network. The difference of features from pre-
+disaster and postdisaster images is utilized for damage
+assessment.
+3) In Weber’s method [12], after feature extraction with
+ResNet-50, features from predisaster and postdisas-
+ter images are concatenated for feature fusion. Then,
+the segmentation is perfo rmed for damage assessment.
+Authorized licensed use limited to: Shanghai Normal University. Downloaded on July 02,2026 at 13:31:16 UTC from IEEE Xplore.  Restrictions apply. 
+
+===== PAGE 8 =====
+5402114 IEEE TRANSACTIONS ON GEOSCIENCE AND REMOTE SENSING, VOL. 60, 2022
+TABLE V
+BUILDING DAMAGE ASSESSMENT RESUL TS ON THE X BD D ATA S E TWITH DIFFERENT METHODS
+4) Several state-of-the-art semantic segmentation networks,
+including FCN [58], SegNet [59], and DeepLabv3 [60],
+are also employed for comparison. We set the two-stage
+framework unchanged and only replace the U-Net-based
+architecture in Stage 2 with these mentioned networks.
+According to Table V, both methods provided low scores
+compared with other networks. It is reasonable.
+Apart from our proposed two-stage framework, a network
+without the MFF module, the CDA module, and CutMix is
+used as a clean baseline for comparison, which is denoted as
+the vanilla network. The damage assessment results of differ-
+ent approaches are reported in Table V. The proposed frame-
+work using the vanilla network alone outperforms the existing
+methods, e.g., [14] and [12], in terms of all three metrics ( F1
+s ,
+F1b,a n d F1d ). Unlike the RescueNet and Weber’s method,
+the decoder and skip connections are used in our framework.
+Therefore, our method provides a better performance in the
+building segmentation stage (i.e., an improvement of over
+2% in F1
+b). Moreover, our method achieves a signiﬁcant
+improvement (about 12%, 0.493 → 0.616) in minor damage
+level compared with RescueNet [14].
+Different from our proposed framework, the change
+detection-based networks (WNet [53] and U-Net ++ [57])
+perform building segmentation and damage assessment in one
+network. According to Table V, low scores of F1s are provided
+by both methods. It is reasonable because is difﬁcult for
+networks to locate buildings when postdamage images are also
+fed into the networks. From Table V, WNet provided the low-
+est score on F1
+b and the no damage level. As FCN uses simple
+upsampling to predict the damage levels and hardly considers
+features from shadow layers, the score in F1s is not satisfac-
+tory compared with other methods under the same framework.
+In contrast, SegNet and DeepLabv3 have achieved promising
+results using our proposed framework. Compared with the
+vanilla network, our overall approach incorporating the pro-
+posed components further improves the accuracy for damage
+assessment (0.782 versus 0.757 in F1
+d ), and the improvement
+is consistent for all the damage levels. By considering both
+the building segmentation and damage assessment perfor-
+mance (i.e., the overall score F1s ), our proposed two-stage
+framework outperforms the existing methods [12], [14] by
+a considerable margin. The classiﬁcation confusion matrix
+of proposed framework is reported in Table VI. Com-
+pared with classiﬁcation accuracy in Table I, much improve-
+ments are achieved in the minor damage and major
+TABLE VI
+CLASSIFICA TION CONFUSION MAT R I X(%) OF THE PROPOSED
+BDAN ET ON THE X BD T ESTING SET
+Fig. 5. (a)–(d) Visual examples of build ing segmentation in Stage 1. First row
+to third row: pre-disaster images, ground truth of building segmentation, and
+segmentation results of Stage 1. The gr een color represents building objects.
+The blue color represents backgrounds.
+damage level, indicating the effectiveness of our proposed
+method.
+Some visual results of building segmentation are pre-
+sented in Fig. 5. By decomposing the framework into two
+stages, the network can focus o n building segmentation in
+Stage 1, achieving good segmentation results compared with
+the ground-truth segmentation maps. Therefore, the results can
+be used to effectively guide the b uilding locations for damage
+assessment in Stage 2.
+Fig. 6 shows a visual comparison of damage assessment
+results of different networks. For U-Net ++, it is obvious
+that this method cannot provid e precise outlines of build-
+ing objects, and thus, many segmentation mistakes can be
+found. For FCN, more misclassiﬁcation can be found from its
+Authorized licensed use limited to: Shanghai Normal University. Downloaded on July 02,2026 at 13:31:16 UTC from IEEE Xplore.  Restrictions apply. 
+
+===== PAGE 9 =====
+SHEN et al. : BDANet: MULTISCALE CNN WITH CDA 5402114
+Fig. 6. Damage assessment results. From left to right: (a) predisaster ima ge, (b) postdisaster image, (c) ground tr uth, (d) FCN, (e) SegNet, (f) DeepL ab, and
+(g) our proposed network.
+TABLE VII
+ABLA TION STUDY OF DIFFERENT COMPONENTS (MFF, CDA, AND CUT MIX STRA TEGY ) IN THE PROPOSED FRAMEWORK
+classiﬁcation map compared with other methods. We can also
+observe that much misclassiﬁcation comes from the levels of
+minor and major damages because both two levels are difﬁcult
+classes. Compared with FCN and SegNet, DeepLabv3 pro-
+vides a better visual result. Overall, our proposed BDANet
+achieves the best performance with fewer damage assessment
+errors.
+D. Ablation Study
+To investigate the contribution of the MFF module, the CDA
+module, and CutMix data augmentation, we carry out ablation
+studies on these components. Table VII reports the results of
+the vanilla network with these individual components. It can
+be seen that CDA and MFF bring about 0.6% and 0.5%
+improvements in F1
+s , respectively. Moreover, the CutMix
+strategy on difﬁcult classes boosts the overall performance
+(F1s ) by 1.3%, which is a considerable gain. In particular,
+the accuracy of minor damage class is improved by 2.7%
+(0.578 versus 0.605) with CutMix.
+1) Analysis of MFF: As illustrated in Fig. 2, three
+feature streams are used to extract the features from differ-
+ent image resolutions. Therefore, this ablation study investi-
+gates the effectiveness of the three streams. Note that, when
+Authorized licensed use limited to: Shanghai Normal University. Downloaded on July 02,2026 at 13:31:16 UTC from IEEE Xplore.  Restrictions apply. 
+
+===== PAGE 10 =====
+5402114 IEEE TRANSACTIONS ON GEOSCIENCE AND REMOTE SENSING, VOL. 60, 2022
+Fig. 7. Visualization of feature map s of MFF module. First column: the
+input images with 1 ×,0 . 5×, and 0.25 × resolution. (a) Feature maps of 1 ×
+stream. (b) Feature maps of 0.5 × stream. (c) Features maps of 0.25 × stream.
+TABLE VIII
+ANALYSIS OF THE MFF M ODULE .T HE COMBINA TIONS OF FEA TURE
+STREAMS WITH DIFFERENT SCALES (1×,0 . 5×, AND 0.25 ×)
+ARE USED FOR COMPARISON
+only the stream with the original image resolution (1 ×)i s
+used, the framework is consistent with the vanilla network.
+Table VIII reports the results of different streams applied in the
+network, where the 0 .5× and 0 .25× scales yield about 0.4%
+and 0.2% performance gains in F1
+s , respectively. When three
+streams are used together in the network, an improvement
+of 0.5% is obtained, indicating that learning features from
+different image scales is useful for improving the overall
+performance of damage assessment.
+The feature maps from different streams are also depicted
+in Fig. 7. Speciﬁcally, we visualize several feature maps
+extracted from the ﬁrst convolutional layer of the three
+streams. We can observe that lo cal and detailed information
+can be extracted from the 1 × stream, while more global
+information is captured from streams with lower resolution
+(0.5× and 0.25 ×).
+Fig. 8. Evaluation of the training efﬁciency in Stage 2 by applying
+network weights from Stage 1 as initialization. (a) V alidation accuracy (%).
+(b) Cross-entropy loss.
+TABLE IX
+INFLUENCE OF THE POSITIONS (DCONV 1, DCONV 2, AND
+DCONV 3) OF CDA M ODULES IN THE NETWORK
+2) Analysis of CDA: To explore the correlations between
+predisaster and postdisaster features, three CDA modules are
+used in the decoder of the network, which is represented
+as dconv1, dconv2, and dconv3 in Fig. 2. This experiment
+investigates the inﬂuence of the number of CDA modules and
+the embedding position of CDA in the network. Table IX
+shows that only slight performance gain is achieved when
+CDA is added in the convolutional layer of a small scale
+(dconv1). In contrast, a better improvement is obtained when
+CDA is added in the layer with a larger scale (dconv3).
+This is reasonable because more detailed information can be
+extracted when the feature maps are on a larger scale. When
+all three CDA modules are used in the network, around 0.6%
+improvement is achieved compared with the vanilla network.
+As discussed in Section III-C, the CDA module is developed
+from the SE module [56]. Therefore, in this experiment,
+we further evaluate the effect iveness of CDA compared with
+the SE module. In the experiment, CDA is replaced with
+the channel (cha) and spatial (spa) attention modules of SE.
+As reported in Table X, only 0.1% improvement is achieved
+when the SE channel attention module is applied in the
+Authorized licensed use limited to: Shanghai Normal University. Downloaded on July 02,2026 at 13:31:16 UTC from IEEE Xplore.  Restrictions apply. 
+
+===== PAGE 11 =====
+SHEN et al. : BDANet: MULTISCALE CNN WITH CDA 5402114
+Fig. 9. Building change detection results of different methods on LEVIR-CD d ataset. (a) Before change, (b) afte r change, (c) ground truth, (d) WNet,
+(e) U-Net++, and (f) our proposed BDANet.
+TABLE X
+DAMAGE ASSESSMENT RESUL TS OF USING CDA OR SE M ODULES
+TABLE XI
+ANALYSIS OF CUT MIX APPLIED TO DIFFERENT DAMAGE LEVELS
+network. With both channel and spatial attention of SE, more
+gains are obtained in F1s . Our proposed CDA provides a better
+result in comparison with all SE modules, which indicates
+that exploring the features between predisaster and postdisas-
+ter images is effective in improving the damage assessment
+performance.
+3) Analysis of CutMix: For the xBD dataset, minor damage
+and major damage are the most difﬁcult classes based on
+the results in Table I. Therefore, in our proposed method,
+CutMix data augmentation is mainly focused on these two
+damage levels to generate more training samples for them.
+We further conduct experiments to investigate the inﬂuence
+of CutMix on different damage levels. Table XI presents the
+overall scores when CutMix is applied on different damage
+levels. It is obvious that there is barely any improvement
+TABLE XII
+COMPUT A TIONAL COST AND INFERENCE SPEED
+ANALYSIS OF THE NETWORK IN STAG E 2
+when CutMix is used on the entire dataset (i.e., considering
+all classes). In contrast, a signiﬁcant improvement is achieved
+when only minor and major damage levels are considered in
+the data augmentation. This class-speciﬁc data augmentation
+strategy facilitates the network to learn better representations
+for those classes.
+E. Computational Cost and Training Efﬁciency
+We also compare the parame ter size, computational
+cost (FLOP) and inference speed of the proposed overall
+framework, and the vanilla network with MFF and CDA mod-
+ules. The CutMix strategy is used in the data preprocessing
+stage, and thus, it does not consume additional computational
+resources in the network. As shown in Table XII, the MFF
+module adds a little more computati onal cost since more
+convolutional operations are applied. Although the CDA mod-
+ule has a complicated architect ure, it uses few convolutional
+operations. Therefore, it inc ludes less than 1M additional
+parameters. This results in only a slight increase in com-
+putational cost (107.6 versus 92.9 GFLOPs). Moreover, our
+proposed framework only increases less than 2M parameters
+and about 60G FLOPs compared with the vanilla network.
+We also calculate the average in ference time (s) for each image
+Authorized licensed use limited to: Shanghai Normal University. Downloaded on July 02,2026 at 13:31:16 UTC from IEEE Xplore.  Restrictions apply. 
+
+===== PAGE 12 =====
+5402114 IEEE TRANSACTIONS ON GEOSCIENCE AND REMOTE SENSING, VOL. 60, 2022
+TABLE XIII
+COMPARISON OF DIFFERENT METHODS ON THE LEVIR-CD D ATA S E T
+(1024 × 1024 pixels) in the testing phase. The additional
+runtime (0.016 s) is negligible.
+In addition, we evaluate the training efﬁciency of using
+weights from Stage 1. As discussed in Section III, the network
+weights from Stage 1 are used as initial weights in the network
+of Stage 2 for ﬁne-tuning. Fig. 8 p lots the valid ation accuracy
+and loss versus the number of epochs. It is obvious that
+a higher validation accuracy and a smaller loss value are
+achieved at the ﬁrst epoch when adopting the weights from
+Stage 1 as initialization. With the number of epochs increasing,
+the curve of using weights from Stage 1 converges faster.
+Fig. 8 shows that at least 5 epochs are saved when using the
+weights from Stage 1.
+F . Evaluation on Building Change Detection Dataset
+As more datasets on building damage assessment are
+difﬁcult to acquire, a building change detection dataset
+LEVIR-CD [61] is used for evaluation of our proposed frame-
+work. These images are captured in several cities of TX, USA,
+from 2002 to 2018. The dataset collected 637 high-resolution
+images (0.5 m/pixel) with a size of 1024 × 1024 via Google
+Earth. Among these images, 509 image pairs are used for
+training, and 128 image pairs are used for testing.
+Some change detection-based methods, including
+WNet [53] and U-Net ++ [57], are used in comparison with
+BDANet. For the change detection task, only the network in
+Stage 2 is used for training. The results of different methods
+on LEVIR-CD are reported in Table XIII. From the table,
+we can observe that the proposed method achieved the best
+score on three indexes (precision, recall, and F1), indicating
+that BDANet is also effective on other datasets. Fig. 9
+provides some visual results of different change detection
+methods. We can also observe that the proposed BDANet
+provides better performance compared with other methods.
+V. C
+ONCLUSION
+In this article, a two-stage CNN-based learning framework,
+named BDANet, is proposed for building damage assessment
+from satellite images. In Stage 1, a U-Net architecture is used
+for building segmentation, and the output is used for guiding
+the building locations in damage assessment. In Stage 2,
+the MFF and CDA modules are used for further improving the
+assessment performance. MFF is used to learn features from
+various scales of images, which enables the network to build
+a robust feature representation. The CDA module is used to
+explore the correlations between predisaster and postdisaster
+features and enhance the feature representation capability.
+Moreover, a data augmentation strategy CutMix is employed to
+mitigate the challenge of difﬁcult classes. Experimental results
+show that signiﬁcant improvements can be achieved when
+CutMix is applied on difﬁcult damage levels. The proposed
+method also yields state-of-the -art building damage assessment
+performance on the xBD dataset.
+R
+EFERENCES
+[1] N. Pierdicca et al. , “Triple collocation to assess classiﬁcation accuracy
+without a ground truth in case of earthquake damage assessment,” IEEE
+Trans. Geosci. Remote Sens. , vol. 56, no. 1, pp. 485–496, Jan. 2018.
+[2] T. Y amaguchi, T. Mizutani, M. Ta rumi, and D. Su, “Sensitive damage
+detection of reinforced concrete bridge slab by ‘Time-variant deconvo-
+lution’ of SHF-band radar signal,” IEEE Trans. Geosci. Remote Sens. ,
+vol. 57, no. 3, pp. 1478–1488, Mar. 2019.
+[3] C. A. Graff, S. R. Cofﬁeld, Y . Chen, E. Foufoula-Georgiou,
+J. T. Randerson, and P . Smyth, “Forecasting daily wildﬁre activity using
+Poisson regression,” IEEE Trans. Geosci. Remote Sens. , vol. 58, no. 7,
+pp. 4837–4851, Jul. 2020.
+[4] C. B. Engel, S. D. Jones, and K. Reinke, “A seasonal-window ensemble-
+based thresholding technique used to detect active ﬁres in geostationary
+remotely sensed data,” IEEE Trans. Geosci. Remote Sens. , early access,
+Sep. 4, 2020, doi: 10.1109/TGRS.2020.3018455.
+[5] T. Ci, Z. Liu, and Y . Wang, “Assessment of the degree of building
+damage caused by disaster using convolutional neural networks in
+combination with ordinal regression,” Remote Sens. , vol. 11, no. 23,
+p. 2858, Dec. 2019.
+[6] F. Nex, D. Duarte, F. G. Tonolo, and N. Kerle, “Structural building
+damage detection with deep learning: Assessment of a state-of-the-art
+CNN in operational conditions,” Remote Sens. , vol. 11, no. 23, p. 2765,
+Nov. 2019.
+[7] Z. Zhu, “Change detection using Landsat time series: A review of
+frequencies, preprocessing, al gorithms, and applications,” ISPRS J. Pho-
+togramm. Remote Sens. , vol. 130, pp. 370–384, Aug. 2017.
+[ 8 ] A .P .T e w k e s b u r y ,A .J .C o m b e r ,N .J .T a t e ,A .L a m b ,a n dP .F .F i s h e r ,
+“A critical synthesis of remotely sensed optical image change detection
+techniques,” Remote Sens. Environ. , vol. 160, pp. 1–14, Apr. 2015.
+[9] T.-L. Chin, K.-Y . Chen, D.-Y . Chen, and D.-E. Lin, “Intelligent real-
+time earthquake detection by recurrent neural networks,” IEEE Trans.
+Geosci. Remote Sens. , vol. 58, no. 8, pp. 5440–5449, Aug. 2020.
+[10] S. Ji, S. Wei, and M. Lu, “Fully convolutional networks for multisource
+building extraction from an open aerial and satellite imagery data
+set,” IEEE Trans. Geosci. Remote Sens. , vol. 57, no. 1, pp. 574–586,
+Jan. 2019.
+[11] J. Z. Xu, W. Lu, Z. Li, P . Khaitan, and V . Zaytseva, “Building damage
+detection in satellite imagery using convolutional neural networks,” in
+Proc. Conf. Neural Inf. Process. Syst. (NeurIPS)-Humanitarian Assis-
+tance Disaster Response Workshop , 2019, pp. 1–7.
+[12] E. Weber and H. Kané, “Building disaster damage assessment in
+satellite imagery with multi-temporal fusion,” in Proc. Int. Conf. Learn.
+Represent. (ICLR)-AI Earth Sci. Workshop , 2020, pp. 1–10.
+[13] H. Hao et al. , “An attention-based system for damage assessment
+using satellite imagery,” 2020, arXiv:2004.06643. [Online]. Available:
+http://arxiv.org/abs/2004.06643
+[14] R. Gupta and M. Shah, “RescueNet: Joint building segmentation and
+damage assessment from satellite imagery,” in Proc. 25th Int. Conf.
+Pattern Recognit. (ICPR) , Jan. 2021, pp. 1–7.
+[15] R. Liu, L. Mi, and Z. Chen, “AFNet: Adaptive fusion network for remote
+sensing image semantic segmentation,” IEEE Trans. Geosci. Remote
+Sens., early access, Nov. 16, 2020, doi: 10.1109/TGRS.2020.3034123.
+[16] C. Wang, X. Bai, S. Wang, J. Zhou, and P . Ren, “Multiscale visual
+attention networks for object detection in VHR remote sensing images,”
+IEEE Geosci. Remote Sens. Lett. , vol. 16, no. 2, pp. 310–314, Feb. 2019.
+[17] H. Luo, C. Chen, L. Fang, X. Zhu, and L. Lu, “High-resolution aerial
+images semantic segmentation using deep fully convolutional network
+with channel attention mechanism,” IEEE J. Sel. Topics Appl. Earth
+Observ. Remote Sens. , vol. 12, no. 9, pp. 3492–3507, Sep. 2019.
+[18] R. Gupta et al.
+, “xBD: A dataset for assessing building damage from
+satellite imagery,” in Proc. IEEE Conf. Comput. Vis. Pattern Recognit.
+Workshops, Nov. 2019, pp. 10–17.
+[19] C. Shorten and T. M. Khoshgoftaar, “A survey on image data augmen-
+tation for deep learning,” J. Big Data , vol. 6, no. 1, p. 60, Dec. 2019.
+[20] E. D. Cubuk, B. Zoph, D. Mane, V . V asudevan, and Q. V . Le, “AutoAug-
+ment: Learning augmentation strategies from data,” in Proc. IEEE/CVF
+Conf. Comput. Vis. Pattern Recognit. (CVPR) , Jun. 2019, pp. 113–123.
+[21] A. Myronenko, “3D MRI brain tumor segmentation using autoencoder
+regularization,” in Proc. Int. MICCAI Brainlesion Workshop .C h a m ,
+Switzerland: Springer, 2018, pp. 311–320.
+[22] S. Y un, D. Han, S. Chun, S. J. Oh, Y . Y oo, and J. Choe, “CutMix:
+Regularization strategy to train strong classiﬁers with localizable fea-
+tures,” in Proc. IEEE/CVF Int. Conf. Comput. Vis. (ICCV) , Oct. 2019,
+pp. 6023–6032.
+Authorized licensed use limited to: Shanghai Normal University. Downloaded on July 02,2026 at 13:31:16 UTC from IEEE Xplore.  Restrictions apply. 
+
+===== PAGE 13 =====
+SHEN et al. : BDANet: MULTISCALE CNN WITH CDA 5402114
+[23] O. Ronneberger, P . Fischer, and T. Brox, “U-Net: Convolutional net-
+works for biomedical image segmentation,” in Medical Image Comput-
+ing and Computer-Assisted Intervention—MICCAI . Cham, Switzerland:
+Springer, 2015, pp. 234–241.
+[24] Y . Liu, D. Chen, A. Ma, Y . Zhong, F. Fang, and K. Xu, “Mul-
+tiscale U-shaped CNN building instance extraction framework with
+edge constraint for high-spatial-re solution remote sensing imagery,”
+IEEE Trans. Geosci. Remote Sens. , early access, Sep. 22, 2020, doi:
+10.1109/TGRS.2020.3022410.
+[25] L. Dong and J. Shan, “A comprehensive review of earthquake-induced
+building damage detection with remote sensing techniques,” ISPRS J.
+Photogramm. Remote Sens. , vol. 84, pp. 85–99, Oct. 2013.
+[26] R. Anniballe et al. , “Earthquake damage mapping: An overall assess-
+ment of ground surveys and VHR image change detection after L’Aquila
+2009 earthquake,” Remote Sens. Environ. , vol. 210, pp. 166–178,
+Jun. 2018.
+[27] B. Kalantar, N. Ueda, H. A. H. Al-Najjar, and A. A. Halin, “Assessment
+of convolutional neural network ar chitectures for earthquake-induced
+building damage detection based on pre- and post-event orthophoto
+images,” Remote Sens. , vol. 12, no. 21, p. 3529, Jan. 2020.
+[28] X. Zhu, J. Liang, and A. Hauptmann, “MSNet: A multilevel instance
+segmentation network for natural disaster damage assessment in aerial
+videos,” in Proc. IEEE Winter Conf. Appl. Comput. Vis. (WACV) ,
+Jan. 2021, pp. 2023–2032.
+[29] A. V etrivel, M. Gerke, N. Kerle, F. Nex, and G. V osselman, “Disaster
+damage detection through synergistic use of deep learning and 3D
+point cloud features derived from very high resolution oblique aerial
+images, and multiple-kernel-learning,” ISPRS J. Photogramm. Remote
+Sens., vol. 140, pp. 45–59, Jun. 2018.
+[30] S. Tilon, F. Nex, N. Kerle, and G. V osselman, “Post-disaster building
+damage detection from Earth observation imagery using unsupervised
+and transferable anomaly detecting generative adversarial networks,”
+Remote Sens. , vol. 12, no. 24, p. 4193, Dec. 2020.
+[31] P . Li, H. Xu, S. Liu, and J. Guo, “Urban building damage detection from
+very high resolution imagery using one -class svm and spatial relations,”
+in Proc. IEEE Int. Geosci. Remote Sensing Symp. , vol. 5, Jul. 2009,
+pp. 112–114.
+[32] G. T. Kaya, N. Musaoglu, and O. K . Ersoy, “Damage assessment of 2010
+Haiti earthquake with post-earthquake satellite image by support vector
+selection and adaptation,” Photogramm. Eng. Remote Sens. , vol. 77,
+no. 10, pp. 1025–1035, Oct. 2011.
+[33] A. Cooner, Y . Shao, and J. Campbell, “Detection of urban damage using
+remote sensing and machine learning algorithms: Revisiting the 2010
+Haiti earthquake,” Remote Sens. , vol. 8, no. 10, p. 868, Oct. 2016.
+[34] M. Presa-Reyes and S.-C. Chen, “Assessing building damage by learning
+the deep feature correspondence of bef ore and after aerial images,” in
+Proc. IEEE Conf. Multimedia Inf. Process. Retr . (MIPR) , Aug. 2020,
+pp. 43–48.
+[35] L. Liu, J. Cheng, Q. Quan, F.-X. Wu, Y .-P . Wang, and J. Wang,
+“A survey on U-shaped networks in medical image segmentations,”
+Neurocomputing, vol. 409, pp. 244–258, Oct. 2020.
+[36] H. Ding, Z. Pan, Q. Cen, Y . Li, and S. Chen, “Multi-scale fully convolu-
+tional network for gland segmentation using three-class classiﬁcation,”
+Neurocomputing, vol. 380, pp. 150–161, Mar. 2020.
+[37] W. Li, F.-D. Wang, and G.-S. Xia, “A geometry-attentional network for
+ALS point cloud classiﬁcation,” ISPRS J. Photogramm. Remote Sens. ,
+vol. 164, pp. 26–40, Jun. 2020.
+[38] G. Chen, X. Zhang, Q. Wang, F. Dai, Y . Gong, and K. Zhu, “Symmetrical
+dense-shortcut deep fully convolutional networks for semantic segmen-
+tation of very-high-resolution remote sensing images,” IEEE J. Sel.
+Topics Appl. Earth Observ. Remote Sens. , vol. 11, no. 5, pp. 1633–1644,
+May 2018.
+[39] J. Chen, L. Wan, J. Zhu, G. Xu, and M. Deng, “Multi-scale spatial and
+channel-wise attention for improvin g object detection in remote sensing
+imagery,” IEEE Geosci. Remote Sens. Lett. , vol. 17, no. 4, pp. 681–685,
+Apr. 2020.
+[40] L. Li, J. Liang, M. Weng, and H. Zhu, “A multiple-feature reuse network
+to extract buildings from remote sensing imagery,” Remote Sens.
+, vol. 10,
+no. 9, p. 1350, Aug. 2018.
+[41] Y . Xu, Z. Xie, Y . Feng, and Z. C hen, “Road extraction from high-
+resolution remote sensing imagery using deep learning,” Remote Sens. ,
+vol. 10, no. 9, p. 1461, Sep. 2018.
+[42] J. Chen et al. , “DASNet: Dual attentive fully convolutional siamese
+networks for change detection in high-resolution satellite images,” IEEE
+J. Sel. Topics Appl. Earth Observ. Remote Sens. , vol. 14, pp. 1194–1206,
+2021.
+[43] J. Hu, L. Shen, and G. Sun, “Squeeze-and-excitation networks,” in
+Proc. IEEE/CVF Conf. Comput. Vis. Pattern Recognit. , Jun. 2018,
+pp. 7132–7141.
+[44] X. Wang, R. B. Girshick, A. Gupta, and K. He, “Non-local neural
+networks,” in Proc. IEEE Conf. Comput. Vis. Pattern Recognit. (CVPR) ,
+Jun. 2018, pp. 7794–7803.
+[45] Z. Rao, M. He, Z. Zhu, Y . Dai, an d R. He, “Bidirectional guided
+attention network for 3-D semantic detection of remote sensing images,”
+IEEE Trans. Geosci. Remote Sens. , early access, Oct. 22, 2020, doi:
+10.1109/TGRS.2020.3029527.
+[46] Z. Zheng, Y . Zhong, J. Wang, and A. Ma, “Foreground-aware relation
+network for geospatial object segmentation in high spatial resolution
+remote sensing imagery,” in Proc. IEEE/CVF Conf. Comput. Vis. Pattern
+Recognit. (CVPR) , Jun. 2020, pp. 4096–4105.
+[47] L. Ding, H. Tang, and L. Bruzzone, “ LANet: Local attention embedding
+to improve the semantic segmentation of remote sensing images,” IEEE
+Trans. Geosci. Remote Sens. , vol. 59, no. 1, pp. 426–435, Jan. 2021.
+[48] D. Zhang, N. Li, and Q. Y e, “Positi onal context aggregation network for
+remote sensing scene classiﬁcation,” IEEE Geosci. Remote Sens. Lett. ,
+vol. 17, no. 6, pp. 943–947, Jun. 2020.
+[49] R. Takahashi, T. Matsubara, and K. Uehara, “Data augmentation using
+random image cropping and patching for deep CNNs,” IEEE Trans.
+Circuits Syst. Video Technol. , vol. 30, no. 9, pp. 2917–2931, Sep. 2020.
+[50] W. Li, C. Chen, M. Zhang, H. Li, and Q. Du, “Data augmentation
+for hyperspectral image classiﬁcation with deep CNN,” IEEE Geosci.
+Remote Sens. Lett. , vol. 16, no. 4, pp. 593–597, Apr. 2019.
+[51] T. DeVries and G. W. Taylor, “Impr oved regularization of convolutional
+neural networks with cutout,” 2017, arXiv:1708.04552. [Online]. Avail-
+able: http://arxiv.org/abs/1708.04552
+[52] H. Zhang, M. Cisse, Y . N. Dauphin, and D. Lopez-Paz, “mixup:
+Beyond empirical risk minimization,” in Proc. Int. Conf. Learn. Rep-
+resent. (ICLR) , 2018, pp. 1–13. [Online]. Available: https://openreview.
+net/forum?id=r1Ddp1-Rb
+[53] B. Hou, Q. Liu, H. Wang, and Y . Wang, “From W-Net to CDGAN:
+Bitemporal change detection via deep learning techniques,” IEEE Trans.
+Geosci. Remote Sens. , vol. 58, no. 3, pp. 1790–1802, Mar. 2020.
+[54] R. C. Daudt, B. L. Saux, and A. Boul ch, “Fully convolutional siamese
+networks for change detection,” in Proc. 25th IEEE Int. Conf. Image
+Process. (ICIP), Oct. 2018, pp. 4063–4067.
+[55] K. He, X. Zhang, S. Ren, and J . Sun, “Deep residual learning for
+image recognition,” in Proc. IEEE Conf. Comput. Vis. Pattern Recognit.
+(CVPR), Jun. 2016, pp. 770–778.
+[56] A. G. Roy, N. Navab, and C. Wachinger, “Recalibrating fully con-
+volutional networks with spatial and channel ‘squeeze and excitation’
+blocks,” IEEE Trans. Med. Imag., vol. 38, no. 2, pp. 540–549, Feb. 2018.
+[57] D. Peng, Y . Zhang, and H. Guan, “E nd-to-end change detection for high
+resolution satellite images using improved UNet ++,” Remote Sens. ,
+vol. 11, no. 11, p. 1382, Jun. 2019.
+[58] J. Long, E. Shelhamer, and T. Darrell, “Fully convolutional networks
+for semantic segmentation,” in Proc. IEEE Conf. Comput. Vis. Pattern
+Recognit. (CVPR) , Jun. 2015, pp. 3431–3440.
+[59] V . Badrinarayanan, A. Kendall, and R. Cipolla, “SegNet: A deep
+convolutional encoder-decoder arch itecture for image segmentation,”
+IEEE Trans. Pattern Anal. Mach. Intell. , vol. 39, no. 12, pp. 2481–2495,
+Dec. 2017.
+[60] L. C. Chen, Y . Zhu, F. Schroff, and H. Adam, “Encoder-decoder with
+atrous separable convolution for semantic image segmentation,” in Proc.
+Eur . Conf. Comput. Vis. (ECCV) , 2018, pp. 1–9.
+[61] H. Chen and Z. Shi, “A spatial-te mporal attention-based method and a
+new dataset for remote sensing image change detection,” Remote Sens. ,
+vol. 12, no. 10, p. 1662, May 2020.
+Yu Shen received the B.E. degree in computer sci-
+ence and technology from the Nanjing University of
+Science and Technology (N JUST), Nanjing, China,
+in 2015, where he is pursuing the Ph.D. degree
+in computer science with the School of Computer
+Science and Engineering.
+His research interests include the areas of remote
+sensing image processing, computer vision, and
+machine learning.
+Authorized licensed use limited to: Shanghai Normal University. Downloaded on July 02,2026 at 13:31:16 UTC from IEEE Xplore.  Restrictions apply. 
+
+===== PAGE 14 =====
+5402114 IEEE TRANSACTIONS ON GEOSCIENCE AND REMOTE SENSING, VOL. 60, 2022
+Sijie Zhu received the M.S. degree from the Uni-
+versity of Chinese Academy of Sciences, Beijing,
+China, in 2018 and the B.E. degree from the Uni-
+versity of Science and Technology of China, Hefei,
+China, in 2015. He is pursuing the Ph.D. degree
+with the University of North Carolina at Charlotte,
+Charlotte, NC, USA.
+His research interests lie in visual representation
+learning and computer vision applications.
+Taojiannan Yang (Graduate Student Member,
+IEEE) r eceived the B.E. degree from the University
+of Science and Technology of China, Hefei, China,
+in 2017. He is pursuing the Ph.D. degree with the
+University of North Carolina at Charlotte, Charlotte,
+NC, USA.
+His research interests lie in visual representation
+learning and computer vision applications.
+Chen Chen (Member, IEEE) r eceived the B.E.
+degree in automation from Beijing Forestry Univer-
+sity, Beijing, China, in 2009, the M.S. degree in elec-
+trical engineering from Mississippi State University,
+Starkville, MS, USA, in 2012, and the Ph.D. degree
+from the Department of Electrical Engineering, Uni-
+versity of Texas at Dallas, Richardson, TX, USA,
+in 2016.
+He held a Post-Doctoral Research Associate posi-
+tion at the Center for Research in Computer Vision
+(CRCV), University of Central Florida, Orlando, FL,
+USA, from July 2016 to June 2018. He is an Assistant Professor with the
+Department of Electrical and Computer Engineering at the University of North
+Carolina at Charlotte, Charlotte, NC, USA. His research interests include
+signal and image processing, computer vision, and deep learning.
+D r .C h e ni sa nA s s o c i a t eE d i t o ro fJournal of Real-Time Image Processing
+and IEEE J
+OURNAL ON MINIA TURIZA TION FOR AIR AND SPACE SYSTEMS .
+Delu Pan received the B.S. degree in physics from
+the Nanjing University of Science and Technology,
+Nanjing, China, in 1968.
+He is a Senior Scientist (expert of marine remote
+sensing) with the Second Institute of Oceanography,
+Ministry of Natural Resources, Hangzhou, China.
+He is also an Academician of the Chinese Academy
+of Engineering, Beijing, China, and a Professor with
+Zhejiang University, Hangzhou.
+Mr. Pan is the Vice President of the Chinese
+Society of Oceanography and has been a member
+of the International Ocean Color Coordinating Group since 2000.
+Jianyu Chen (Member, IEEE) r eceived the M.S.
+degree in environmental science and the Ph.D.
+degree in earth science from Zhejiang University,
+Hangzhou, China, in 1998 and 2004, respectively.
+He is a Professor of remote sensing with the State
+Key Laboratory of Satellite Ocean Environment
+Dynamics, Second Institute of Oceanography, Min-
+istry of Natural Resources, Hangzhou, China. He has
+been a Post-Doctoral Res earcher with the Shanghai
+Institute of Technical Physics, Chinese Academy
+of Sciences, Shanghai, China. He has also been a
+Visiting Professor with the Department of Geography and Environmental
+Management, University of Waterloo, Waterloo, ON, Canada. His research
+interests include object-based image analysis, remote sensing of the coastal
+environment, and geographic information system.
+Liang Xiao (Member, IEEE) received the B.S.
+degree in applied mathematics and the Ph.D. degree
+in computer science from the Nanjing University of
+Science and Technology (N JUST), Nanjing, China,
+in 1999 and 2004, respectively.
+Since 2013, he has been the Deputy Director of the
+Jiangsu Key Laboratory of Spectral Imaging Intel-
+ligent Perception, China. Since 2014, he has been
+the second Director of the Key Laboratory of Intel-
+ligent Perception and Systems for High-Dimensional
+Information of Ministry of Education, NJUST, where
+he is a Professor with the School of Com puter Science and Engineering. His
+ﬁelds of interests include remote sensing image processing, image modeling,
+computer vision, machine learning, and pattern recognition.
+Qian Du (Fellow, IEEE) r eceived the Ph.D. degree
+in electrical engineering from the University of
+Maryland Baltimore County, Baltimore, MD, USA,
+in 2000.
+She is the Bobby Shackouls Professor with the
+Department of Electrical and Computer Engineering,
+Mississippi State University, Mississippi State, MS,
+USA. Her research interest s include hyperspectral
+remote sensing image analysis, pattern recognition,
+and machine learning.
+Dr. Du served as a Co-Chair for the Data Fusion
+Technical Committee of the IEEE Geoscience and Remote Sensing Soci-
+ety (GRSS) from 2009 to 2013 and the Chair for the Remote Sensing
+and Mapping Technical Committee of the International Association for
+Pattern Recognition (IAPR) from 2010 to 2014. She served as the Editor-
+in-Chief of the IEEE J
+OURNAL OF SELECTED TOPICS IN APPLIED EARTH
+OBSERV A TIONS AND REMOTE SENSING from 2016 to 2020. She is a Fellow
+of SPIE.
+Authorized licensed use limited to: Shanghai Normal University. Downloaded on July 02,2026 at 13:31:16 UTC from IEEE Xplore.  Restrictions apply. 

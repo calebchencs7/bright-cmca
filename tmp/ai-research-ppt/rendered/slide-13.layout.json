@@ -1,0 +1,2325 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/uj16it",
+    "id": "uj16it",
+    "slide": 13,
+    "layoutId": "a3589779-6b67-4ddb-87f5-c8c1eeb66327",
+    "layoutName": "Title Slide",
+    "layoutType": "title",
+    "masterLayoutId": "ad4ede6b-54e6-4ad5-9a5a-b133745c6305",
+    "masterLayoutName": "Master",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "theme": {
+    "colorSchemeName": "ChatGPT",
+    "colors": {
+      "accent1": "#156082",
+      "accent2": "#E97132",
+      "accent3": "#196B24",
+      "accent4": "#0F9ED5",
+      "accent5": "#A02B93",
+      "accent6": "#4EA72E",
+      "bg1": "#FFFFFF",
+      "bg2": "#000000",
+      "tx1": "#1F1F1F",
+      "tx2": "#FFFFFF",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#0E2841",
+      "lt2": "#E8E8E8",
+      "hlink": "#467886",
+      "folHlink": "#96607D"
+    },
+    "typefaces": [
+      "Helvetica Neue",
+      "PingFang SC"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "a3589779-6b67-4ddb-87f5-c8c1eeb66327",
+      "name": "Title Slide",
+      "type": "title",
+      "parentLayoutId": "ad4ede6b-54e6-4ad5-9a5a-b133745c6305",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "ad4ede6b-54e6-4ad5-9a5a-b133745c6305",
+      "name": "Master",
+      "type": "master",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/54b21cnq",
+      "id": "1",
+      "name": "Google-Shape-532-p58-2",
+      "bbox": [
+        1184.18,
+        659.24,
+        54.48,
+        25.33
+      ],
+      "composeSource": {
+        "run": 1,
+        "path": "0.0"
+      },
+      "geometry": "rect",
+      "text": "13",
+      "textPreview": "13",
+      "resolvedFontSize": 13.33,
+      "resolvedTextStyle": {
+        "anchor": 3,
+        "fontSize": 13.33,
+        "typeface": "Helvetica Neue",
+        "color": "#000000",
+        "alignment": "right",
+        "verticalAlignment": "bottom",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "13"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "13",
+          "lineSpacingPercent": 112000,
+          "resolvedTextStyle": {
+            "anchor": 3,
+            "fontSize": 13.33,
+            "typeface": "Helvetica Neue",
+            "color": "#000000",
+            "alignment": "right",
+            "verticalAlignment": "bottom",
+            "wrap": "square",
+            "autoFit": "none",
+            "insets": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "13",
+              "fontSize": 14,
+              "typeface": "PingFang SC",
+              "color": "#4B5563"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ]
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/i10jqx4z",
+      "id": "2",
+      "name": "Google-Shape-533-p58-3",
+      "bbox": [
+        41.33,
+        36.12,
+        1197.33,
+        109.97
+      ],
+      "composeSource": {
+        "run": 1,
+        "path": "0.1"
+      },
+      "geometry": "rect",
+      "text": "文献矩阵最终要产出“可防守的 gap”",
+      "textPreview": "文献矩阵最终要产出“可防守的 gap”",
+      "resolvedFontSize": 38.67,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 38.67,
+        "typeface": "Helvetica Neue",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "文献矩阵最终要产出“可防守的 gap”"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "文献矩阵最终要产出“可防守的 gap”",
+          "lineSpacingPercent": 100000,
+          "resolvedTextStyle": {
+            "anchor": 1,
+            "fontSize": 38.67,
+            "typeface": "Helvetica Neue",
+            "color": "#000000",
+            "alignment": "left",
+            "verticalAlignment": "top",
+            "wrap": "square",
+            "autoFit": "none",
+            "insets": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "文献矩阵最终要产出“可防守的 gap”",
+              "fontSize": 48,
+              "typeface": "PingFang SC",
+              "color": "#000000",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ]
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/329kz25k",
+      "id": "3",
+      "name": "Content-Placeholder-15-4",
+      "bbox": [
+        42.09,
+        111.02,
+        1197.33,
+        106.27
+      ],
+      "composeSource": {
+        "run": 1,
+        "path": "0.2"
+      },
+      "geometry": "rect",
+      "text": "不是：没人做过。  而是：现有机制在这个设置、这个证据要求下还缺什么。\n把相近工作放在同一行比较，gap 会从形容词变成明确的设计决策。",
+      "textPreview": "不是：没人做过。  而是：现有机制在这个设置、这个证据要求下还缺什么。 | 把相近工作放在同一行比较，gap 会从形容词变成明确的设计决策。",
+      "resolvedFontSize": 21.33,
+      "resolvedTextStyle": {
+        "fontSize": 21.33,
+        "typeface": "Helvetica Neue",
+        "color": "#000000",
+        "alignment": "left",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "不是：没人做过。  而是：现有机制在这个设置、这个证据要求下还缺什么。"
+          },
+          {
+            "index": 2,
+            "text": "把相近工作放在同一行比较，gap 会从形容词变成明确的设计决策。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "不是：没人做过。  而是：现有机制在这个设置、这个证据要求下还缺什么。",
+          "lineSpacingPercent": 112000,
+          "spaceAfter": 500,
+          "resolvedTextStyle": {
+            "fontSize": 21.33,
+            "typeface": "Helvetica Neue",
+            "color": "#000000",
+            "alignment": "left",
+            "autoFit": "none",
+            "insets": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "不是：没人做过。  而是：现有机制在这个设置、这个证据要求下还缺什么。",
+              "fontSize": 24,
+              "typeface": "PingFang SC",
+              "color": "#000000",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "把相近工作放在同一行比较，gap 会从形容词变成明确的设计决策。",
+          "lineSpacingPercent": 112000,
+          "resolvedTextStyle": {
+            "fontSize": 21.33,
+            "typeface": "Helvetica Neue",
+            "color": "#000000",
+            "alignment": "left",
+            "autoFit": "none",
+            "insets": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "把相近工作放在同一行比较，gap 会从形容词变成明确的设计决策。",
+              "fontSize": 22,
+              "typeface": "PingFang SC",
+              "color": "#4B5563"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ]
+    },
+    {
+      "order": 4,
+      "kind": "table",
+      "scope": "slide",
+      "aid": "tb/547ip4zu",
+      "id": "4",
+      "name": "Google-Shape-644-p93-5",
+      "bbox": [
+        41.33,
+        236.33,
+        1197.33,
+        412.87
+      ],
+      "composeSource": {
+        "run": 1,
+        "path": "0.3"
+      },
+      "text": "Column Label | Column Label | Column Label | Column Label | Column Label\nData Point | $00.000 / item | Yes | 1,000,000k / s | 0.00023862381\nData Point | $00.000 / item | No | 1,000,000k / s | 0.00023862381\nData Point | $00.000 / item | Yes | 1,000,000k / s | 0.00023862381\nData Point | $00.000 / item | No | 1,000,000k / s | 0.00023862381\nData Point | $00.000 / item | Yes | 1,000,000k / s | 0.00023862381\nData Point | $00.000 / item | No | 1,000,000k / s | 0.00023862381\nData Point | $00.000 / item | Yes | 1,000,000k / s | 0.00023862381\nData Point | $00.000 / item | Yes | 1,000,000k / s | 0.00023862381",
+      "textPreview": "Column Label | Column Label | Column Label | Column Label | Column Label | Data Point | $00.000 / item | Yes | 1,000,000k / s | 0.0002386...",
+      "rows": 9,
+      "cols": 5,
+      "cells": [
+        {
+          "index": 1,
+          "row": 1,
+          "column": 1,
+          "bbox": [
+            41.33,
+            236.33,
+            410.09,
+            45.87
+          ],
+          "text": "Column Label",
+          "textPreview": "Column Label",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "Column Label",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "Column Label"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "row": 1,
+          "column": 2,
+          "bbox": [
+            451.42,
+            236.33,
+            196.81,
+            45.87
+          ],
+          "text": "Column Label",
+          "textPreview": "Column Label",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "Column Label",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "Column Label"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "row": 1,
+          "column": 3,
+          "bbox": [
+            648.23,
+            236.33,
+            196.81,
+            45.87
+          ],
+          "text": "Column Label",
+          "textPreview": "Column Label",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "Column Label",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "Column Label"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "row": 1,
+          "column": 4,
+          "bbox": [
+            845.04,
+            236.33,
+            196.81,
+            45.87
+          ],
+          "text": "Column Label",
+          "textPreview": "Column Label",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "Column Label",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "Column Label"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 5,
+          "row": 1,
+          "column": 5,
+          "bbox": [
+            1041.85,
+            236.33,
+            196.81,
+            45.87
+          ],
+          "text": "Column Label",
+          "textPreview": "Column Label",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "Column Label",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "Column Label"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 6,
+          "row": 2,
+          "column": 1,
+          "bbox": [
+            41.33,
+            282.2,
+            410.09,
+            45.87
+          ],
+          "text": "Data Point",
+          "textPreview": "Data Point",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "Data Point",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "Data Point"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 7,
+          "row": 2,
+          "column": 2,
+          "bbox": [
+            451.42,
+            282.2,
+            196.81,
+            45.87
+          ],
+          "text": "$00.000 / item",
+          "textPreview": "$00.000 / item",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "$00.000 / item",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "$00.000 / item"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 8,
+          "row": 2,
+          "column": 3,
+          "bbox": [
+            648.23,
+            282.2,
+            196.81,
+            45.87
+          ],
+          "text": "Yes",
+          "textPreview": "Yes",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "Yes",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "Yes"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 9,
+          "row": 2,
+          "column": 4,
+          "bbox": [
+            845.04,
+            282.2,
+            196.81,
+            45.87
+          ],
+          "text": "1,000,000k / s",
+          "textPreview": "1,000,000k / s",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "1,000,000k / s",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "1,000,000k / s"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 10,
+          "row": 2,
+          "column": 5,
+          "bbox": [
+            1041.85,
+            282.2,
+            196.81,
+            45.87
+          ],
+          "text": "0.00023862381",
+          "textPreview": "0.00023862381",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0.00023862381",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0.00023862381"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 11,
+          "row": 3,
+          "column": 1,
+          "bbox": [
+            41.33,
+            328.08,
+            410.09,
+            45.87
+          ],
+          "text": "Data Point",
+          "textPreview": "Data Point",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "Data Point",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "Data Point"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 12,
+          "row": 3,
+          "column": 2,
+          "bbox": [
+            451.42,
+            328.08,
+            196.81,
+            45.87
+          ],
+          "text": "$00.000 / item",
+          "textPreview": "$00.000 / item",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "$00.000 / item",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "$00.000 / item"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 13,
+          "row": 3,
+          "column": 3,
+          "bbox": [
+            648.23,
+            328.08,
+            196.81,
+            45.87
+          ],
+          "text": "No",
+          "textPreview": "No",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "No",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "No"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 14,
+          "row": 3,
+          "column": 4,
+          "bbox": [
+            845.04,
+            328.08,
+            196.81,
+            45.87
+          ],
+          "text": "1,000,000k / s",
+          "textPreview": "1,000,000k / s",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "1,000,000k / s",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "1,000,000k / s"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 15,
+          "row": 3,
+          "column": 5,
+          "bbox": [
+            1041.85,
+            328.08,
+            196.81,
+            45.87
+          ],
+          "text": "0.00023862381",
+          "textPreview": "0.00023862381",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0.00023862381",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0.00023862381"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 16,
+          "row": 4,
+          "column": 1,
+          "bbox": [
+            41.33,
+            373.95,
+            410.09,
+            45.87
+          ],
+          "text": "Data Point",
+          "textPreview": "Data Point",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "Data Point",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "Data Point"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 17,
+          "row": 4,
+          "column": 2,
+          "bbox": [
+            451.42,
+            373.95,
+            196.81,
+            45.87
+          ],
+          "text": "$00.000 / item",
+          "textPreview": "$00.000 / item",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "$00.000 / item",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "$00.000 / item"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 18,
+          "row": 4,
+          "column": 3,
+          "bbox": [
+            648.23,
+            373.95,
+            196.81,
+            45.87
+          ],
+          "text": "Yes",
+          "textPreview": "Yes",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "Yes",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "Yes"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 19,
+          "row": 4,
+          "column": 4,
+          "bbox": [
+            845.04,
+            373.95,
+            196.81,
+            45.87
+          ],
+          "text": "1,000,000k / s",
+          "textPreview": "1,000,000k / s",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "1,000,000k / s",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "1,000,000k / s"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 20,
+          "row": 4,
+          "column": 5,
+          "bbox": [
+            1041.85,
+            373.95,
+            196.81,
+            45.87
+          ],
+          "text": "0.00023862381",
+          "textPreview": "0.00023862381",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0.00023862381",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0.00023862381"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 21,
+          "row": 5,
+          "column": 1,
+          "bbox": [
+            41.33,
+            419.83,
+            410.09,
+            45.87
+          ],
+          "text": "Data Point",
+          "textPreview": "Data Point",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "Data Point",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "Data Point"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 22,
+          "row": 5,
+          "column": 2,
+          "bbox": [
+            451.42,
+            419.83,
+            196.81,
+            45.87
+          ],
+          "text": "$00.000 / item",
+          "textPreview": "$00.000 / item",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "$00.000 / item",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "$00.000 / item"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 23,
+          "row": 5,
+          "column": 3,
+          "bbox": [
+            648.23,
+            419.83,
+            196.81,
+            45.87
+          ],
+          "text": "No",
+          "textPreview": "No",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "No",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "No"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 24,
+          "row": 5,
+          "column": 4,
+          "bbox": [
+            845.04,
+            419.83,
+            196.81,
+            45.87
+          ],
+          "text": "1,000,000k / s",
+          "textPreview": "1,000,000k / s",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "1,000,000k / s",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "1,000,000k / s"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 25,
+          "row": 5,
+          "column": 5,
+          "bbox": [
+            1041.85,
+            419.83,
+            196.81,
+            45.87
+          ],
+          "text": "0.00023862381",
+          "textPreview": "0.00023862381",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0.00023862381",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0.00023862381"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 26,
+          "row": 6,
+          "column": 1,
+          "bbox": [
+            41.33,
+            465.7,
+            410.09,
+            45.87
+          ],
+          "text": "Data Point",
+          "textPreview": "Data Point",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "Data Point",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "Data Point"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 27,
+          "row": 6,
+          "column": 2,
+          "bbox": [
+            451.42,
+            465.7,
+            196.81,
+            45.87
+          ],
+          "text": "$00.000 / item",
+          "textPreview": "$00.000 / item",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "$00.000 / item",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "$00.000 / item"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 28,
+          "row": 6,
+          "column": 3,
+          "bbox": [
+            648.23,
+            465.7,
+            196.81,
+            45.87
+          ],
+          "text": "Yes",
+          "textPreview": "Yes",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "Yes",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "Yes"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 29,
+          "row": 6,
+          "column": 4,
+          "bbox": [
+            845.04,
+            465.7,
+            196.81,
+            45.87
+          ],
+          "text": "1,000,000k / s",
+          "textPreview": "1,000,000k / s",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "1,000,000k / s",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "1,000,000k / s"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 30,
+          "row": 6,
+          "column": 5,
+          "bbox": [
+            1041.85,
+            465.7,
+            196.81,
+            45.87
+          ],
+          "text": "0.00023862381",
+          "textPreview": "0.00023862381",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0.00023862381",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0.00023862381"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 31,
+          "row": 7,
+          "column": 1,
+          "bbox": [
+            41.33,
+            511.58,
+            410.09,
+            45.87
+          ],
+          "text": "Data Point",
+          "textPreview": "Data Point",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "Data Point",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "Data Point"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 32,
+          "row": 7,
+          "column": 2,
+          "bbox": [
+            451.42,
+            511.58,
+            196.81,
+            45.87
+          ],
+          "text": "$00.000 / item",
+          "textPreview": "$00.000 / item",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "$00.000 / item",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "$00.000 / item"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 33,
+          "row": 7,
+          "column": 3,
+          "bbox": [
+            648.23,
+            511.58,
+            196.81,
+            45.87
+          ],
+          "text": "No",
+          "textPreview": "No",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "No",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "No"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 34,
+          "row": 7,
+          "column": 4,
+          "bbox": [
+            845.04,
+            511.58,
+            196.81,
+            45.87
+          ],
+          "text": "1,000,000k / s",
+          "textPreview": "1,000,000k / s",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "1,000,000k / s",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "1,000,000k / s"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 35,
+          "row": 7,
+          "column": 5,
+          "bbox": [
+            1041.85,
+            511.58,
+            196.81,
+            45.87
+          ],
+          "text": "0.00023862381",
+          "textPreview": "0.00023862381",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0.00023862381",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0.00023862381"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 36,
+          "row": 8,
+          "column": 1,
+          "bbox": [
+            41.33,
+            557.45,
+            410.09,
+            45.87
+          ],
+          "text": "Data Point",
+          "textPreview": "Data Point",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "Data Point",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "Data Point"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 37,
+          "row": 8,
+          "column": 2,
+          "bbox": [
+            451.42,
+            557.45,
+            196.81,
+            45.87
+          ],
+          "text": "$00.000 / item",
+          "textPreview": "$00.000 / item",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "$00.000 / item",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "$00.000 / item"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 38,
+          "row": 8,
+          "column": 3,
+          "bbox": [
+            648.23,
+            557.45,
+            196.81,
+            45.87
+          ],
+          "text": "Yes",
+          "textPreview": "Yes",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "Yes",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "Yes"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 39,
+          "row": 8,
+          "column": 4,
+          "bbox": [
+            845.04,
+            557.45,
+            196.81,
+            45.87
+          ],
+          "text": "1,000,000k / s",
+          "textPreview": "1,000,000k / s",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "1,000,000k / s",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "1,000,000k / s"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 40,
+          "row": 8,
+          "column": 5,
+          "bbox": [
+            1041.85,
+            557.45,
+            196.81,
+            45.87
+          ],
+          "text": "0.00023862381",
+          "textPreview": "0.00023862381",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0.00023862381",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0.00023862381"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 41,
+          "row": 9,
+          "column": 1,
+          "bbox": [
+            41.33,
+            603.33,
+            410.09,
+            45.87
+          ],
+          "text": "Data Point",
+          "textPreview": "Data Point",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "Data Point",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "Data Point"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 42,
+          "row": 9,
+          "column": 2,
+          "bbox": [
+            451.42,
+            603.33,
+            196.81,
+            45.87
+          ],
+          "text": "$00.000 / item",
+          "textPreview": "$00.000 / item",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "$00.000 / item",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "$00.000 / item"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 43,
+          "row": 9,
+          "column": 3,
+          "bbox": [
+            648.23,
+            603.33,
+            196.81,
+            45.87
+          ],
+          "text": "Yes",
+          "textPreview": "Yes",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "Yes",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "Yes"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 44,
+          "row": 9,
+          "column": 4,
+          "bbox": [
+            845.04,
+            603.33,
+            196.81,
+            45.87
+          ],
+          "text": "1,000,000k / s",
+          "textPreview": "1,000,000k / s",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "1,000,000k / s",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "1,000,000k / s"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 45,
+          "row": 9,
+          "column": 5,
+          "bbox": [
+            1041.85,
+            603.33,
+            196.81,
+            45.87
+          ],
+          "text": "0.00023862381",
+          "textPreview": "0.00023862381",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "0.00023862381",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "0.00023862381"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/h0r2xsne",
+      "id": "5",
+      "bbox": [
+        35,
+        220,
+        1210,
+        420
+      ],
+      "geometry": "rect",
+      "fillColor": "#FFFFFF",
+      "lineColor": "#FFFFFF",
+      "lineWidth": 0
+    },
+    {
+      "order": 6,
+      "kind": "table",
+      "scope": "slide",
+      "aid": "tb/32p0nuho",
+      "id": "6",
+      "bbox": [
+        42,
+        236,
+        1197,
+        385
+      ],
+      "text": "研究线 | 已有工作 | 剩余缺口 | 本项目决策\n跨模态融合 | 拼接 / 对齐 / 通用注意力 | 缺少以灾前结构为查询的显式变化比较 | CMCA：Optical Q，SAR K/V\n稀有类别 | CutMix / ClassMix / Copy-Paste | 未同时保证跨事件与三元组同步 | DA-CutMix：跨事件、损伤富集\n泛化证据 | 总体测试集指标 | 平均分可能掩盖事件级退化 | 报告整体 + 逐事件 mIoU\n可迁移性 | 为单一骨干定制 | 难区分模块收益与骨干收益 | 6 个不同家族骨干受控消融",
+      "textPreview": "研究线 | 已有工作 | 剩余缺口 | 本项目决策 | 跨模态融合 | 拼接 / 对齐 / 通用注意力 | 缺少以灾前结构为查询的显式变化比较 | CMCA：Optical Q，SAR K/V | 稀有类别 | CutMix / ClassMix / Copy-Paste ...",
+      "rows": 5,
+      "cols": 4,
+      "cells": [
+        {
+          "index": 1,
+          "row": 1,
+          "column": 1,
+          "bbox": [
+            42,
+            236,
+            175,
+            77
+          ],
+          "text": "研究线",
+          "textPreview": "研究线",
+          "fillColor": "#111827",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "研究线",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "研究线"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "row": 1,
+          "column": 2,
+          "bbox": [
+            217,
+            236,
+            300,
+            77
+          ],
+          "text": "已有工作",
+          "textPreview": "已有工作",
+          "fillColor": "#111827",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "已有工作",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "已有工作"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "row": 1,
+          "column": 3,
+          "bbox": [
+            517,
+            236,
+            365,
+            77
+          ],
+          "text": "剩余缺口",
+          "textPreview": "剩余缺口",
+          "fillColor": "#111827",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "剩余缺口",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "剩余缺口"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "row": 1,
+          "column": 4,
+          "bbox": [
+            882,
+            236,
+            357,
+            77
+          ],
+          "text": "本项目决策",
+          "textPreview": "本项目决策",
+          "fillColor": "#111827",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "本项目决策",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "本项目决策"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 5,
+          "row": 2,
+          "column": 1,
+          "bbox": [
+            42,
+            313,
+            175,
+            77
+          ],
+          "text": "跨模态融合",
+          "textPreview": "跨模态融合",
+          "fillColor": "#FFFFFF",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "跨模态融合",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "跨模态融合"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 6,
+          "row": 2,
+          "column": 2,
+          "bbox": [
+            217,
+            313,
+            300,
+            77
+          ],
+          "text": "拼接 / 对齐 / 通用注意力",
+          "textPreview": "拼接 / 对齐 / 通用注意力",
+          "fillColor": "#FFFFFF",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "拼接 / 对齐 / 通用注意力",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "拼接 / 对齐 / 通用注意力"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 7,
+          "row": 2,
+          "column": 3,
+          "bbox": [
+            517,
+            313,
+            365,
+            77
+          ],
+          "text": "缺少以灾前结构为查询的显式变化比较",
+          "textPreview": "缺少以灾前结构为查询的显式变化比较",
+          "fillColor": "#FFFFFF",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "缺少以灾前结构为查询的显式变化比较",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "缺少以灾前结构为查询的显式变化比较"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 8,
+          "row": 2,
+          "column": 4,
+          "bbox": [
+            882,
+            313,
+            357,
+            77
+          ],
+          "text": "CMCA：Optical Q，SAR K/V",
+          "textPreview": "CMCA：Optical Q，SAR K/V",
+          "fillColor": "#EDF5FF",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "CMCA：Optical Q，SAR K/V",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "CMCA：Optical Q，SAR K/V"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 9,
+          "row": 3,
+          "column": 1,
+          "bbox": [
+            42,
+            390,
+            175,
+            77
+          ],
+          "text": "稀有类别",
+          "textPreview": "稀有类别",
+          "fillColor": "#FFFFFF",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "稀有类别",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "稀有类别"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 10,
+          "row": 3,
+          "column": 2,
+          "bbox": [
+            217,
+            390,
+            300,
+            77
+          ],
+          "text": "CutMix / ClassMix / Copy-Paste",
+          "textPreview": "CutMix / ClassMix / Copy-Paste",
+          "fillColor": "#FFFFFF",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "CutMix / ClassMix / Copy-Paste",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "CutMix / ClassMix / Copy-Paste"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 11,
+          "row": 3,
+          "column": 3,
+          "bbox": [
+            517,
+            390,
+            365,
+            77
+          ],
+          "text": "未同时保证跨事件与三元组同步",
+          "textPreview": "未同时保证跨事件与三元组同步",
+          "fillColor": "#FFFFFF",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "未同时保证跨事件与三元组同步",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "未同时保证跨事件与三元组同步"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 12,
+          "row": 3,
+          "column": 4,
+          "bbox": [
+            882,
+            390,
+            357,
+            77
+          ],
+          "text": "DA-CutMix：跨事件、损伤富集",
+          "textPreview": "DA-CutMix：跨事件、损伤富集",
+          "fillColor": "#EDF5FF",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "DA-CutMix：跨事件、损伤富集",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "DA-CutMix：跨事件、损伤富集"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 13,
+          "row": 4,
+          "column": 1,
+          "bbox": [
+            42,
+            467,
+            175,
+            77
+          ],
+          "text": "泛化证据",
+          "textPreview": "泛化证据",
+          "fillColor": "#FFFFFF",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "泛化证据",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "泛化证据"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 14,
+          "row": 4,
+          "column": 2,
+          "bbox": [
+            217,
+            467,
+            300,
+            77
+          ],
+          "text": "总体测试集指标",
+          "textPreview": "总体测试集指标",
+          "fillColor": "#FFFFFF",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "总体测试集指标",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "总体测试集指标"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 15,
+          "row": 4,
+          "column": 3,
+          "bbox": [
+            517,
+            467,
+            365,
+            77
+          ],
+          "text": "平均分可能掩盖事件级退化",
+          "textPreview": "平均分可能掩盖事件级退化",
+          "fillColor": "#FFFFFF",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "平均分可能掩盖事件级退化",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "平均分可能掩盖事件级退化"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 16,
+          "row": 4,
+          "column": 4,
+          "bbox": [
+            882,
+            467,
+            357,
+            77
+          ],
+          "text": "报告整体 + 逐事件 mIoU",
+          "textPreview": "报告整体 + 逐事件 mIoU",
+          "fillColor": "#EDF5FF",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "报告整体 + 逐事件 mIoU",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "报告整体 + 逐事件 mIoU"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 17,
+          "row": 5,
+          "column": 1,
+          "bbox": [
+            42,
+            544,
+            175,
+            77
+          ],
+          "text": "可迁移性",
+          "textPreview": "可迁移性",
+          "fillColor": "#FFFFFF",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "可迁移性",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "可迁移性"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 18,
+          "row": 5,
+          "column": 2,
+          "bbox": [
+            217,
+            544,
+            300,
+            77
+          ],
+          "text": "为单一骨干定制",
+          "textPreview": "为单一骨干定制",
+          "fillColor": "#FFFFFF",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "为单一骨干定制",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "为单一骨干定制"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 19,
+          "row": 5,
+          "column": 3,
+          "bbox": [
+            517,
+            544,
+            365,
+            77
+          ],
+          "text": "难区分模块收益与骨干收益",
+          "textPreview": "难区分模块收益与骨干收益",
+          "fillColor": "#FFFFFF",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "难区分模块收益与骨干收益",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "难区分模块收益与骨干收益"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 20,
+          "row": 5,
+          "column": 4,
+          "bbox": [
+            882,
+            544,
+            357,
+            77
+          ],
+          "text": "6 个不同家族骨干受控消融",
+          "textPreview": "6 个不同家族骨干受控消融",
+          "fillColor": "#EDF5FF",
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "6 个不同家族骨干受控消融",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "6 个不同家族骨干受控消融"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ve9kvi5o",
+      "id": "7",
+      "bbox": [
+        40,
+        625,
+        1200,
+        30
+      ],
+      "geometry": "rect",
+      "fillColor": "#FFFFFF",
+      "lineColor": "#FFFFFF",
+      "lineWidth": 0
+    }
+  ],
+  "composeRuns": [
+    {
+      "index": 1,
+      "frame": {
+        "left": 0,
+        "top": 0,
+        "width": 1280,
+        "height": 720
+      },
+      "baseUnit": 1,
+      "root": {
+        "path": "0",
+        "kind": "layers",
+        "name": "codex-grid-layout-library#slide-14",
+        "requestedSize": {
+          "width": {
+            "mode": "fill",
+            "value": 1
+          },
+          "height": {
+            "mode": "fill",
+            "value": 1
+          }
+        },
+        "intrinsicSize": {
+          "width": 1239.42,
+          "height": 684.57
+        },
+        "frame": {
+          "left": 0,
+          "top": 0,
+          "width": 1280,
+          "height": 720
+        },
+        "children": [
+          {
+            "path": "0.0",
+            "kind": "text",
+            "name": "Google-Shape-532-p58-2",
+            "position": {
+              "left": 1184.18,
+              "top": 659.24
+            },
+            "requestedSize": {
+              "width": {
+                "mode": "fixed",
+                "value": 54.48
+              },
+              "height": {
+                "mode": "fixed",
+                "value": 25.33
+              }
+            },
+            "intrinsicSize": {
+              "width": 54.48,
+              "height": 25.33
+            },
+            "frame": {
+              "left": 1184.18,
+              "top": 659.24,
+              "width": 54.48,
+              "height": 25.33
+            },
+            "snappedFrame": {
+              "left": 1184.18,
+              "top": 659.24,
+              "width": 54.48,
+              "height": 25.33
+            },
+            "children": [],
+            "text": "13",
+            "transform": "none",
+            "element": {
+              "aid": "sh/54b21cnq",
+              "id": "1",
+              "kind": "shape"
+            }
+          },
+          {
+            "path": "0.1",
+            "kind": "text",
+            "name": "Google-Shape-533-p58-3",
+            "position": {
+              "left": 41.33,
+              "top": 36.12
+            },
+            "requestedSize": {
+              "width": {
+                "mode": "fixed",
+                "value": 1197.33
+              },
+              "height": {
+                "mode": "fixed",
+                "value": 109.97
+              }
+            },
+            "intrinsicSize": {
+              "width": 1197.33,
+              "height": 109.97
+            },
+            "frame": {
+              "left": 41.33,
+              "top": 36.12,
+              "width": 1197.33,
+              "height": 109.97
+            },
+            "snappedFrame": {
+              "left": 41.33,
+              "top": 36.12,
+              "width": 1197.33,
+              "height": 109.97
+            },
+            "children": [],
+            "text": "文献矩阵最终要产出“可防守的 gap”",
+            "transform": "none",
+            "element": {
+              "aid": "sh/i10jqx4z",
+              "id": "2",
+              "kind": "shape"
+            }
+          },
+          {
+            "path": "0.2",
+            "kind": "text",
+            "name": "Content-Placeholder-15-4",
+            "position": {
+              "left": 42.09,
+              "top": 111.02
+            },
+            "requestedSize": {
+              "width": {
+                "mode": "fixed",
+                "value": 1197.33
+              },
+              "height": {
+                "mode": "fixed",
+                "value": 106.27
+              }
+            },
+            "intrinsicSize": {
+              "width": 1197.33,
+              "height": 106.27
+            },
+            "frame": {
+              "left": 42.09,
+              "top": 111.02,
+              "width": 1197.33,
+              "height": 106.27
+            },
+            "snappedFrame": {
+              "left": 42.09,
+              "top": 111.02,
+              "width": 1197.33,
+              "height": 106.27
+            },
+            "children": [],
+            "text": "不是：没人做过。  而是：现有机制在这个设置、这个证据要求下还缺什么。\n把相近工作放在同一行比较，gap 会从形容词变成明确的设计决策。",
+            "transform": "none",
+            "element": {
+              "aid": "sh/329kz25k",
+              "id": "3",
+              "kind": "shape"
+            }
+          },
+          {
+            "path": "0.3",
+            "kind": "table",
+            "name": "Google-Shape-644-p93-5",
+            "position": {
+              "left": 41.33,
+              "top": 236.33
+            },
+            "requestedSize": {
+              "width": {
+                "mode": "fixed",
+                "value": 1197.33
+              },
+              "height": {
+                "mode": "fixed",
+                "value": 412.87
+              }
+            },
+            "intrinsicSize": {
+              "width": 1197.33,
+              "height": 412.87
+            },
+            "frame": {
+              "left": 41.33,
+              "top": 236.33,
+              "width": 1197.33,
+              "height": 412.87
+            },
+            "snappedFrame": {
+              "left": 41.33,
+              "top": 236.33,
+              "width": 1197.33,
+              "height": 412.87
+            },
+            "children": [],
+            "rows": 9,
+            "columns": 5,
+            "columnWidths": [
+              410.09,
+              196.81,
+              196.81,
+              196.81,
+              196.81
+            ],
+            "element": {
+              "aid": "tb/547ip4zu",
+              "id": "4",
+              "kind": "table"
+            }
+          }
+        ],
+        "padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        },
+        "alignItems": "stretch",
+        "justifyItems": "stretch",
+        "contentFrame": {
+          "left": 0,
+          "top": 0,
+          "width": 1280,
+          "height": 720
+        },
+        "items": [
+          {
+            "path": "0.0",
+            "frame": {
+              "left": 1184.18,
+              "top": 659.24,
+              "width": 54.48,
+              "height": 25.33
+            }
+          },
+          {
+            "path": "0.1",
+            "frame": {
+              "left": 41.33,
+              "top": 36.12,
+              "width": 1197.33,
+              "height": 109.97
+            }
+          },
+          {
+            "path": "0.2",
+            "frame": {
+              "left": 42.09,
+              "top": 111.02,
+              "width": 1197.33,
+              "height": 106.27
+            }
+          },
+          {
+            "path": "0.3",
+            "frame": {
+              "left": 41.33,
+              "top": 236.33,
+              "width": 1197.33,
+              "height": 412.87
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

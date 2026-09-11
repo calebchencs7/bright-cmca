@@ -17,6 +17,14 @@ def parse_disaster_event(data_name):
     return name
 
 
+def parse_disaster_type(data_name):
+    """Return the disaster type suffix, such as earthquake or wildfire."""
+    event = parse_disaster_event(data_name)
+    if "-" not in event:
+        raise ValueError(f"Cannot parse disaster type from: {data_name}")
+    return event.rsplit("-", 1)[-1].lower()
+
+
 def img_loader(path):
     img = np.array(imageio.imread(path), np.float32)
     return img
@@ -42,6 +50,7 @@ class MultimodalDamageAssessmentDatset(Dataset):
         dacutmix_box_tries=10,
         dacutmix_donor_tries=10,
         return_dacutmix_stats=False,
+        modality_mode="both",
     ):
         self.dataset_path = dataset_path
         self.data_list = data_list
@@ -59,6 +68,10 @@ class MultimodalDamageAssessmentDatset(Dataset):
         self.dacutmix_box_tries = int(dacutmix_box_tries)
         self.dacutmix_donor_tries = int(dacutmix_donor_tries)
         self.return_dacutmix_stats = bool(return_dacutmix_stats)
+        self.modality_mode = str(modality_mode).lower()
+        valid_modes = ("both", "optical_only", "sar_only", "no_optical", "no_sar")
+        if self.modality_mode not in valid_modes:
+            raise ValueError(f"Unknown modality_mode: {modality_mode}")
 
         if max_iters is not None:
             self.data_list = self.data_list * int(np.ceil(float(max_iters) / len(self.data_list)))
@@ -99,6 +112,11 @@ class MultimodalDamageAssessmentDatset(Dataset):
 
         post_img = imutils.normalize_img(post_img)  # imagenet normalization
         post_img = np.transpose(post_img, (2, 0, 1))
+
+        if self.modality_mode in ("sar_only", "no_optical"):
+            pre_img = np.zeros_like(pre_img)
+        elif self.modality_mode in ("optical_only", "no_sar"):
+            post_img = np.zeros_like(post_img)
 
         return pre_img, post_img, label
 

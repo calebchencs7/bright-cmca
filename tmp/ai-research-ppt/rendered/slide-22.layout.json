@@ -1,0 +1,1465 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/cx6kzf",
+    "id": "cx6kzf",
+    "slide": 22,
+    "layoutId": "a3589779-6b67-4ddb-87f5-c8c1eeb66327",
+    "layoutName": "Title Slide",
+    "layoutType": "title",
+    "masterLayoutId": "ad4ede6b-54e6-4ad5-9a5a-b133745c6305",
+    "masterLayoutName": "Master",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "theme": {
+    "colorSchemeName": "ChatGPT",
+    "colors": {
+      "accent1": "#156082",
+      "accent2": "#E97132",
+      "accent3": "#196B24",
+      "accent4": "#0F9ED5",
+      "accent5": "#A02B93",
+      "accent6": "#4EA72E",
+      "bg1": "#FFFFFF",
+      "bg2": "#000000",
+      "tx1": "#1F1F1F",
+      "tx2": "#FFFFFF",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#0E2841",
+      "lt2": "#E8E8E8",
+      "hlink": "#467886",
+      "folHlink": "#96607D"
+    },
+    "typefaces": [
+      "Helvetica Neue",
+      "PingFang SC"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "a3589779-6b67-4ddb-87f5-c8c1eeb66327",
+      "name": "Title Slide",
+      "type": "title",
+      "parentLayoutId": "ad4ede6b-54e6-4ad5-9a5a-b133745c6305",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "ad4ede6b-54e6-4ad5-9a5a-b133745c6305",
+      "name": "Master",
+      "type": "master",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/qp4jq503",
+      "id": "1",
+      "name": "Google-Shape-532-p58-2",
+      "bbox": [
+        1184.18,
+        659.24,
+        54.48,
+        25.33
+      ],
+      "composeSource": {
+        "run": 1,
+        "path": "0.0"
+      },
+      "geometry": "rect",
+      "text": "22",
+      "textPreview": "22",
+      "resolvedFontSize": 13.33,
+      "resolvedTextStyle": {
+        "anchor": 3,
+        "fontSize": 13.33,
+        "typeface": "Helvetica Neue",
+        "color": "#000000",
+        "alignment": "right",
+        "verticalAlignment": "bottom",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "22"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "22",
+          "lineSpacingPercent": 112000,
+          "resolvedTextStyle": {
+            "anchor": 3,
+            "fontSize": 13.33,
+            "typeface": "Helvetica Neue",
+            "color": "#000000",
+            "alignment": "right",
+            "verticalAlignment": "bottom",
+            "wrap": "square",
+            "autoFit": "none",
+            "insets": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "22",
+              "fontSize": 14,
+              "typeface": "PingFang SC",
+              "color": "#4B5563"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ]
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/dcfi1kzu",
+      "id": "2",
+      "name": "Google-Shape-533-p58-3",
+      "bbox": [
+        41.33,
+        36.12,
+        1197.33,
+        109.97
+      ],
+      "composeSource": {
+        "run": 1,
+        "path": "0.1"
+      },
+      "geometry": "rect",
+      "text": "我反复复用的不是“神奇提示词”，而是一份任务合同",
+      "textPreview": "我反复复用的不是“神奇提示词”，而是一份任务合同",
+      "resolvedFontSize": 38.67,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 38.67,
+        "typeface": "Helvetica Neue",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "我反复复用的不是“神奇提示词”，而是一份任务合同"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "我反复复用的不是“神奇提示词”，而是一份任务合同",
+          "lineSpacingPercent": 100000,
+          "resolvedTextStyle": {
+            "anchor": 1,
+            "fontSize": 38.67,
+            "typeface": "Helvetica Neue",
+            "color": "#000000",
+            "alignment": "left",
+            "verticalAlignment": "top",
+            "wrap": "square",
+            "autoFit": "none",
+            "insets": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "我反复复用的不是“神奇提示词”，而是一份任务合同",
+              "fontSize": 48,
+              "typeface": "PingFang SC",
+              "color": "#000000",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ]
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/sr61sfi9",
+      "id": "3",
+      "name": "Content-Placeholder-10-4",
+      "bbox": [
+        732,
+        249.33,
+        506.67,
+        68
+      ],
+      "composeSource": {
+        "run": 1,
+        "path": "0.2"
+      },
+      "geometry": "rect",
+      "text": "上下文 + 单一任务",
+      "textPreview": "上下文 + 单一任务",
+      "resolvedFontSize": 32,
+      "resolvedTextStyle": {
+        "fontSize": 32,
+        "typeface": "Helvetica Neue",
+        "color": "#000000",
+        "alignment": "left",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "上下文 + 单一任务"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "上下文 + 单一任务",
+          "lineSpacingPercent": 112000,
+          "resolvedTextStyle": {
+            "fontSize": 32,
+            "typeface": "Helvetica Neue",
+            "color": "#000000",
+            "alignment": "left",
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "上下文 + 单一任务",
+              "fontSize": 19,
+              "typeface": "PingFang SC",
+              "color": "#3D8DFF",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ]
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/jmd0vahs",
+      "id": "4",
+      "name": "Content-Placeholder-10-5",
+      "bbox": [
+        509.33,
+        249.33,
+        196,
+        68
+      ],
+      "composeSource": {
+        "run": 1,
+        "path": "0.3"
+      },
+      "geometry": "rect",
+      "resolvedFontSize": 32,
+      "resolvedTextStyle": {
+        "fontSize": 32,
+        "typeface": "Helvetica Neue",
+        "color": "#000000",
+        "alignment": "left",
+        "autoFit": "shrinkText",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      }
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/il4zm507",
+      "id": "5",
+      "name": "Content-Placeholder-10-6",
+      "bbox": [
+        732,
+        353.33,
+        506.67,
+        68
+      ],
+      "composeSource": {
+        "run": 1,
+        "path": "0.4"
+      },
+      "geometry": "rect",
+      "text": "约束 + 证据边界",
+      "textPreview": "约束 + 证据边界",
+      "resolvedFontSize": 32,
+      "resolvedTextStyle": {
+        "fontSize": 32,
+        "typeface": "Helvetica Neue",
+        "color": "#000000",
+        "alignment": "left",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "约束 + 证据边界"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "约束 + 证据边界",
+          "lineSpacingPercent": 112000,
+          "resolvedTextStyle": {
+            "fontSize": 32,
+            "typeface": "Helvetica Neue",
+            "color": "#000000",
+            "alignment": "left",
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "约束 + 证据边界",
+              "fontSize": 19,
+              "typeface": "PingFang SC",
+              "color": "#3D8DFF",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ]
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/5ovix0zy",
+      "id": "6",
+      "name": "Content-Placeholder-10-7",
+      "bbox": [
+        509.33,
+        353.33,
+        196,
+        68
+      ],
+      "composeSource": {
+        "run": 1,
+        "path": "0.5"
+      },
+      "geometry": "rect",
+      "resolvedFontSize": 32,
+      "resolvedTextStyle": {
+        "fontSize": 32,
+        "typeface": "Helvetica Neue",
+        "color": "#000000",
+        "alignment": "left",
+        "autoFit": "shrinkText",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      }
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/4nmhofid",
+      "id": "7",
+      "name": "Content-Placeholder-10-8",
+      "bbox": [
+        732,
+        457.33,
+        506.67,
+        68
+      ],
+      "composeSource": {
+        "run": 1,
+        "path": "0.6"
+      },
+      "geometry": "rect",
+      "text": "输出格式 + 样例",
+      "textPreview": "输出格式 + 样例",
+      "resolvedFontSize": 32,
+      "resolvedTextStyle": {
+        "fontSize": 32,
+        "typeface": "Helvetica Neue",
+        "color": "#000000",
+        "alignment": "left",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "输出格式 + 样例"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "输出格式 + 样例",
+          "lineSpacingPercent": 112000,
+          "resolvedTextStyle": {
+            "fontSize": 32,
+            "typeface": "Helvetica Neue",
+            "color": "#000000",
+            "alignment": "left",
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "输出格式 + 样例",
+              "fontSize": 19,
+              "typeface": "PingFang SC",
+              "color": "#3D8DFF",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ]
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/vit0rqhg",
+      "id": "8",
+      "name": "Content-Placeholder-10-9",
+      "bbox": [
+        509.33,
+        457.33,
+        196,
+        68
+      ],
+      "composeSource": {
+        "run": 1,
+        "path": "0.7"
+      },
+      "geometry": "rect",
+      "resolvedFontSize": 32,
+      "resolvedTextStyle": {
+        "fontSize": 32,
+        "typeface": "Helvetica Neue",
+        "color": "#000000",
+        "alignment": "left",
+        "autoFit": "shrinkText",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      }
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/uhkzil0b",
+      "id": "9",
+      "name": "Content-Placeholder-10-10",
+      "bbox": [
+        732,
+        562.67,
+        506.67,
+        68
+      ],
+      "composeSource": {
+        "run": 1,
+        "path": "0.8"
+      },
+      "geometry": "rect",
+      "text": "自检 + 失败条件",
+      "textPreview": "自检 + 失败条件",
+      "resolvedFontSize": 32,
+      "resolvedTextStyle": {
+        "fontSize": 32,
+        "typeface": "Helvetica Neue",
+        "color": "#000000",
+        "alignment": "left",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "自检 + 失败条件"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "自检 + 失败条件",
+          "lineSpacingPercent": 112000,
+          "resolvedTextStyle": {
+            "fontSize": 32,
+            "typeface": "Helvetica Neue",
+            "color": "#000000",
+            "alignment": "left",
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "自检 + 失败条件",
+              "fontSize": 19,
+              "typeface": "PingFang SC",
+              "color": "#3D8DFF",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ]
+    },
+    {
+      "order": 10,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/03qp0reh",
+      "id": "10",
+      "name": "Content-Placeholder-10-11",
+      "bbox": [
+        509.33,
+        562.67,
+        196,
+        68
+      ],
+      "composeSource": {
+        "run": 1,
+        "path": "0.9"
+      },
+      "geometry": "rect",
+      "resolvedFontSize": 32,
+      "resolvedTextStyle": {
+        "fontSize": 32,
+        "typeface": "Helvetica Neue",
+        "color": "#000000",
+        "alignment": "left",
+        "autoFit": "shrinkText",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      }
+    },
+    {
+      "order": 11,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/14jqtwv2",
+      "id": "11",
+      "name": "Google-Shape-534-p58-12",
+      "bbox": [
+        41.33,
+        249.33,
+        374.67,
+        380
+      ],
+      "composeSource": {
+        "run": 1,
+        "path": "0.10"
+      },
+      "geometry": "rect",
+      "text": "复制这个骨架\n背景：我在做什么，听众/读者是谁。\n任务：这一次只完成一个动作。\n约束：哪些不能改，哪些证据不能越界。\n输入：文件、表格、段落或代码。\n输出：指定格式、长度和字段。\n自检：列出不确定项、反例和验证步骤。\n",
+      "textPreview": "复制这个骨架 | 背景：我在做什么，听众/读者是谁。 | 任务：这一次只完成一个动作。 | 约束：哪些不能改，哪些证据不能越界。 | 输入：文件、表格、段落或代码。 | 输出：指定格式、长度和字段。 | 自检：列出不确定项、反例和验证步骤。 |",
+      "resolvedFontSize": 32,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 32,
+        "typeface": "Helvetica Neue",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 8,
+        "lines": [
+          {
+            "index": 1,
+            "text": "复制这个骨架"
+          },
+          {
+            "index": 2,
+            "text": "背景：我在做什么，听众/读者是谁。"
+          },
+          {
+            "index": 3,
+            "text": "任务：这一次只完成一个动作。"
+          },
+          {
+            "index": 4,
+            "text": "约束：哪些不能改，哪些证据不能越界。"
+          },
+          {
+            "index": 5,
+            "text": "输入：文件、表格、段落或代码。"
+          },
+          {
+            "index": 6,
+            "text": "输出：指定格式、长度和字段。"
+          },
+          {
+            "index": 7,
+            "text": "自检：列出不确定项、反例和验证步骤。"
+          },
+          {
+            "index": 8,
+            "text": ""
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "复制这个骨架",
+          "lineSpacingPercent": 112000,
+          "spaceAfter": 800,
+          "resolvedTextStyle": {
+            "anchor": 1,
+            "fontSize": 32,
+            "typeface": "Helvetica Neue",
+            "color": "#000000",
+            "alignment": "left",
+            "verticalAlignment": "top",
+            "wrap": "square",
+            "autoFit": "none",
+            "insets": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "复制这个骨架",
+              "fontSize": 28,
+              "typeface": "PingFang SC",
+              "color": "#000000",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "背景：我在做什么，听众/读者是谁。\n任务：这一次只完成一个动作。\n约束：哪些不能改，哪些证据不能越界。\n输入：文件、表格、段落或代码。\n输出：指定格式、长度和字段。\n自检：列出不确定项、反例和验证步骤。",
+          "lineSpacingPercent": 112000,
+          "resolvedTextStyle": {
+            "anchor": 1,
+            "fontSize": 32,
+            "typeface": "Helvetica Neue",
+            "color": "#000000",
+            "alignment": "left",
+            "verticalAlignment": "top",
+            "wrap": "square",
+            "autoFit": "none",
+            "insets": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "背景：我在做什么，听众/读者是谁。\n任务：这一次只完成一个动作。\n约束：哪些不能改，哪些证据不能越界。\n输入：文件、表格、段落或代码。\n输出：指定格式、长度和字段。\n自检：列出不确定项、反例和验证步骤。",
+              "fontSize": 20,
+              "typeface": "PingFang SC",
+              "color": "#4B5563"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ]
+    }
+  ],
+  "composeRuns": [
+    {
+      "index": 1,
+      "frame": {
+        "left": 0,
+        "top": 0,
+        "width": 1280,
+        "height": 720
+      },
+      "baseUnit": 1,
+      "root": {
+        "path": "0",
+        "kind": "layers",
+        "name": "codex-grid-layout-library#slide-15",
+        "requestedSize": {
+          "width": {
+            "mode": "fill",
+            "value": 1
+          },
+          "height": {
+            "mode": "fill",
+            "value": 1
+          }
+        },
+        "intrinsicSize": {
+          "width": 1238.67,
+          "height": 684.57
+        },
+        "frame": {
+          "left": 0,
+          "top": 0,
+          "width": 1280,
+          "height": 720
+        },
+        "children": [
+          {
+            "path": "0.0",
+            "kind": "text",
+            "name": "Google-Shape-532-p58-2",
+            "position": {
+              "left": 1184.18,
+              "top": 659.24
+            },
+            "requestedSize": {
+              "width": {
+                "mode": "fixed",
+                "value": 54.48
+              },
+              "height": {
+                "mode": "fixed",
+                "value": 25.33
+              }
+            },
+            "intrinsicSize": {
+              "width": 54.48,
+              "height": 25.33
+            },
+            "frame": {
+              "left": 1184.18,
+              "top": 659.24,
+              "width": 54.48,
+              "height": 25.33
+            },
+            "snappedFrame": {
+              "left": 1184.18,
+              "top": 659.24,
+              "width": 54.48,
+              "height": 25.33
+            },
+            "children": [],
+            "text": "22",
+            "transform": "none",
+            "element": {
+              "aid": "sh/qp4jq503",
+              "id": "1",
+              "kind": "shape"
+            }
+          },
+          {
+            "path": "0.1",
+            "kind": "text",
+            "name": "Google-Shape-533-p58-3",
+            "position": {
+              "left": 41.33,
+              "top": 36.12
+            },
+            "requestedSize": {
+              "width": {
+                "mode": "fixed",
+                "value": 1197.33
+              },
+              "height": {
+                "mode": "fixed",
+                "value": 109.97
+              }
+            },
+            "intrinsicSize": {
+              "width": 1197.33,
+              "height": 109.97
+            },
+            "frame": {
+              "left": 41.33,
+              "top": 36.12,
+              "width": 1197.33,
+              "height": 109.97
+            },
+            "snappedFrame": {
+              "left": 41.33,
+              "top": 36.12,
+              "width": 1197.33,
+              "height": 109.97
+            },
+            "children": [],
+            "text": "我反复复用的不是“神奇提示词”，而是一份任务合同",
+            "transform": "none",
+            "element": {
+              "aid": "sh/dcfi1kzu",
+              "id": "2",
+              "kind": "shape"
+            }
+          },
+          {
+            "path": "0.2",
+            "kind": "text",
+            "name": "Content-Placeholder-10-4",
+            "position": {
+              "left": 732,
+              "top": 249.33
+            },
+            "requestedSize": {
+              "width": {
+                "mode": "fixed",
+                "value": 506.67
+              },
+              "height": {
+                "mode": "fixed",
+                "value": 68
+              }
+            },
+            "intrinsicSize": {
+              "width": 506.67,
+              "height": 68
+            },
+            "frame": {
+              "left": 732,
+              "top": 249.33,
+              "width": 506.67,
+              "height": 68
+            },
+            "snappedFrame": {
+              "left": 732,
+              "top": 249.33,
+              "width": 506.67,
+              "height": 68
+            },
+            "children": [],
+            "text": "上下文 + 单一任务",
+            "transform": "none",
+            "element": {
+              "aid": "sh/sr61sfi9",
+              "id": "3",
+              "kind": "shape"
+            }
+          },
+          {
+            "path": "0.3",
+            "kind": "text",
+            "name": "Content-Placeholder-10-5",
+            "position": {
+              "left": 509.33,
+              "top": 249.33
+            },
+            "requestedSize": {
+              "width": {
+                "mode": "fixed",
+                "value": 196
+              },
+              "height": {
+                "mode": "fixed",
+                "value": 68
+              }
+            },
+            "intrinsicSize": {
+              "width": 196,
+              "height": 68
+            },
+            "frame": {
+              "left": 509.33,
+              "top": 249.33,
+              "width": 196,
+              "height": 68
+            },
+            "snappedFrame": {
+              "left": 509.33,
+              "top": 249.33,
+              "width": 196,
+              "height": 68
+            },
+            "children": [],
+            "text": "",
+            "transform": "none",
+            "element": {
+              "aid": "sh/jmd0vahs",
+              "id": "4",
+              "kind": "shape"
+            }
+          },
+          {
+            "path": "0.4",
+            "kind": "text",
+            "name": "Content-Placeholder-10-6",
+            "position": {
+              "left": 732,
+              "top": 353.33
+            },
+            "requestedSize": {
+              "width": {
+                "mode": "fixed",
+                "value": 506.67
+              },
+              "height": {
+                "mode": "fixed",
+                "value": 68
+              }
+            },
+            "intrinsicSize": {
+              "width": 506.67,
+              "height": 68
+            },
+            "frame": {
+              "left": 732,
+              "top": 353.33,
+              "width": 506.67,
+              "height": 68
+            },
+            "snappedFrame": {
+              "left": 732,
+              "top": 353.33,
+              "width": 506.67,
+              "height": 68
+            },
+            "children": [],
+            "text": "约束 + 证据边界",
+            "transform": "none",
+            "element": {
+              "aid": "sh/il4zm507",
+              "id": "5",
+              "kind": "shape"
+            }
+          },
+          {
+            "path": "0.5",
+            "kind": "text",
+            "name": "Content-Placeholder-10-7",
+            "position": {
+              "left": 509.33,
+              "top": 353.33
+            },
+            "requestedSize": {
+              "width": {
+                "mode": "fixed",
+                "value": 196
+              },
+              "height": {
+                "mode": "fixed",
+                "value": 68
+              }
+            },
+            "intrinsicSize": {
+              "width": 196,
+              "height": 68
+            },
+            "frame": {
+              "left": 509.33,
+              "top": 353.33,
+              "width": 196,
+              "height": 68
+            },
+            "snappedFrame": {
+              "left": 509.33,
+              "top": 353.33,
+              "width": 196,
+              "height": 68
+            },
+            "children": [],
+            "text": "",
+            "transform": "none",
+            "element": {
+              "aid": "sh/5ovix0zy",
+              "id": "6",
+              "kind": "shape"
+            }
+          },
+          {
+            "path": "0.6",
+            "kind": "text",
+            "name": "Content-Placeholder-10-8",
+            "position": {
+              "left": 732,
+              "top": 457.33
+            },
+            "requestedSize": {
+              "width": {
+                "mode": "fixed",
+                "value": 506.67
+              },
+              "height": {
+                "mode": "fixed",
+                "value": 68
+              }
+            },
+            "intrinsicSize": {
+              "width": 506.67,
+              "height": 68
+            },
+            "frame": {
+              "left": 732,
+              "top": 457.33,
+              "width": 506.67,
+              "height": 68
+            },
+            "snappedFrame": {
+              "left": 732,
+              "top": 457.33,
+              "width": 506.67,
+              "height": 68
+            },
+            "children": [],
+            "text": "输出格式 + 样例",
+            "transform": "none",
+            "element": {
+              "aid": "sh/4nmhofid",
+              "id": "7",
+              "kind": "shape"
+            }
+          },
+          {
+            "path": "0.7",
+            "kind": "text",
+            "name": "Content-Placeholder-10-9",
+            "position": {
+              "left": 509.33,
+              "top": 457.33
+            },
+            "requestedSize": {
+              "width": {
+                "mode": "fixed",
+                "value": 196
+              },
+              "height": {
+                "mode": "fixed",
+                "value": 68
+              }
+            },
+            "intrinsicSize": {
+              "width": 196,
+              "height": 68
+            },
+            "frame": {
+              "left": 509.33,
+              "top": 457.33,
+              "width": 196,
+              "height": 68
+            },
+            "snappedFrame": {
+              "left": 509.33,
+              "top": 457.33,
+              "width": 196,
+              "height": 68
+            },
+            "children": [],
+            "text": "",
+            "transform": "none",
+            "element": {
+              "aid": "sh/vit0rqhg",
+              "id": "8",
+              "kind": "shape"
+            }
+          },
+          {
+            "path": "0.8",
+            "kind": "text",
+            "name": "Content-Placeholder-10-10",
+            "position": {
+              "left": 732,
+              "top": 562.67
+            },
+            "requestedSize": {
+              "width": {
+                "mode": "fixed",
+                "value": 506.67
+              },
+              "height": {
+                "mode": "fixed",
+                "value": 68
+              }
+            },
+            "intrinsicSize": {
+              "width": 506.67,
+              "height": 68
+            },
+            "frame": {
+              "left": 732,
+              "top": 562.67,
+              "width": 506.67,
+              "height": 68
+            },
+            "snappedFrame": {
+              "left": 732,
+              "top": 562.67,
+              "width": 506.67,
+              "height": 68
+            },
+            "children": [],
+            "text": "自检 + 失败条件",
+            "transform": "none",
+            "element": {
+              "aid": "sh/uhkzil0b",
+              "id": "9",
+              "kind": "shape"
+            }
+          },
+          {
+            "path": "0.9",
+            "kind": "text",
+            "name": "Content-Placeholder-10-11",
+            "position": {
+              "left": 509.33,
+              "top": 562.67
+            },
+            "requestedSize": {
+              "width": {
+                "mode": "fixed",
+                "value": 196
+              },
+              "height": {
+                "mode": "fixed",
+                "value": 68
+              }
+            },
+            "intrinsicSize": {
+              "width": 196,
+              "height": 68
+            },
+            "frame": {
+              "left": 509.33,
+              "top": 562.67,
+              "width": 196,
+              "height": 68
+            },
+            "snappedFrame": {
+              "left": 509.33,
+              "top": 562.67,
+              "width": 196,
+              "height": 68
+            },
+            "children": [],
+            "text": "",
+            "transform": "none",
+            "element": {
+              "aid": "sh/03qp0reh",
+              "id": "10",
+              "kind": "shape"
+            }
+          },
+          {
+            "path": "0.10",
+            "kind": "text",
+            "name": "Google-Shape-534-p58-12",
+            "position": {
+              "left": 41.33,
+              "top": 249.33
+            },
+            "requestedSize": {
+              "width": {
+                "mode": "fixed",
+                "value": 374.67
+              },
+              "height": {
+                "mode": "fixed",
+                "value": 380
+              }
+            },
+            "intrinsicSize": {
+              "width": 374.67,
+              "height": 380
+            },
+            "frame": {
+              "left": 41.33,
+              "top": 249.33,
+              "width": 374.67,
+              "height": 380
+            },
+            "snappedFrame": {
+              "left": 41.33,
+              "top": 249.33,
+              "width": 374.67,
+              "height": 380
+            },
+            "children": [],
+            "text": "复制这个骨架\n背景：我在做什么，听众/读者是谁。\n任务：这一次只完成一个动作。\n约束：哪些不能改，哪些证据不能越界。\n输入：文件、表格、段落或代码。\n输出：指定格式、长度和字段。\n自检：列出不确定项、反例和验证步骤。\n",
+            "transform": "none",
+            "element": {
+              "aid": "sh/14jqtwv2",
+              "id": "11",
+              "kind": "shape"
+            }
+          }
+        ],
+        "padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        },
+        "alignItems": "stretch",
+        "justifyItems": "stretch",
+        "contentFrame": {
+          "left": 0,
+          "top": 0,
+          "width": 1280,
+          "height": 720
+        },
+        "items": [
+          {
+            "path": "0.0",
+            "frame": {
+              "left": 1184.18,
+              "top": 659.24,
+              "width": 54.48,
+              "height": 25.33
+            }
+          },
+          {
+            "path": "0.1",
+            "frame": {
+              "left": 41.33,
+              "top": 36.12,
+              "width": 1197.33,
+              "height": 109.97
+            }
+          },
+          {
+            "path": "0.2",
+            "frame": {
+              "left": 732,
+              "top": 249.33,
+              "width": 506.67,
+              "height": 68
+            }
+          },
+          {
+            "path": "0.3",
+            "frame": {
+              "left": 509.33,
+              "top": 249.33,
+              "width": 196,
+              "height": 68
+            }
+          },
+          {
+            "path": "0.4",
+            "frame": {
+              "left": 732,
+              "top": 353.33,
+              "width": 506.67,
+              "height": 68
+            }
+          },
+          {
+            "path": "0.5",
+            "frame": {
+              "left": 509.33,
+              "top": 353.33,
+              "width": 196,
+              "height": 68
+            }
+          },
+          {
+            "path": "0.6",
+            "frame": {
+              "left": 732,
+              "top": 457.33,
+              "width": 506.67,
+              "height": 68
+            }
+          },
+          {
+            "path": "0.7",
+            "frame": {
+              "left": 509.33,
+              "top": 457.33,
+              "width": 196,
+              "height": 68
+            }
+          },
+          {
+            "path": "0.8",
+            "frame": {
+              "left": 732,
+              "top": 562.67,
+              "width": 506.67,
+              "height": 68
+            }
+          },
+          {
+            "path": "0.9",
+            "frame": {
+              "left": 509.33,
+              "top": 562.67,
+              "width": 196,
+              "height": 68
+            }
+          },
+          {
+            "path": "0.10",
+            "frame": {
+              "left": 41.33,
+              "top": 249.33,
+              "width": 374.67,
+              "height": 380
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

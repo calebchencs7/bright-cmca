@@ -444,6 +444,7 @@ class Trainer:
             dacutmix_box_tries=self.args.dacutmix_box_tries,
             dacutmix_donor_tries=self.args.dacutmix_donor_tries,
             return_dacutmix_stats=(split == "train" and self.args.use_dacutmix),
+            modality_mode=self.args.modality_mode,
         )
 
     # -----------------------------------------------------------------------
@@ -966,6 +967,11 @@ def main():
     parser.add_argument("--val_data_list_path", type=str)
     parser.add_argument("--test_dataset_path", type=str)
     parser.add_argument("--test_data_list_path", type=str)
+    parser.add_argument("--modality_mode", type=str, default="both",
+                        choices=["both", "optical_only", "sar_only", "no_optical", "no_sar"],
+                        help="Modality ablation mode. both = optical+SAR; "
+                             "optical_only/no_sar zeroes SAR after normalization; "
+                             "sar_only/no_optical zeroes optical after normalization.")
 
     # Training — paper defaults
     parser.add_argument("--train_batch_size", type=int, default=16)

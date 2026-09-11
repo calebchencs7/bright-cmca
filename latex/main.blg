@@ -13,44 +13,44 @@ Database file #1: bright-cmca-references.bib
 -- See the "IEEEtran_bst_HOWTO.pdf" manual for usage information.
 
 Done.
-You've used 47 entries,
+You've used 36 entries,
             4087 wiz_defined-function locations,
-            1071 strings with 18098 characters,
-and the built_in function-call counts, 43210 in all, are:
-= -- 3379
-> -- 1305
-< -- 384
-+ -- 722
-- -- 250
-* -- 2091
-:= -- 5979
-add.period$ -- 95
-call.type$ -- 47
-change.case$ -- 47
-chr.to.int$ -- 921
-cite$ -- 47
-duplicate$ -- 3002
-empty$ -- 3319
-format.name$ -- 284
-if$ -- 10200
+            1020 strings with 15646 characters,
+and the built_in function-call counts, 32885 in all, are:
+= -- 2608
+> -- 969
+< -- 296
++ -- 536
+- -- 181
+* -- 1591
+:= -- 4589
+add.period$ -- 73
+call.type$ -- 36
+change.case$ -- 36
+chr.to.int$ -- 702
+cite$ -- 36
+duplicate$ -- 2291
+empty$ -- 2491
+format.name$ -- 210
+if$ -- 7747
 int.to.chr$ -- 0
-int.to.str$ -- 47
-missing$ -- 539
-newline$ -- 164
-num.names$ -- 47
-pop$ -- 1305
+int.to.str$ -- 36
+missing$ -- 405
+newline$ -- 131
+num.names$ -- 36
+pop$ -- 964
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 2
-skip$ -- 3334
+skip$ -- 2544
 stack$ -- 0
-substring$ -- 2282
-swap$ -- 2575
-text.length$ -- 77
+substring$ -- 1740
+swap$ -- 1973
+text.length$ -- 62
 text.prefix$ -- 0
 top$ -- 5
-type$ -- 47
+type$ -- 36
 warning$ -- 0
-while$ -- 188
-width$ -- 49
-write$ -- 476
+while$ -- 147
+width$ -- 38
+write$ -- 373

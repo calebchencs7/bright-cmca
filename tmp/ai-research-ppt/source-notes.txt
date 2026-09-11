@@ -1,0 +1,28 @@
+Local project sources
+- /Users/haochen/Documents/Development/bright-cmca/README.md
+- /Users/haochen/Documents/Development/bright-cmca/latex/main.tex
+- /Users/haochen/Documents/Development/bright-cmca/latex/main.bbl
+- /Users/haochen/Documents/Development/bright-cmca/bda_benchmark/model/UNetCMCA.py
+- /Users/haochen/Documents/Development/bright-cmca/bda_benchmark/dataset/imutils.py
+- /Users/haochen/Documents/Development/bright-cmca/bda_benchmark/dataset/make_data_loader.py
+- /Users/haochen/Documents/Development/bright-cmca/Ablation experiment.xlsx
+- /Users/haochen/Documents/Development/bright-cmca/figure/overall.jpg
+- /Users/haochen/Documents/Development/bright-cmca/figure/bright_framework.png
+- /Users/haochen/Documents/Development/bright-cmca/latex/images/Technology Roadmap.png
+- /Users/haochen/Documents/Development/bright-cmca/latex/images/CMCA.png
+- /Users/haochen/Documents/Development/bright-cmca/latex/images/DA-CutMix.png
+- /Users/haochen/Documents/Development/bright-cmca/latex/images/dacutmix_example.png
+- /Users/haochen/Documents/Development/bright-cmca/tmp/spreadsheet-read/renders/Overall.png
+- /Users/haochen/Documents/Development/bright-cmca/tmp/spreadsheet-read/renders/per-event_mIoU.png
+
+Literature referenced in the deck (bibliographic details from latex/main.bbl)
+- Chen et al., BRIGHT, Earth System Science Data, 2025.
+- Yun et al., CutMix, ICCV, 2019.
+- Olsson et al., ClassMix, WACV, 2021.
+- Ghiasi et al., Simple Copy-Paste, CVPR, 2021.
+- Shen et al., BDANet, IEEE TGRS, 2022.
+- Chen et al., ChangeMamba, IEEE TGRS, 2024.
+
+Tool naming note
+- ChatGPT / Claude / DeepSeek, Elicit / Semantic Scholar / Perplexity, NotebookLM, and Codex / GitHub Copilot are shown as replaceable examples by capability category. No feature-specific claims are made.
+

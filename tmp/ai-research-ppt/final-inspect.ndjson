@@ -1,0 +1,270 @@
+{"kind":"deck","id":"pr/fcf3tc","name":"Deck"}
+{"kind":"layout","layoutId":"ad4ede6b-54e6-4ad5-9a5a-b133745c6305","name":"Master","type":"master"}
+{"kind":"layout","layoutId":"a3589779-6b67-4ddb-87f5-c8c1eeb66327","name":"Title Slide","type":"title"}
+{"kind":"slide","id":"sl/v0bi5m","slide":1,"title":"我如何用 AI","textShapes":3}
+{"kind":"textbox","id":"sh/lcbat4ni","slide":1,"name":"Title-3-1","text":"我如何用 AI\n完成科研闭环","textPreview":"我如何用 AI | 完成科研闭环","textChars":14,"textLines":2,"bbox":[41.33,182.55,992,261.57]}
+{"kind":"textbox","id":"sh/ypkryp4r","slide":1,"name":"Subtitle-4-2","text":"从 idea、文献与实验，到画图和论文写作\nHao Chen","textPreview":"从 idea、文献与实验，到画图和论文写作 | Hao Chen","textChars":30,"textLines":2,"bbox":[41.33,497.87,598.67,113.41]}
+{"kind":"textbox","id":"sh/zqtsru5c","slide":1,"name":"Subtitle-4-3","text":"科研分享 · 真实项目拆解","textPreview":"科研分享 · 真实项目拆解","textChars":13,"textLines":1,"bbox":[41.33,41.18,598.67,68.15]}
+{"kind":"shape","id":"sh/cn29wfml","slide":1,"bbox":[1038,184,200,12]}
+{"kind":"shape","id":"sh/dobapkn6","slide":1,"bbox":[1038,211,126,12]}
+{"kind":"notes","id":"nt/v0bi5m","slide":1,"text":"建议讲法（0:30）\n• 开场先说明：这不是一份 AI 工具排行榜，而是一套在真实科研项目里反复使用的工作流。\n• 今天用一个贯穿案例——多模态建筑损伤评估——把每一步拆开，重点展示输入、输出和人工检查。"}
+{"kind":"slide","id":"sl/itsbh2","slide":2,"title":"02","textShapes":6}
+{"kind":"textbox","id":"sh/0f69szy9","slide":2,"name":"Google-Shape-532-p58-2","text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[1184.18,659.24,54.48,25.33]}
+{"kind":"textbox","id":"sh/zed8juxo","slide":2,"name":"Google-Shape-533-p58-3","text":"工具很多，但我只把它们分成三类助手","textPreview":"工具很多，但我只把它们分成三类助手","textChars":17,"textLines":1,"bbox":[41.33,36.17,1197.33,134.7]}
+{"kind":"shape","id":"sh/ed4rqpg3","slide":2,"name":"Rounded-Rectangle-9-4","bbox":[452.38,353.33,374.67,276]}
+{"kind":"shape","id":"sh/94fap4fq","slide":2,"name":"Rounded-Rectangle-10-5","bbox":[864,353.33,374.67,276]}
+{"kind":"textbox","id":"sh/o369wzy5","slide":2,"name":"Content-Placeholder-9-6","text":"推理与写作\n扩展假设、重组论证、暴露逻辑缺口；不让模型替我下科学结论。","textPreview":"推理与写作 | 扩展假设、重组论证、暴露逻辑缺口；不让模型替我下科学结论。","textChars":35,"textLines":2,"bbox":[485.23,435.29,309.64,150.43]}
+{"kind":"textbox","id":"sh/n2x8nuxk","slide":2,"name":"Content-Placeholder-10-7","text":"编程与验证\n定位接口、生成最小补丁、补测试；每个改动都要能运行、能复现。","textPreview":"编程与验证 | 定位接口、生成最小补丁、补测试；每个改动都要能运行、能复现。","textChars":36,"textLines":2,"bbox":[896.18,435.29,309.64,150.43]}
+{"kind":"shape","id":"sh/mhorupgz","slide":2,"name":"Google-Shape-340-p61-8","bbox":[485.84,387.83,24.55,24.54]}
+{"kind":"shape","id":"sh/x8zat4fm","slide":2,"name":"Google-Shape-340-p61-9","bbox":[895.88,387.83,24.55,24.54]}
+{"kind":"shape","id":"sh/w7q90jyh","slide":2,"name":"Rounded-Rectangle-5-10","bbox":[40.77,353.33,374.67,276]}
+{"kind":"textbox","id":"sh/apcr69gf","slide":2,"name":"Content-Placeholder-9-11","text":"检索与阅读\n找入口、整理证据、对照多篇论文；不直接相信摘要式结论。","textPreview":"检索与阅读 | 找入口、整理证据、对照多篇论文；不直接相信摘要式结论。","textChars":33,"textLines":2,"bbox":[73.61,435.29,309.64,150.43]}
+{"kind":"shape","id":"sh/bqlsfexk","slide":2,"name":"Google-Shape-340-p61-12","bbox":[74.23,387.83,24.55,24.54]}
+{"kind":"textbox","id":"sh/cre98jy5","slide":2,"name":"Content-Placeholder-15-13","text":"示例组合（按你自己的账号替换即可）\n检索/阅读：Elicit、Semantic Scholar、NotebookLM  ·  推理/写作：ChatGPT、Claude、DeepSeek  ·  编程/自动化：Codex、GitHub Copilot\n它们加速搜索、比较、生成和检查；问题定义、证据判断、最终责任仍在研究者。","textPreview":"示例组合（按你自己的账号替换即可） | 检索/阅读：Elicit、Semantic Scholar、NotebookLM  ·  推理/写作：ChatGPT、Claude、DeepSeek  ·  编程/自动化：Codex、GitHub Copilot | 它们加速搜索、比...","textChars":161,"textLines":3,"bbox":[41.33,152.29,1197.33,171.05]}
+{"kind":"shape","id":"sh/xsnahofq","slide":2,"bbox":[41,620,1198,10]}
+{"kind":"notes","id":"nt/itsbh2","slide":2,"text":"建议讲法（1:20）\n• 介绍工具时不要逐个演示界面，先讲三种能力：找资料、想/写、写代码/验证。这样听众换任何工具都能复用。\n• 强调三个不能外包的决定：研究问题是否值得做、证据是否足够、论文中的最终表述是否负责。\n• 可以现场问听众：你们最卡的是哪一类？后面每一类都会有案例。"}
+{"kind":"slide","id":"sl/2gxdqr","slide":3,"title":"03","textShapes":2}
+{"kind":"textbox","id":"sh/q5s7qdc3","slide":3,"name":"Slide-Number-Placeholder-1-2","text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[1184.18,659.24,54.48,25.33]}
+{"kind":"textbox","id":"sh/d8j6l8vu","slide":3,"name":"Title-2-3","text":"30 分钟看完一条可复用的 AI 科研工作流","textPreview":"30 分钟看完一条可复用的 AI 科研工作流","textChars":22,"textLines":1,"bbox":[41.33,36.12,1197.33,109.97]}
+{"kind":"shape","id":"sh/zulonid0","slide":3,"bbox":[35,205,1210,432]}
+{"kind":"table","id":"tb/t87q5w7u","slide":3,"name":"Table-3-4","rows":6,"cols":2,"preview":"01 | Agenda item one","bbox":[41.33,218.37,1197.34,410.96]}
+{"kind":"table","id":"tb/vap876p0","slide":3,"name":"","rows":5,"cols":2,"preview":"01 | 找到 idea：把失败现象变成可证伪假设","bbox":[41,218,1197,392]}
+{"kind":"notes","id":"nt/2gxdqr","slide":3,"text":"建议讲法（0:50）\n• 用这一页建立预期：不是五个互相独立的技巧，而是一条闭环；前一步的产物就是后一步的输入。\n• 说明案例页会给可复制提示词，听众不需要预先懂模型结构。"}
+{"kind":"slide","id":"sl/q9528r","slide":4,"title":"04","textShapes":4}
+{"kind":"textbox","id":"sh/vqp4bmls","slide":4,"name":"Google-Shape-532-p58-2","text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[1184.18,659.24,54.48,25.33]}
+{"kind":"textbox","id":"sh/wbyl4rmd","slide":4,"name":"Google-Shape-533-p58-3","text":"贯穿案例｜建筑损伤评估","textPreview":"贯穿案例｜建筑损伤评估","textChars":11,"textLines":1,"bbox":[41.33,36.12,1197.33,109.97]}
+{"kind":"shape","id":"sh/xcrmdw3y","slide":4,"name":"Picture-3-4-backing","bbox":[658.17,41.62,581.6,588.14]}
+{"kind":"textbox","id":"sh/nmp47mlw","slide":4,"name":"Google-Shape-534-p58-5","text":"为什么难？\n灾后光学影像常受云、烟、雨和夜间影响；SAR 能全天候观测，但它与光学“长得完全不一样”。\n\n任务：用灾前光学 + 灾后 SAR，分出背景、完好、受损、毁坏建筑。","textPreview":"为什么难？ | 灾后光学影像常受云、烟、雨和夜间影响；SAR 能全天候观测，但它与光学“长得完全不一样”。 |  | 任务：用灾前光学 + 灾后 SAR，分出背景、完好、受损、毁坏建筑。","textChars":87,"textLines":4,"bbox":[41.33,213.33,581.33,416]}
+{"kind":"shape","id":"sh/8nyl07mh","slide":4,"bbox":[658,120,581,510]}
+{"kind":"shape","id":"sh/6h03a1kf","slide":4,"bbox":[42,147,9,28]}
+{"kind":"textbox","id":"sh/7i94j6l0","slide":4,"text":"贯穿案例 · BRIGHT 多模态遥感","textPreview":"贯穿案例 · BRIGHT 多模态遥感","textChars":19,"textLines":1,"bbox":[60,145,440,34]}
+{"kind":"image","id":"im/r2lsni9k","slide":4,"name":"Picture-3-4","geometry":"roundRect","alt":"hero placeholder for Picture 3","prompt":"Clean editorial light-blue conceptual image with subtle architectural geometry, ample white space, and no embedded text","isPlaceholder":true,"bbox":[658.17,41.62,581.6,588.14]}
+{"kind":"image","id":"im/s3u9gna5","slide":4,"name":"","geometry":"roundRect","alt":"BRIGHT dataset global overview and samples","bbox":[658,120,581,510]}
+{"kind":"notes","id":"nt/q9528r","slide":4,"text":"建议讲法（1:10）\n• 先用生活语言解释：光学像照片，SAR 像用微波“摸”表面；两者互补，但像素外观差异很大。\n• 指出四分类里，真正重要的“受损/毁坏”像素又最少，因此同时存在跨模态融合和类别不平衡。\n• 这页只讲任务，不讲方法，为后面的 idea 形成制造张力。\n\n[Sources]\n- /Users/haochen/Documents/Development/bright-cmca/README.md\n- /Users/haochen/Documents/Development/bright-cmca/figure/overall.jpg"}
+{"kind":"slide","id":"sl/lzrdkr","slide":5,"title":"05","textShapes":4}
+{"kind":"textbox","id":"sh/9kzq1sfy","slide":5,"name":"Google-Shape-532-p58-2","text":"05","textPreview":"05","textChars":2,"textLines":1,"bbox":[1184.18,659.24,54.48,25.33]}
+{"kind":"textbox","id":"sh/mh8r6dw7","slide":5,"name":"Google-Shape-533-p58-3","text":"真正的研究起点，是两个反复失败的现象","textPreview":"真正的研究起点，是两个反复失败的现象","textChars":18,"textLines":1,"bbox":[41.33,36.12,1197.33,109.97]}
+{"kind":"textbox","id":"sh/7ih8zixs","slide":5,"name":"Google-Shape-534-p58-4","text":"01  融合没有“比较”\n简单拼接让模型看见两种模态，却没有明确告诉它：应该拿灾前建筑结构去哪里寻找灾后变化。\n\n症状：加入 SAR 后提升有限，跨传感器差异可能盖过真实损伤。","textPreview":"01  融合没有“比较” | 简单拼接让模型看见两种模态，却没有明确告诉它：应该拿灾前建筑结构去哪里寻找灾后变化。 |  | 症状：加入 SAR 后提升有限，跨传感器差异可能盖过真实损伤。","textChars":88,"textLines":4,"bbox":[41.33,213.33,581.33,371.11]}
+{"kind":"textbox","id":"sh/wna9cne9","slide":5,"name":"Content-Placeholder-3-5","text":"02  稀有类别学不够\n背景与完好建筑占多数；受损、毁坏样本少，而且灾种之间差异大。\n\n症状：整体准确率很好看，但重要类别和新灾害事件表现不稳。","textPreview":"02  稀有类别学不够 | 背景与完好建筑占多数；受损、毁坏样本少，而且灾种之间差异大。 |  | 症状：整体准确率很好看，但重要类别和新灾害事件表现不稳。","textChars":72,"textLines":4,"bbox":[656.86,213.33,581.33,371.11]}
+{"kind":"shape","id":"sh/hojq5sfu","slide":5,"bbox":[41,594,581,8]}
+{"kind":"shape","id":"sh/ul8raxw3","slide":5,"bbox":[657,594,581,8]}
+{"kind":"notes","id":"nt/lzrdkr","slide":5,"text":"建议讲法（1:15）\n• 强调 idea 常常不是从“凭空创新”开始，而是从一个可重复观察到的失败开始。\n• 把两个现象分别归类：一个是模型层的问题（如何比较模态），一个是数据层的问题（如何增加稀有损伤暴露）。\n• 转场：接下来演示如何把这两句观察交给 AI，而不是问“给我一个新方法”。\n\n[Sources]\n- /Users/haochen/Documents/Development/bright-cmca/latex/main.tex（Introduction）"}
+{"kind":"slide","id":"sl/hg9dun","slide":6,"title":"06","textShapes":8}
+{"kind":"textbox","id":"sh/3etczq5c","slide":6,"name":"Google-Shape-532-p58-2","text":"06","textPreview":"06","textChars":2,"textLines":1,"bbox":[1184.18,659.24,54.48,25.33]}
+{"kind":"textbox","id":"sh/oz2d8vmx","slide":6,"name":"Google-Shape-533-p58-3","text":"案例 1｜先给“失败现象”，再让 AI 扩展假设","textPreview":"案例 1｜先给“失败现象”，再让 AI 扩展假设","textChars":24,"textLines":1,"bbox":[41.33,36.17,1197.33,67.64]}
+{"kind":"shape","id":"sh/p0be10ni","slide":6,"name":"Rounded-Rectangle-1-4","bbox":[41.68,350.56,580.99,138.67]}
+{"kind":"textbox","id":"sh/e90v2l4v","slide":6,"name":"Content-Placeholder-10-5","text":"低质量问题","textPreview":"低质量问题","textChars":5,"textLines":1,"bbox":[72.89,376.69,523.56,92.16]}
+{"kind":"textbox","id":"sh/fa9cvq5g","slide":6,"name":"Content-Placeholder-15-6","text":"“请给我 10 个创新点。”\n输出看似丰富，却无法比较、验证，也容易重复已有工作。\n","textPreview":"“请给我 10 个创新点。” | 输出看似丰富，却无法比较、验证，也容易重复已有工作。 |","textChars":42,"textLines":3,"bbox":[72.89,506.94,549.78,102.67]}
+{"kind":"shape","id":"sh/gb2d4vml","slide":6,"name":"Rounded-Rectangle-7-7","bbox":[657.3,350.56,580.99,138.67]}
+{"kind":"textbox","id":"sh/1cbux0n6","slide":6,"name":"Content-Placeholder-10-8","text":"可研究的问题","textPreview":"可研究的问题","textChars":6,"textLines":1,"bbox":[688.51,376.69,523.56,92.16]}
+{"kind":"textbox","id":"sh/y54vep4z","slide":6,"name":"Content-Placeholder-15-9","text":"“根据失败现象，给 3 个机制假设。”\n每个假设必须给最小实现、对照、风险与证伪条件。\n","textPreview":"“根据失败现象，给 3 个机制假设。” | 每个假设必须给最小实现、对照、风险与证伪条件。 |","textChars":44,"textLines":3,"bbox":[688.51,506.94,549.78,102.67]}
+{"kind":"textbox","id":"sh/z6dw7alk","slide":6,"name":"Content-Placeholder-15-10","text":"一个好提示词要包含 5 件事\n任务背景 · 已观察到的失败 · 不允许改变的约束 · 需要的对照实验 · 证伪条件\n","textPreview":"一个好提示词要包含 5 件事 | 任务背景 · 已观察到的失败 · 不允许改变的约束 · 需要的对照实验 · 证伪条件 |","textChars":58,"textLines":3,"bbox":[42.09,121.52,1197.33,171.05]}
+{"kind":"textbox","id":"sh/vidgvadc","slide":6,"text":"任务：灾前光学 + 灾后 SAR 的四类建筑损伤分割\n失败：简单拼接增益有限；受损/毁坏类别稀少\n约束：不重做解码器；推理开销尽量不变；必须可消融\n请提出 3 个可证伪机制假设。每个输出：\n① 为什么可能有效  ② 最小改动  ③ 必要对照  ④ 失败风险  ⑤ 证伪条件","textPreview":"任务：灾前光学 + 灾后 SAR 的四类建筑损伤分割 | 失败：简单拼接增益有限；受损/毁坏类别稀少 | 约束：不重做解码器；推理开销尽量不变；必须可消融 | 请提出 3 个可证伪机制假设。每个输出： | ① 为什么可能有效  ② 最小改动  ③ 必要对照  ④ 失败风险 ...","textChars":136,"textLines":5,"bbox":[42,278,1197,255]}
+{"kind":"notes","id":"nt/hg9dun","slide":6,"text":"建议讲法（1:50）\n• 先读左侧低质量问题，让听众感受“创新点列表”为什么没有用：它没有锚定观察，也没有约束。\n• 逐行读可复制提示词。重点解释“最小改动”和“证伪条件”：前者控制工程成本，后者逼 AI 提出真正可以被实验否定的假设。\n• 实操建议：第一次只让 AI 产出 3 个假设；第二轮再要求它互相批评，避免一口气生成 20 个点子。\n\n[Sources]\n- /Users/haochen/Documents/Development/bright-cmca/latex/main.tex（problem formulation）"}
+{"kind":"slide","id":"sl/74shm9","slide":7,"title":"07","textShapes":8}
+{"kind":"textbox","id":"sh/gf2h4zah","slide":7,"name":"Slide-Number-Placeholder-3-2","text":"07","textPreview":"07","textChars":2,"textLines":1,"bbox":[1184.18,659.24,54.48,25.33]}
+{"kind":"textbox","id":"sh/vet0bu9w","slide":7,"name":"Title-10-3","text":"AI 的价值不是“给答案”，而是展开假设空间","textPreview":"AI 的价值不是“给答案”，而是展开假设空间","textChars":22,"textLines":1,"bbox":[41.33,36.12,1197.33,109.97]}
+{"kind":"shape","id":"sh/udkz29sb","slide":7,"name":"Google-Shape-2259-p159-4","bbox":[35.46,560.8,1285.61,0.03]}
+{"kind":"shape","id":"sh/tcbi94rq","slide":7,"name":"Google-Shape-2260-p159-5","bbox":[35.46,555.18,11.24,11.24]}
+{"kind":"shape","id":"sh/8b2h0za5","slide":7,"name":"Google-Shape-2261-p159-6","bbox":[446.38,555.18,11.24,11.24]}
+{"kind":"shape","id":"sh/7at07u90","slide":7,"name":"Google-Shape-2262-p159-7","bbox":[858.38,555.18,11.24,11.24]}
+{"kind":"shape","id":"sh/69kzypsf","slide":7,"name":"Rounded-Rectangle-19-8","bbox":[41.33,147.17,374.67,380]}
+{"kind":"textbox","id":"sh/d8filora","slide":7,"name":"Content-Placeholder-8-9","text":"模型层假设\n如果让灾前光学作为 Query，去检索灾后 SAR 的 Key/Value，就能显式比较结构变化。\n\n→ CMCA","textPreview":"模型层假设 | 如果让灾前光学作为 Query，去检索灾后 SAR 的 Key/Value，就能显式比较结构变化。 |  | → CMCA","textChars":63,"textLines":4,"bbox":[73.85,189.69,309.64,269.48]}
+{"kind":"shape","id":"sh/c7m1cjap","slide":7,"name":"Rounded-Rectangle-21-10","bbox":[452.33,147.17,374.67,380]}
+{"kind":"textbox","id":"sh/ep8zmtoz","slide":7,"name":"Content-Placeholder-8-11","text":"数据层假设\n如果优先混入跨事件的受损/毁坏区域，并同步三元组，就能增加稀有损伤暴露。\n\n→ DA-CutMix","textPreview":"数据层假设 | 如果优先混入跨事件的受损/毁坏区域，并同步三元组，就能增加稀有损伤暴露。 |  | → DA-CutMix","textChars":55,"textLines":4,"bbox":[484.85,189.69,309.64,269.48]}
+{"kind":"shape","id":"sh/fqh0vypk","slide":7,"name":"Rounded-Rectangle-23-12","bbox":[864.83,147.17,374.67,380]}
+{"kind":"textbox","id":"sh/0rq1o36p","slide":7,"name":"Content-Placeholder-8-13","text":"评估层假设\n如果增益来自更稳健的变化建模，它不应只在一个骨干或总体像素统计上成立。\n\n→ 多骨干 + 逐事件","textPreview":"评估层假设 | 如果增益来自更稳健的变化建模，它不应只在一个骨干或总体像素统计上成立。 |  | → 多骨干 + 逐事件","textChars":54,"textLines":4,"bbox":[897.35,189.69,309.64,269.48]}
+{"kind":"textbox","id":"sh/1szix87a","slide":7,"name":"Text-Placeholder-16-14","text":"数据","textPreview":"数据","textChars":2,"textLines":1,"bbox":[446.38,588.18,272.54,41.15]}
+{"kind":"textbox","id":"sh/q1oziton","slide":7,"name":"Text-Placeholder-16-15","text":"机制","textPreview":"机制","textChars":2,"textLines":1,"bbox":[41.04,588.18,272.54,41.15]}
+{"kind":"textbox","id":"sh/r2h0ryp8","slide":7,"name":"Text-Placeholder-16-16","text":"证据","textPreview":"证据","textChars":2,"textLines":1,"bbox":[863.56,588.18,272.54,41.15]}
+{"kind":"notes","id":"nt/74shm9","slide":7,"text":"建议讲法（1:40）\n• 按三列讲：机制、数据、证据。前两列是候选方法，第三列决定实验是否足以支持结论。\n• 提醒听众：AI 会把语言说得很肯定；我们要把每句话改写为“如果……那么在某个对照中应该观察到……”。\n• 可以让 AI 继续做红队：分别给出每个假设最可能失败的原因，例如形状不匹配、显存爆炸、混入不真实区域。\n\n[Sources]\n- /Users/haochen/Documents/Development/bright-cmca/latex/main.tex（CMCA and DA-CutMix descriptions）\n- /Users/haochen/Documents/Development/bright-cmca/bda_benchmark/model/UNetCMCA.py"}
+{"kind":"slide","id":"sl/s82nxy","slide":8,"title":"08","textShapes":4}
+{"kind":"textbox","id":"sh/ilsjqpoj","slide":8,"name":"Google-Shape-532-p58-2","text":"08","textPreview":"08","textChars":2,"textLines":1,"bbox":[1184.18,659.24,54.48,25.33]}
+{"kind":"textbox","id":"sh/5o3ilk7u","slide":8,"name":"Google-Shape-533-p58-3","text":"两个想法，两个独立插件","textPreview":"两个想法，两个独立插件","textChars":11,"textLines":1,"bbox":[41.33,36.12,1197.33,109.97]}
+{"kind":"shape","id":"sh/4nu1sf6p","slide":8,"name":"Picture-3-4-backing","bbox":[658.17,41.62,581.6,588.14]}
+{"kind":"textbox","id":"sh/uxsjm5o7","slide":8,"name":"Google-Shape-534-p58-5","text":"可证伪设计\nCMCA：只改语义瓶颈的跨模态交互。\nDA-CutMix：只改训练数据，不改推理。\n\n四组对照：Baseline / +CMCA / +DA-CutMix / +两者。\n\n失败也有信息：若组合不增益，检查是否互相冗余或依赖骨干。","textPreview":"可证伪设计 | CMCA：只改语义瓶颈的跨模态交互。 | DA-CutMix：只改训练数据，不改推理。 |  | 四组对照：Baseline / +CMCA / +DA-CutMix / +两者。 |  | 失败也有信息：若组合不增益，检查是否互相冗余或依赖骨干。","textChars":120,"textLines":7,"bbox":[41.33,213.33,581.33,416]}
+{"kind":"shape","id":"sh/hkjihk7y","slide":8,"bbox":[658,118,581,512]}
+{"kind":"shape","id":"sh/fulkrupc","slide":8,"bbox":[42,150,9,28]}
+{"kind":"textbox","id":"sh/etcji9or","slide":8,"text":"IDEA → 设计 → 对照","textPreview":"IDEA → 设计 → 对照","textChars":14,"textLines":1,"bbox":[60,148,440,34]}
+{"kind":"image","id":"im/ed8r6147","slide":8,"name":"Picture-3-4","geometry":"roundRect","alt":"hero placeholder for Picture 3","prompt":"Clean editorial light-blue conceptual image with subtle architectural geometry, ample white space, and no embedded text","isPlaceholder":true,"bbox":[658.17,41.62,581.6,588.14]}
+{"kind":"image","id":"im/10za1w3y","slide":8,"name":"","geometry":"roundRect","alt":"CMCA and DA-CutMix technology roadmap","bbox":[658,118,581,512]}
+{"kind":"notes","id":"nt/s82nxy","slide":8,"text":"建议讲法（1:25）\n• 指着图从左到右讲：训练前先做 DA-CutMix，网络瓶颈处做 CMCA，最后保持原损失与预测头。\n• 为什么要做成插件？因为插件能在多个骨干上复用，也能让两个贡献独立开关，便于消融。\n• 这一步可以让 AI 帮你检查实验矩阵是否漏项，但矩阵对应什么科学问题必须由人决定。\n\n[Sources]\n- /Users/haochen/Documents/Development/bright-cmca/latex/images/Technology Roadmap.png\n- /Users/haochen/Documents/Development/bright-cmca/latex/main.tex（Overall Framework）"}
+{"kind":"slide","id":"sl/b6n3t8","slide":9,"title":"09","textShapes":6}
+{"kind":"textbox","id":"sh/fad43i5g","slide":9,"name":"Slide-Number-Placeholder-1-2","text":"09","textPreview":"09","textChars":2,"textLines":1,"bbox":[1184.17,659.17,54.5,25.33]}
+{"kind":"textbox","id":"sh/gbm5cnm1","slide":9,"name":"Title-2-3","text":"留下 idea 前，我用四道门把“漂亮废话”筛掉","textPreview":"留下 idea 前，我用四道门把“漂亮废话”筛掉","textChars":24,"textLines":1,"bbox":[41.33,36.12,1197.33,109.97]}
+{"kind":"textbox","id":"sh/1cvm58n6","slide":9,"name":"Content-Placeholder-9-4","text":"可解释\n能否说清它针对哪个失败机制，而不是只说“增强特征”？","textPreview":"可解释 | 能否说清它针对哪个失败机制，而不是只说“增强特征”？","textChars":30,"textLines":2,"bbox":[41.33,213.33,581.33,172.5]}
+{"kind":"textbox","id":"sh/2d4ned4r","slide":9,"name":"Content-Placeholder-10-5","text":"可实现\n最小改动在哪里？shape、显存、数据同步是否可控？","textPreview":"可实现 | 最小改动在哪里？shape、显存、数据同步是否可控？","textChars":30,"textLines":2,"bbox":[656.86,213.33,581.33,172.5]}
+{"kind":"textbox","id":"sh/3ed47i5c","slide":9,"name":"Content-Placeholder-9-6","text":"可证伪\n有明确基线、消融、负面结果解释和停止条件吗？","textPreview":"可证伪 | 有明确基线、消融、负面结果解释和停止条件吗？","textChars":26,"textLines":2,"bbox":[41.33,421.73,581.33,172.51]}
+{"kind":"textbox","id":"sh/ofm5gnmx","slide":9,"name":"Content-Placeholder-10-7","text":"可定位新意\n与最相近工作相比，差异是机制、设置还是证据？","textPreview":"可定位新意 | 与最相近工作相比，差异是机制、设置还是证据？","textChars":28,"textLines":2,"bbox":[656.86,421.73,581.33,172.51]}
+{"kind":"notes","id":"nt/b6n3t8","slide":9,"text":"建议讲法（1:10）\n• 建议把 AI 候选 idea 放进这四格，任何一格答不清就先不做。\n• 尤其警惕“可定位新意”：AI 很容易把常见模块重新命名。必须去原论文核对，不接受二手总结。\n• 在这个案例里，CMCA 的最小接口和 DA-CutMix 的同步三元组都能被清楚描述，因此进入下一步文献核查。"}
+{"kind":"slide","id":"sl/lnvki3","slide":10,"title":"10","textShapes":7}
+{"kind":"textbox","id":"sh/x4vq94nm","slide":10,"name":"Slide-Number-Placeholder-1-2","text":"10","textPreview":"10","textChars":2,"textLines":1,"bbox":[1184.17,659.17,54.5,25.33]}
+{"kind":"textbox","id":"sh/a14rypov","slide":10,"name":"Title-2-3","text":"案例 2｜查文献之前，先写下四个问题","textPreview":"案例 2｜查文献之前，先写下四个问题","textChars":18,"textLines":1,"bbox":[41.33,36.12,1197.33,109.97]}
+{"kind":"textbox","id":"sh/v2d87u5g","slide":10,"name":"Content-Placeholder-9-4","text":"任务线\n建筑损伤评估的主流任务定义、数据集与指标是什么？","textPreview":"任务线 | 建筑损伤评估的主流任务定义、数据集与指标是什么？","textChars":28,"textLines":2,"bbox":[41.33,213.33,581.33,172.5]}
+{"kind":"textbox","id":"sh/8zm9wf6p","slide":10,"name":"Content-Placeholder-10-5","text":"融合线\n光学—SAR 如何对齐、交互、比较？简单拼接哪里失效？","textPreview":"融合线 | 光学—SAR 如何对齐、交互、比较？简单拼接哪里失效？","textChars":31,"textLines":2,"bbox":[656.86,213.33,581.33,172.5]}
+{"kind":"textbox","id":"sh/90vq5kna","slide":10,"name":"Content-Placeholder-9-6","text":"长尾线\nCutMix、ClassMix、Copy-Paste 如何增加稀有类别证据？","textPreview":"长尾线 | CutMix、ClassMix、Copy-Paste 如何增加稀有类别证据？","textChars":42,"textLines":2,"bbox":[41.33,421.73,581.33,172.51]}
+{"kind":"textbox","id":"sh/md4ru5oz","slide":10,"name":"Content-Placeholder-10-7","text":"泛化线\n总体分数之外，跨事件/跨灾种如何划分和报告？","textPreview":"泛化线 | 总体分数之外，跨事件/跨灾种如何划分和报告？","textChars":26,"textLines":2,"bbox":[656.86,421.73,581.33,172.51]}
+{"kind":"shape","id":"sh/ned83ap4","slide":10,"bbox":[42,105,9,28]}
+{"kind":"textbox","id":"sh/sv698j69","slide":10,"text":"检索不是收集标题，而是回答问题","textPreview":"检索不是收集标题，而是回答问题","textChars":15,"textLines":1,"bbox":[60,103,440,34]}
+{"kind":"notes","id":"nt/lnvki3","slide":10,"text":"建议讲法（1:15）\n• 演示如何从两个失败现象拆出四条检索线。每条线都对应论文里的一个论证任务。\n• 不要一开始用完整自然语言问“这个方向的 gap 是什么”；先分别找任务、机制、长尾和泛化证据。\n• 这样做的好处是：即使 AI 漏掉论文，你也能看出缺的是哪一类证据。\n\n[Sources]\n- /Users/haochen/Documents/Development/bright-cmca/latex/main.tex（Related Work）"}
+{"kind":"slide","id":"sl/rijlon","slide":11,"title":"11","textShapes":8}
+{"kind":"textbox","id":"sh/cnahczm1","slide":11,"name":"Slide-Number-Placeholder-3-2","text":"11","textPreview":"11","textChars":2,"textLines":1,"bbox":[1184.18,659.24,54.48,25.33]}
+{"kind":"textbox","id":"sh/bm1gjelw","slide":11,"name":"Title-10-3","text":"检索分三层：先扩召回，再追原文，最后做反证","textPreview":"检索分三层：先扩召回，再追原文，最后做反证","textChars":21,"textLines":1,"bbox":[41.33,36.12,1197.33,109.97]}
+{"kind":"shape","id":"sh/al8za94b","slide":11,"name":"Google-Shape-2259-p159-4","bbox":[35.46,354.2,1285.61,0.03]}
+{"kind":"shape","id":"sh/lcjypo3y","slide":11,"name":"Google-Shape-2260-p159-5","bbox":[35.46,348.58,11.24,11.24]}
+{"kind":"shape","id":"sh/kbahgjmd","slide":11,"name":"Google-Shape-2261-p159-6","bbox":[446.38,348.58,11.24,11.24]}
+{"kind":"shape","id":"sh/zq1gnels","slide":11,"name":"Google-Shape-2262-p159-7","bbox":[858.38,348.58,11.24,11.24]}
+{"kind":"textbox","id":"sh/ypsze947","slide":11,"name":"Content-Placeholder-15-8","text":"第一层","textPreview":"第一层","textChars":3,"textLines":1,"bbox":[41.33,298.51,169.33,27.55]}
+{"kind":"textbox","id":"sh/9g3ito3u","slide":11,"name":"Content-Placeholder-15-9","text":"第二层","textPreview":"第二层","textChars":3,"textLines":1,"bbox":[450.83,298.51,169.33,27.55]}
+{"kind":"textbox","id":"sh/8fuhkjm9","slide":11,"name":"Content-Placeholder-15-10","text":"第三层","textPreview":"第三层","textChars":3,"textLines":1,"bbox":[863.33,298.51,169.33,27.55]}
+{"kind":"textbox","id":"sh/elsrqho3","slide":11,"name":"Text-Placeholder-16-11","text":"核对原文\n下载 PDF，定位任务设置、数据划分、公式、表格与限制。\n输出：证据卡片。","textPreview":"核对原文 | 下载 PDF，定位任务设置、数据划分、公式、表格与限制。 | 输出：证据卡片。","textChars":42,"textLines":3,"bbox":[453.24,401.33,331.35,166.54]}
+{"kind":"textbox","id":"sh/zm18zmpo","slide":11,"name":"Text-Placeholder-16-12","text":"广搜术语\n用 Semantic Scholar / Elicit / Perplexity 找同义词、代表作、引用链。\n输出：20 篇候选，不下结论。","textPreview":"广搜术语 | 用 Semantic Scholar / Elicit / Perplexity 找同义词、代表作、引用链。 | 输出：20 篇候选，不下结论。","textChars":75,"textLines":3,"bbox":[41.98,401.33,331.35,166.54]}
+{"kind":"textbox","id":"sh/0na9sr69","slide":11,"name":"Text-Placeholder-16-13","text":"反向搜索\n专门搜失败案例、负面结果、跨域退化和相反结论。\n输出：边界条件。","textPreview":"反向搜索 | 专门搜失败案例、负面结果、跨域退化和相反结论。 | 输出：边界条件。","textChars":37,"textLines":3,"bbox":[858.57,401.33,331.35,166.54]}
+{"kind":"notes","id":"nt/rijlon","slide":11,"text":"建议讲法（1:20）\n• 第一层允许 AI 快，但只把结果当候选目录；第二层必须回原文；第三层主动找反证。\n• 给一个可复制检索式示例：('building damage assessment' AND optical SAR) AND (cross-attention OR fusion)；再把 augmentation 和 cross-event 分开搜。\n• 实操小技巧：让 AI 为每个关键词给 3 个同义表达，但不要让它编造 DOI。"}
+{"kind":"slide","id":"sl/mgipkk","slide":12,"title":"12","textShapes":8}
+{"kind":"textbox","id":"sh/7etgze9k","slide":12,"name":"Google-Shape-532-p58-2","text":"12","textPreview":"12","textChars":2,"textLines":1,"bbox":[1184.18,659.24,54.48,25.33]}
+{"kind":"textbox","id":"sh/8f2hsja5","slide":12,"name":"Google-Shape-533-p58-3","text":"一篇论文只留一张“证据卡”，避免读完就忘","textPreview":"一篇论文只留一张“证据卡”，避免读完就忘","textChars":20,"textLines":1,"bbox":[41.33,36.17,1197.33,67.64]}
+{"kind":"shape","id":"sh/9gby1orq","slide":12,"name":"Rounded-Rectangle-1-4","bbox":[41.68,350.56,580.99,138.67]}
+{"kind":"textbox","id":"sh/uhkzu9sb","slide":12,"name":"Content-Placeholder-10-5","text":"证据卡内容","textPreview":"证据卡内容","textChars":5,"textLines":1,"bbox":[72.89,376.69,523.56,92.16]}
+{"kind":"textbox","id":"sh/vid03e9g","slide":12,"name":"Content-Placeholder-15-6","text":"主张：类聚焦的 CutMix 有助于困难损伤等级\n设置：光学 BDA；需记录数据、基线、指标\n限制：未处理光学—SAR—标签三元同步","textPreview":"主张：类聚焦的 CutMix 有助于困难损伤等级 | 设置：光学 BDA；需记录数据、基线、指标 | 限制：未处理光学—SAR—标签三元同步","textChars":66,"textLines":3,"bbox":[72.89,506.94,549.78,102.67]}
+{"kind":"shape","id":"sh/wjmhwja1","slide":12,"name":"Rounded-Rectangle-7-7","bbox":[657.3,350.56,580.99,138.67]}
+{"kind":"textbox","id":"sh/hkvi5orm","slide":12,"name":"Content-Placeholder-10-8","text":"给 AI 的输出契约","textPreview":"给 AI 的输出契约","textChars":10,"textLines":1,"bbox":[688.51,376.69,523.56,92.16]}
+{"kind":"textbox","id":"sh/il4zyts7","slide":12,"name":"Content-Placeholder-15-9","text":"只输出原文明确支持的内容\n每条附页码/表号/原句附近上下文\n无法确认写“未找到”，禁止补全","textPreview":"只输出原文明确支持的内容 | 每条附页码/表号/原句附近上下文 | 无法确认写“未找到”，禁止补全","textChars":45,"textLines":3,"bbox":[688.51,506.94,549.78,102.67]}
+{"kind":"textbox","id":"sh/jmd07y9s","slide":12,"name":"Content-Placeholder-15-10","text":"示例：BDANet 的证据卡\nAI 可以先抽取；研究者必须回到原文核对页码、表格和实验设置。\n","textPreview":"示例：BDANet 的证据卡 | AI 可以先抽取；研究者必须回到原文核对页码、表格和实验设置。 |","textChars":47,"textLines":3,"bbox":[42.09,121.52,1197.33,171.05]}
+{"kind":"textbox","id":"sh/rap8ru5s","slide":12,"text":"请把这篇论文整理为：研究问题｜方法机制｜数据与划分｜关键对照｜数字证据｜作者承认的限制｜与我课题的关系。每条必须附页码或表号；无法确认就写“未找到”。","textPreview":"请把这篇论文整理为：研究问题｜方法机制｜数据与划分｜关键对照｜数字证据｜作者承认的限制｜与我课题的关系。每条必须附页码或表号；无法确认就写“未找到”。","textChars":75,"textLines":1,"bbox":[42,285,1197,70]}
+{"kind":"notes","id":"nt/mgipkk","slide":12,"text":"建议讲法（1:30）\n• 现场演示时先展示提示词，再讲左侧卡片。AI 的任务是结构化，不是替你判断论文好不好。\n• 核查顺序：先看表格数字是否存在，再看数据划分是否一致，最后看作者是否真的做了你想引用的结论。\n• 卡片最后一行必须写限制；没有限制的卡片通常只是摘要复述。\n\n[Sources]\n- /Users/haochen/Documents/Development/bright-cmca/latex/main.bbl（shen2022bdanet）\n- /Users/haochen/Documents/Development/bright-cmca/latex/main.tex（Sample-Mixing Augmentation）"}
+{"kind":"slide","id":"sl/uj16it","slide":13,"title":"13","textShapes":3}
+{"kind":"textbox","id":"sh/54b21cnq","slide":13,"name":"Google-Shape-532-p58-2","text":"13","textPreview":"13","textChars":2,"textLines":1,"bbox":[1184.18,659.24,54.48,25.33]}
+{"kind":"textbox","id":"sh/i10jqx4z","slide":13,"name":"Google-Shape-533-p58-3","text":"文献矩阵最终要产出“可防守的 gap”","textPreview":"文献矩阵最终要产出“可防守的 gap”","textChars":19,"textLines":1,"bbox":[41.33,36.12,1197.33,109.97]}
+{"kind":"textbox","id":"sh/329kz25k","slide":13,"name":"Content-Placeholder-15-4","text":"不是：没人做过。  而是：现有机制在这个设置、这个证据要求下还缺什么。\n把相近工作放在同一行比较，gap 会从形容词变成明确的设计决策。","textPreview":"不是：没人做过。  而是：现有机制在这个设置、这个证据要求下还缺什么。 | 把相近工作放在同一行比较，gap 会从形容词变成明确的设计决策。","textChars":68,"textLines":2,"bbox":[42.09,111.02,1197.33,106.27]}
+{"kind":"shape","id":"sh/h0r2xsne","slide":13,"bbox":[35,220,1210,420]}
+{"kind":"shape","id":"sh/ve9kvi5o","slide":13,"bbox":[40,625,1200,30]}
+{"kind":"table","id":"tb/547ip4zu","slide":13,"name":"Google-Shape-644-p93-5","rows":9,"cols":5,"preview":"Column Label | Column Label | Column Label | Column Label | Column Label","bbox":[41.33,236.33,1197.33,412.87]}
+{"kind":"table","id":"tb/32p0nuho","slide":13,"name":"","rows":5,"cols":4,"preview":"研究线 | 已有工作 | 剩余缺口 | 本项目决策","bbox":[42,236,1197,385]}
+{"kind":"notes","id":"nt/uj16it","slide":13,"text":"建议讲法（1:35）\n• 逐行解释“已有工作—剩余缺口—项目决策”，让听众看到方法不是从工具名跳出来的，而是从证据矩阵推出来的。\n• 强调最安全的创新表述不是“first”，而是明确限定任务、设置和证据：在多模态 BDA 的三元同步与跨事件评估下做了什么。\n• 如果某行找不到直接证据，就回到检索层补文献，而不是让 AI 用常识填满。\n\n[Sources]\n- /Users/haochen/Documents/Development/bright-cmca/latex/main.tex（Related Work and Contributions）\n- /Users/haochen/Documents/Development/bright-cmca/latex/main.bbl"}
+{"kind":"slide","id":"sl/h8ydmi","slide":14,"title":"14","textShapes":8}
+{"kind":"textbox","id":"sh/f2p8jeh8","slide":14,"name":"Google-Shape-532-p58-2","text":"14","textPreview":"14","textChars":2,"textLines":1,"bbox":[1184.18,659.24,54.48,25.33]}
+{"kind":"textbox","id":"sh/g3y9cjit","slide":14,"name":"Google-Shape-533-p58-3","text":"案例 3｜让 AI 改“最小接口”，不要重写整个项目","textPreview":"案例 3｜让 AI 改“最小接口”，不要重写整个项目","textChars":26,"textLines":1,"bbox":[41.33,36.12,1197.33,109.97]}
+{"kind":"shape","id":"sh/147qloze","slide":14,"name":"Google-Shape-534-p58-4","bbox":[41.33,213.33,581.33,371.11]}
+{"kind":"shape","id":"sh/6xw76p0r","slide":14,"name":"Content-Placeholder-3-5","bbox":[656.86,213.33,581.33,371.11]}
+{"kind":"shape","id":"sh/ry58fu1c","slide":14,"bbox":[35,175,1210,450]}
+{"kind":"shape","id":"sh/sze98zix","slide":14,"bbox":[42,205,572,320]}
+{"kind":"textbox","id":"sh/t0nqh4ji","slide":14,"text":"CMCA：只替换瓶颈交互","textPreview":"CMCA：只替换瓶颈交互","textChars":12,"textLines":1,"bbox":[60,219,536,28]}
+{"kind":"textbox","id":"sh/qt0rit0v","slide":14,"text":"# Optical asks; SAR answers\nQ = q_proj(opt_feat)\nK = k_proj(reduce(sar_feat))\nV = v_proj(reduce(sar_feat))\nattn = softmax(Q @ K.T * scale)\naligned_sar = attn @ V\nchange = change_proj([aligned_sar, opt_feat])","textPreview":"# Optical asks; SAR answers | Q = q_proj(opt_feat) | K = k_proj(reduce(sar_feat)) | V = v_proj(reduce(sar_feat)) | attn = softmax(Q @ K.T...","textChars":207,"textLines":7,"bbox":[60,255,536,254]}
+{"kind":"shape","id":"sh/bu98ryhg","slide":14,"bbox":[666,205,572,320]}
+{"kind":"textbox","id":"sh/nmt0zeh0","slide":14,"text":"DA-CutMix：只改训练数据","textPreview":"DA-CutMix：只改训练数据","textChars":16,"textLines":1,"bbox":[684,219,536,28]}
+{"kind":"textbox","id":"sh/mlkz69gf","slide":14,"text":"donor = sample(different_event)\nbox = find_patch(\n  damage_pixels >= threshold\n)\npre[box]   = donor_pre[box]\npost[box]  = donor_post[box]\nlabel[box] = donor_label[box]\n# inference path unchanged","textPreview":"donor = sample(different_event) | box = find_patch( |   damage_pixels >= threshold | ) | pre[box]   = donor_pre[box] | post[box]  = donor...","textChars":194,"textLines":8,"bbox":[684,255,536,254]}
+{"kind":"textbox","id":"sh/9ovi1oz6","slide":14,"text":"我给编程 AI 的要求：先列接口与 shape → 只生成最小补丁 → 补一个最小张量测试 → 显存/随机性/推理路径自检","textPreview":"我给编程 AI 的要求：先列接口与 shape → 只生成最小补丁 → 补一个最小张量测试 → 显存/随机性/推理路径自检","textChars":61,"textLines":1,"bbox":[42,553,1197,58]}
+{"kind":"shape","id":"sh/8n218jyl","slide":14,"bbox":[42,152,9,28]}
+{"kind":"textbox","id":"sh/vqd03ehc","slide":14,"text":"代码实践 · 接口优先","textPreview":"代码实践 · 接口优先","textChars":11,"textLines":1,"bbox":[60,150,440,34]}
+{"kind":"notes","id":"nt/h8ydmi","slide":14,"text":"建议讲法（1:55）\n• 先展示左右两个最小接口：模型侧输入输出 shape 不变；数据侧同步替换 pre/post/label，推理路径不变。\n• 可复制的编程提示词：‘先阅读相关类和调用链；列出最小插入点与张量形状；不要改公共 API；提交补丁后运行一个 B=2 的随机张量前向测试。’\n• 人工重点检查三件事：跨模态方向是否与科学假设一致；数据增强有没有破坏标签对齐；随机增强是否记录概率与成功率。\n• 如果 AI 一次改 20 个文件，立即缩小任务；科研代码最怕无法定位增益来源。\n\n[Sources]\n- /Users/haochen/Documents/Development/bright-cmca/bda_benchmark/model/UNetCMCA.py\n- /Users/haochen/Documents/Development/bright-cmca/bda_benchmark/dataset/imutils.py\n- /Users/haochen/Documents/Development/bright-cmca/bda_benchmark/dataset/make_data_loader.py"}
+{"kind":"slide","id":"sl/uihfir","slide":15,"title":"15","textShapes":8}
+{"kind":"textbox","id":"sh/nqt83m94","slide":15,"name":"Slide-Number-Placeholder-3-2","text":"15","textPreview":"15","textChars":2,"textLines":1,"bbox":[1184.18,659.24,54.48,25.33]}
+{"kind":"textbox","id":"sh/or29crq9","slide":15,"name":"Title-10-3","text":"每个科研主张，都必须对应一个清楚的比较","textPreview":"每个科研主张，都必须对应一个清楚的比较","textChars":19,"textLines":1,"bbox":[41.33,36.12,1197.33,109.97]}
+{"kind":"shape","id":"sh/9sva5wru","slide":15,"name":"Google-Shape-2259-p159-4","bbox":[35.46,560.8,1285.61,0.03]}
+{"kind":"shape","id":"sh/elkr6h87","slide":15,"name":"Google-Shape-2260-p159-5","bbox":[35.46,555.18,11.24,11.24]}
+{"kind":"shape","id":"sh/zmt8z29s","slide":15,"name":"Google-Shape-2261-p159-6","bbox":[446.38,555.18,11.24,11.24]}
+{"kind":"shape","id":"sh/0n2987qd","slide":15,"name":"Google-Shape-2262-p159-7","bbox":[858.38,555.18,11.24,11.24]}
+{"kind":"shape","id":"sh/1obq1cry","slide":15,"name":"Rounded-Rectangle-19-8","bbox":[41.33,147.17,374.67,380]}
+{"kind":"textbox","id":"sh/qx0r2x8b","slide":15,"name":"Content-Placeholder-8-9","text":"2 × 2 消融\nBaseline\n+ CMCA\n+ DA-CutMix\n+ 两者\n\n回答：两个模块独立还是互补？","textPreview":"2 × 2 消融 | Baseline | + CMCA | + DA-CutMix | + 两者 |  | 回答：两个模块独立还是互补？","textChars":57,"textLines":7,"bbox":[73.85,189.69,309.64,269.48]}
+{"kind":"shape","id":"sh/ry98v29w","slide":15,"name":"Rounded-Rectangle-21-10","bbox":[452.33,147.17,374.67,380]}
+{"kind":"textbox","id":"sh/bqt4fytg","slide":15,"name":"Content-Placeholder-8-11","text":"6 类骨干\nCNN · Transformer\nSiamese · Recurrent\nDeepLab · Mamba\n\n回答：收益是否依赖单一架构？","textPreview":"6 类骨干 | CNN · Transformer | Siamese · Recurrent | DeepLab · Mamba |  | 回答：收益是否依赖单一架构？","textChars":75,"textLines":6,"bbox":[484.85,189.69,309.64,269.48]}
+{"kind":"shape","id":"sh/qpk36tsv","slide":15,"name":"Rounded-Rectangle-23-12","bbox":[864.83,147.17,374.67,380]}
+{"kind":"textbox","id":"sh/dsvmh8bm","slide":15,"name":"Content-Placeholder-8-13","text":"两种统计口径\n整体测试集 mIoU\n逐事件平均 / 胜出次数\n\n回答：增益是真稳健，还是大事件像素主导？","textPreview":"两种统计口径 | 整体测试集 mIoU | 逐事件平均 / 胜出次数 |  | 回答：增益是真稳健，还是大事件像素主导？","textChars":52,"textLines":5,"bbox":[897.35,189.69,309.64,269.48]}
+{"kind":"textbox","id":"sh/crml83a1","slide":15,"name":"Text-Placeholder-16-14","text":"跨架构","textPreview":"跨架构","textChars":3,"textLines":1,"bbox":[446.38,588.18,272.54,41.15]}
+{"kind":"textbox","id":"sh/zed4jits","slide":15,"name":"Text-Placeholder-16-15","text":"模块因果","textPreview":"模块因果","textChars":4,"textLines":1,"bbox":[41.04,588.18,272.54,41.15]}
+{"kind":"textbox","id":"sh/yd43ads7","slide":15,"name":"Text-Placeholder-16-16","text":"跨事件","textPreview":"跨事件","textChars":3,"textLines":1,"bbox":[863.56,588.18,272.54,41.15]}
+{"kind":"notes","id":"nt/uihfir","slide":15,"text":"建议讲法（1:25）\n• 把论文的三个主要主张一一映射到三类实验；如果一个主张找不到对应比较，就删掉或补实验。\n• AI 可以根据主张生成实验清单，但要让它同时标注：自变量、控制变量、主要指标、停止条件和预期反例。\n• 本案例刻意使用六种骨干，并同时看全局像素与逐事件结果，避免只挑一个好看的数字。\n\n[Sources]\n- /Users/haochen/Documents/Development/bright-cmca/latex/main.tex（Experimental Setup and Ablations）"}
+{"kind":"slide","id":"sl/9zlg4v","slide":16,"title":"16","textShapes":8}
+{"kind":"textbox","id":"sh/i5o7udcb","slide":16,"name":"Slide-Number-Placeholder-3-2","text":"16","textPreview":"16","textChars":2,"textLines":1,"bbox":[1184.18,659.24,54.48,25.33]}
+{"kind":"textbox","id":"sh/5szq5sv2","slide":16,"name":"Title-10-3","text":"结果不是一句“提升了”：总体与逐事件可能讲不同故事","textPreview":"结果不是一句“提升了”：总体与逐事件可能讲不同故事","textChars":25,"textLines":1,"bbox":[41.33,36.12,1197.33,109.97]}
+{"kind":"shape","id":"sh/k7qpwnuh","slide":16,"name":"Rounded-Rectangle-36-4","bbox":[658.48,352.76,271.07,278.9]}
+{"kind":"textbox","id":"sh/7uh872ds","slide":16,"name":"Content-Placeholder-9-5","text":"6 / 6","textPreview":"6 / 6","textChars":5,"textLines":1,"bbox":[683.4,375.85,223.97,121.35]}
+{"kind":"textbox","id":"sh/6t87yxc7","slide":16,"name":"Content-Placeholder-15-6","text":"组合设置的总体 mIoU 均高于基线","textPreview":"组合设置的总体 mIoU 均高于基线","textChars":18,"textLines":1,"bbox":[690.39,532.1,216.98,64.67]}
+{"kind":"shape","id":"sh/twzq9svy","slide":16,"name":"Rounded-Rectangle-39-7","bbox":[968.42,352.76,271.07,278.9]}
+{"kind":"textbox","id":"sh/svqp0nud","slide":16,"name":"Content-Placeholder-9-8","text":"+1.94","textPreview":"+1.94","textChars":5,"textLines":1,"bbox":[993.34,375.85,223.97,121.35]}
+{"kind":"textbox","id":"sh/fy18b2d4","slide":16,"name":"Content-Placeholder-15-9","text":"DeepLabV3Plus 的最大增益（百分点）","textPreview":"DeepLabV3Plus 的最大增益（百分点）","textChars":24,"textLines":1,"bbox":[1000.33,532.1,216.98,64.67]}
+{"kind":"textbox","id":"sh/ux872xcj","slide":16,"name":"Content-Placeholder-2-10","text":"6 个骨干的总体 mIoU：Baseline vs. CMCA + DA-CutMix","textPreview":"6 个骨干的总体 mIoU：Baseline vs. CMCA + DA-CutMix","textChars":43,"textLines":1,"bbox":[657.33,205.31,581.61,104]}
+{"kind":"shape","id":"sh/10jq987m","slide":16,"bbox":[35,122,596,545]}
+{"kind":"textbox","id":"sh/zeh87ypw","slide":16,"text":"关键解释\nDamageFormer：全局最优来自 DA-CutMix 单独使用；某些设置的逐事件平均更稳。\n\n结论应写成“收益受骨干和统计口径影响”，而不是“所有场景一致提升”。","textPreview":"关键解释 | DamageFormer：全局最优来自 DA-CutMix 单独使用；某些设置的逐事件平均更稳。 |  | 结论应写成“收益受骨干和统计口径影响”，而不是“所有场景一致提升”。","textChars":89,"textLines":4,"bbox":[658,164,581,160]}
+{"kind":"chart","id":"ch/87a14fux","slide":16,"name":"","chartType":"line","bbox":[40.51,131.73,581.02,527.51]}
+{"kind":"chart","id":"ch/m58j25cr","slide":16,"name":"","chartType":"bar","bbox":[48,155,565,470]}
+{"kind":"notes","id":"nt/9zlg4v","slide":16,"text":"建议讲法（1:40）\n• 先讲蓝柱整体高于灰柱，再立刻补充例外：组合并不总是每个骨干的单项最优，逐事件平均也可能给出不同排序。\n• 这是 AI 很容易写错的地方：它会把“多数提升”扩写成“稳定提升/显著提升”。必须逐组对照原表。\n• 强调统计口径的意义：全局 mIoU 按所有像素汇总，逐事件平均让小事件获得同等权重。\n\n[Sources]\n- /Users/haochen/Documents/Development/bright-cmca/latex/main.tex（Table: Overall Ablation Results; Per-Event Robustness）\n- /Users/haochen/Documents/Development/bright-cmca/Ablation experiment.xlsx"}
+{"kind":"slide","id":"sl/vnyy1q","slide":17,"title":"17","textShapes":9}
+{"kind":"textbox","id":"sh/q947al8v","slide":17,"name":"Google-Shape-532-p58-2","text":"17","textPreview":"17","textChars":2,"textLines":1,"bbox":[1184.18,659.24,54.48,25.33]}
+{"kind":"textbox","id":"sh/dcfqlgrm","slide":17,"name":"Google-Shape-533-p58-3","text":"案例 4｜画图前先写一句“观众必须看见什么”","textPreview":"案例 4｜画图前先写一句“观众必须看见什么”","textChars":22,"textLines":1,"bbox":[41.33,36.12,1197.33,109.97]}
+{"kind":"textbox","id":"sh/cb69cvq1","slide":17,"name":"Google-Shape-534-p58-4","text":"本页的句子：组合模块在所有骨干上提高总体 mIoU，但收益大小与逐事件稳定性因骨干而异。","textPreview":"本页的句子：组合模块在所有骨干上提高总体 mIoU，但收益大小与逐事件稳定性因骨干而异。","textChars":44,"textLines":1,"bbox":[41.33,180.83,581.33,90.83]}
+{"kind":"textbox","id":"sh/zyx87q9s","slide":17,"name":"Content-Placeholder-10-5","text":"① 主要比较是什么？","textPreview":"① 主要比较是什么？","textChars":10,"textLines":1,"bbox":[828,313.94,410.67,57.61]}
+{"kind":"shape","id":"sh/ydorel87","slide":17,"name":"Google-Shape-340-p61-6","bbox":[788.21,316.55,22.32,22.31]}
+{"kind":"textbox","id":"sh/l0fq90ri","slide":17,"name":"TextBox-11-7","text":"AI 可以写绘图代码、统一字体、输出 SVG/PDF；但图表类型必须由信息任务决定。\n如果一句话写不清，先不要画图。","textPreview":"AI 可以写绘图代码、统一字体、输出 SVG/PDF；但图表类型必须由信息任务决定。 | 如果一句话写不清，先不要画图。","textChars":58,"textLines":2,"bbox":[41.33,313.94,581.33,302.85]}
+{"kind":"textbox","id":"sh/0z69gvqx","slide":17,"name":"Content-Placeholder-10-8","text":"② 基线和单位是什么？","textPreview":"② 基线和单位是什么？","textChars":11,"textLines":1,"bbox":[828,377.94,410.67,57.61]}
+{"kind":"shape","id":"sh/f2d8b698","slide":17,"name":"Google-Shape-340-p61-9","bbox":[788.21,380.55,22.32,22.31]}
+{"kind":"textbox","id":"sh/ehk721sn","slide":17,"name":"Content-Placeholder-10-10","text":"③ 需要显示绝对值还是 Δ？","textPreview":"③ 需要显示绝对值还是 Δ？","textChars":14,"textLines":1,"bbox":[828,442.5,410.67,57.61]}
+{"kind":"shape","id":"sh/8batsnax","slide":17,"name":"Google-Shape-340-p61-11","bbox":[788.21,445.1,22.32,22.31]}
+{"kind":"textbox","id":"sh/9wjulsri","slide":17,"name":"Content-Placeholder-10-12","text":"④ 异常与反例在哪里？","textPreview":"④ 异常与反例在哪里？","textChars":11,"textLines":1,"bbox":[828,506.49,410.67,57.61]}
+{"kind":"shape","id":"sh/m9sbqdsr","slide":17,"name":"Google-Shape-340-p61-13","bbox":[788.21,509.1,22.32,22.31]}
+{"kind":"textbox","id":"sh/na1cji9c","slide":17,"name":"Content-Placeholder-10-14","text":"⑤ 一张图能否回答一个问题？","textPreview":"⑤ 一张图能否回答一个问题？","textChars":14,"textLines":1,"bbox":[828,571.83,410.67,57.61]}
+{"kind":"shape","id":"sh/wzadwnat","slide":17,"name":"Google-Shape-340-p61-15","bbox":[788.21,574.44,22.32,22.31]}
+{"kind":"notes","id":"nt/vnyy1q","slide":17,"text":"建议讲法（1:10）\n• 把上一页的结论句读出来，说明图表只是这句话的证据载体。\n• 实操提示词：把表格列名和目标句给 AI，让它先推荐 2 种图并解释各自会隐藏什么，再让它生成代码。\n• 检查三件事：纵轴是否截断、颜色是否把次要信息抢走、图例是否让人来回寻找。\n\n[Sources]\n- /Users/haochen/Documents/Development/bright-cmca/latex/main.tex（reported metrics and result interpretation）"}
+{"kind":"slide","id":"sl/bxoqk9","slide":18,"title":"18","textShapes":5}
+{"kind":"textbox","id":"sh/4jux43e9","slide":18,"name":"Google-Shape-532-p58-2","text":"18","textPreview":"18","textChars":2,"textLines":1,"bbox":[1184.18,659.24,54.48,25.33]}
+{"kind":"textbox","id":"sh/3ilwvydo","slide":18,"name":"Google-Shape-533-p58-3","text":"原始表格 → 证据图","textPreview":"原始表格 → 证据图","textChars":10,"textLines":1,"bbox":[41.33,36.12,1197.33,109.97]}
+{"kind":"shape","id":"sh/ihcf2tw3","slide":18,"name":"Picture-3-4-backing","bbox":[658.17,41.62,581.6,588.14]}
+{"kind":"textbox","id":"sh/snux83el","slide":18,"name":"Google-Shape-534-p58-5","text":"1 选指标\n围绕主张只保留 mIoU。\n\n2 算差值","textPreview":"1 选指标 | 围绕主张只保留 mIoU。 |  | 2 算差值","textChars":26,"textLines":4,"bbox":[41.33,213.33,581.33,416]}
+{"kind":"shape","id":"sh/rmlwzyd0","slide":18,"bbox":[41,205,581,420]}
+{"kind":"textbox","id":"sh/qlcf6dwf","slide":18,"text":"1  选指标\n围绕主张只保留 mIoU，而不是一次放 8 个指标。\n\n2  算差值\n保留 Baseline 与组合设置，计算百分点变化。\n\n3  留例外\n把 DamageFormer 和逐事件口径的差异写进解释，不藏掉。","textPreview":"1  选指标 | 围绕主张只保留 mIoU，而不是一次放 8 个指标。 |  | 2  算差值 | 保留 Baseline 与组合设置，计算百分点变化。 |  | 3  留例外 | 把 DamageFormer 和逐事件口径的差异写进解释，不藏掉。","textChars":110,"textLines":8,"bbox":[42,214,550,370]}
+{"kind":"shape","id":"sh/tsjepovm","slide":18,"bbox":[635,120,604,510]}
+{"kind":"shape","id":"sh/2psvatcb","slide":18,"bbox":[42,147,9,28]}
+{"kind":"textbox","id":"sh/nq1c3ydw","slide":18,"text":"原始数据保留在表格；幻灯片只展示当前主张所需证据","textPreview":"原始数据保留在表格；幻灯片只展示当前主张所需证据","textChars":24,"textLines":1,"bbox":[60,145,440,34]}
+{"kind":"image","id":"im/obalw32h","slide":18,"name":"Picture-3-4","geometry":"roundRect","alt":"hero placeholder for Picture 3","prompt":"Clean editorial light-blue conceptual image with subtle architectural geometry, ample white space, and no embedded text","isPlaceholder":true,"bbox":[658.17,41.62,581.6,588.14]}
+{"kind":"image","id":"im/18zm1oj6","slide":18,"name":"","geometry":"roundRect","alt":"Ablation workbook overall results table","bbox":[635,120,604,510]}
+{"kind":"notes","id":"nt/bxoqk9","slide":18,"text":"建议讲法（1:20）\n• 右侧是原始工作表视图，信息完整但不适合讲述；左侧展示三次压缩：选指标、算差值、留例外。\n• 让 AI 生成绘图脚本时，要求它同时输出数据核对表：原始单元格、转换公式、图中数值。这样能防止复制错列。\n• 科研画图不等于美化：每一次删除都要说明为什么不影响当前主张。\n\n[Sources]\n- /Users/haochen/Documents/Development/bright-cmca/Ablation experiment.xlsx\n- /Users/haochen/Documents/Development/bright-cmca/tmp/spreadsheet-read/renders/Overall.png"}
+{"kind":"slide","id":"sl/s5t4of","slide":19,"title":"19","textShapes":8}
+{"kind":"textbox","id":"sh/l0j6lsfq","slide":19,"name":"Slide-Number-Placeholder-3-2","text":"19","textPreview":"19","textChars":2,"textLines":1,"bbox":[1184.18,659.24,54.48,25.33]}
+{"kind":"textbox","id":"sh/yx8nadgz","slide":19,"name":"Title-10-3","text":"案例 5｜论文段落用“主张—证据—解释”搭起来","textPreview":"案例 5｜论文段落用“主张—证据—解释”搭起来","textChars":23,"textLines":1,"bbox":[41.33,36.12,1197.33,109.97]}
+{"kind":"shape","id":"sh/zy1ojixk","slide":19,"name":"Google-Shape-2259-p159-4","bbox":[35.46,354.2,1285.61,0.03]}
+{"kind":"shape","id":"sh/8na5gnyh","slide":19,"name":"Google-Shape-2260-p159-5","bbox":[35.46,348.58,11.24,11.24]}
+{"kind":"shape","id":"sh/9oj6psfm","slide":19,"name":"Google-Shape-2261-p159-6","bbox":[446.38,348.58,11.24,11.24]}
+{"kind":"shape","id":"sh/m1snedgb","slide":19,"name":"Google-Shape-2262-p159-7","bbox":[858.38,348.58,11.24,11.24]}
+{"kind":"textbox","id":"sh/nm1onixw","slide":19,"name":"Content-Placeholder-15-8","text":"CLAIM","textPreview":"CLAIM","textChars":5,"textLines":1,"bbox":[41.33,298.51,169.33,27.55]}
+{"kind":"textbox","id":"sh/wru5k7yd","slide":19,"name":"Content-Placeholder-15-9","text":"EVIDENCE","textPreview":"EVIDENCE","textChars":8,"textLines":1,"bbox":[450.83,298.51,169.33,27.55]}
+{"kind":"textbox","id":"sh/xs36tcfy","slide":19,"name":"Content-Placeholder-15-10","text":"WARRANT","textPreview":"WARRANT","textChars":7,"textLines":1,"bbox":[863.33,298.51,169.33,27.55]}
+{"kind":"textbox","id":"sh/14ryxgbm","slide":19,"name":"Text-Placeholder-16-11","text":"证据\nUNet：受损类 IoU 37.48 → 39.30；mIoU 64.74 → 65.39。","textPreview":"证据 | UNet：受损类 IoU 37.48 → 39.30；mIoU 64.74 → 65.39。","textChars":49,"textLines":2,"bbox":[453.24,401.33,331.35,166.54]}
+{"kind":"textbox","id":"sh/03ixoba1","slide":19,"name":"Text-Placeholder-16-12","text":"主张\nCMCA 让跨模态比较更显式，有助于恢复损伤敏感结构线索。","textPreview":"主张 | CMCA 让跨模态比较更显式，有助于恢复损伤敏感结构线索。","textChars":32,"textLines":2,"bbox":[41.98,401.33,331.35,166.54]}
+{"kind":"textbox","id":"sh/fipgvqtg","slide":19,"name":"Text-Placeholder-16-13","text":"解释\n提升集中在受损类，支持“比较结构变化”的机制；但仍需用多骨干与事件级结果限定外推。","textPreview":"解释 | 提升集中在受损类，支持“比较结构变化”的机制；但仍需用多骨干与事件级结果限定外推。","textChars":44,"textLines":2,"bbox":[858.57,401.33,331.35,166.54]}
+{"kind":"notes","id":"nt/s5t4of","slide":19,"text":"建议讲法（1:15）\n• 让听众看到一段结果分析不是‘数字 + 形容词’，而是三步：我主张什么、什么数字支持、为什么这个数字与机制有关。\n• 可复制提示词：‘按 claim-evidence-warrant 重写，不新增任何数字；每个形容词必须能指向表格单元格。’\n• AI 最适合做结构检查：标出只有主张没有证据、只有数字没有解释的句子。\n\n[Sources]\n- /Users/haochen/Documents/Development/bright-cmca/latex/main.tex（UNet ablation discussion）"}
+{"kind":"slide","id":"sl/qgpknb","slide":20,"title":"20","textShapes":4}
+{"kind":"textbox","id":"sh/d0j25wfu","slide":20,"name":"Google-Shape-532-p58-2","text":"20","textPreview":"20","textChars":2,"textLines":1,"bbox":[1184.18,659.24,54.48,25.33]}
+{"kind":"textbox","id":"sh/qxs3uhgj","slide":20,"name":"Google-Shape-533-p58-3","text":"AI 润色的目标：更精确，不是更夸张","textPreview":"AI 润色的目标：更精确，不是更夸张","textChars":18,"textLines":1,"bbox":[41.33,36.12,1197.33,109.97]}
+{"kind":"textbox","id":"sh/by1k3mx4","slide":20,"name":"Google-Shape-534-p58-4","text":"改写前：看起来有力，但不可核验\n“Our method significantly improves performance and generalization across all settings.”\n\n问题：没有数字；‘significantly’ 暗示统计检验；‘all settings’ 与结果不符。","textPreview":"改写前：看起来有力，但不可核验 | “Our method significantly improves performance and generalization across all settings.” |  | 问题：没有数字；‘significantly’ 暗示...","textChars":157,"textLines":4,"bbox":[41.33,213.33,581.33,371.11]}
+{"kind":"textbox","id":"sh/ovals7yd","slide":20,"name":"Content-Placeholder-3-5","text":"改写后：数字、范围、例外都在\n“On UNet, CMCA + DA-CutMix raises mIoU from 64.74% to 66.16% (+1.42 points). The gain is backbone-dependent: for DamageFormer, DA-CutMix alone gives the best global mIoU.”","textPreview":"改写后：数字、范围、例外都在 | “On UNet, CMCA + DA-CutMix raises mIoU from 64.74% to 66.16% (+1.42 points). The gain is backbone-dependent: for DamageF...","textChars":186,"textLines":2,"bbox":[656.86,213.33,581.33,371.11]}
+{"kind":"shape","id":"sh/pwj21cfy","slide":20,"bbox":[41,594,581,8]}
+{"kind":"shape","id":"sh/2983qxg7","slide":20,"bbox":[657,594,581,8]}
+{"kind":"notes","id":"nt/qgpknb","slide":20,"text":"建议讲法（1:30）\n• 先让听众挑错：significantly、generalization、all settings 分别需要什么证据。\n• 再读右侧：它只使用表格已有数字，并主动交代 DamageFormer 的例外，因此结论更窄但更可信。\n• 实操流程：先让 AI 做‘claim audit’，列出每句主张需要的证据；再润色语言；最后人工逐个数字回表格。顺序不要反。\n\n[Sources]\n- /Users/haochen/Documents/Development/bright-cmca/latex/main.tex（Overall Ablation Results discussion）"}
+{"kind":"slide","id":"sl/ke80rh","slide":21,"title":"21","textShapes":6}
+{"kind":"textbox","id":"sh/srel83ep","slide":21,"name":"Slide-Number-Placeholder-1-2","text":"21","textPreview":"21","textChars":2,"textLines":1,"bbox":[1184.17,659.17,54.5,25.33]}
+{"kind":"textbox","id":"sh/rq5kfyx4","slide":21,"name":"Title-2-3","text":"接受 AI 输出前，我固定做四类检查","textPreview":"接受 AI 输出前，我固定做四类检查","textChars":18,"textLines":1,"bbox":[41.33,36.12,1197.33,109.97]}
+{"kind":"textbox","id":"sh/6pw36twj","slide":21,"name":"Content-Placeholder-9-4","text":"引用检查\n论文是否真实？作者、年份、页码、表号是否与原文一致？","textPreview":"引用检查 | 论文是否真实？作者、年份、页码、表号是否与原文一致？","textChars":31,"textLines":2,"bbox":[41.33,213.33,581.33,172.5]}
+{"kind":"textbox","id":"sh/1w7ml8f6","slide":21,"name":"Content-Placeholder-10-5","text":"数据与代码检查\n数字回到原表；代码能跑测试；随机种子、环境与日志可复现。","textPreview":"数据与代码检查 | 数字回到原表；代码能跑测试；随机种子、环境与日志可复现。","textChars":36,"textLines":2,"bbox":[656.86,213.33,581.33,172.5]}
+{"kind":"textbox","id":"sh/gvylc3el","slide":21,"name":"Content-Placeholder-9-6","text":"隐私与权限检查\n未公开数据、审稿材料、个人信息和密钥不直接上传公共模型。","textPreview":"隐私与权限检查 | 未公开数据、审稿材料、个人信息和密钥不直接上传公共模型。","textChars":36,"textLines":2,"bbox":[41.33,421.73,581.33,172.51]}
+{"kind":"textbox","id":"sh/fup4jix0","slide":21,"name":"Content-Placeholder-10-7","text":"作者责任检查\nAI 不署名也不背责；最终论证、引用和表述由作者确认。","textPreview":"作者责任检查 | AI 不署名也不背责；最终论证、引用和表述由作者确认。","textChars":34,"textLines":2,"bbox":[656.86,421.73,581.33,172.51]}
+{"kind":"notes","id":"nt/ke80rh","slide":21,"text":"建议讲法（1:15）\n• 这页不要一带而过。举一个最常见错误：AI 给出一个看似真实的引用，但年份或结论对应不上。\n• 建议建立简单审计记录：关键提示词、输入文件版本、代码提交、生成图表脚本、人工核查者。\n• 如果材料涉及未公开数据或审稿保密，先确认机构和期刊政策，再选择本地/企业环境或完全不上传。"}
+{"kind":"slide","id":"sl/cx6kzf","slide":22,"title":"22","textShapes":7}
+{"kind":"textbox","id":"sh/qp4jq503","slide":22,"name":"Google-Shape-532-p58-2","text":"22","textPreview":"22","textChars":2,"textLines":1,"bbox":[1184.18,659.24,54.48,25.33]}
+{"kind":"textbox","id":"sh/dcfi1kzu","slide":22,"name":"Google-Shape-533-p58-3","text":"我反复复用的不是“神奇提示词”，而是一份任务合同","textPreview":"我反复复用的不是“神奇提示词”，而是一份任务合同","textChars":24,"textLines":1,"bbox":[41.33,36.12,1197.33,109.97]}
+{"kind":"textbox","id":"sh/sr61sfi9","slide":22,"name":"Content-Placeholder-10-4","text":"上下文 + 单一任务","textPreview":"上下文 + 单一任务","textChars":10,"textLines":1,"bbox":[732,249.33,506.67,68]}
+{"kind":"shape","id":"sh/jmd0vahs","slide":22,"name":"Content-Placeholder-10-5","bbox":[509.33,249.33,196,68]}
+{"kind":"textbox","id":"sh/il4zm507","slide":22,"name":"Content-Placeholder-10-6","text":"约束 + 证据边界","textPreview":"约束 + 证据边界","textChars":9,"textLines":1,"bbox":[732,353.33,506.67,68]}
+{"kind":"shape","id":"sh/5ovix0zy","slide":22,"name":"Content-Placeholder-10-7","bbox":[509.33,353.33,196,68]}
+{"kind":"textbox","id":"sh/4nmhofid","slide":22,"name":"Content-Placeholder-10-8","text":"输出格式 + 样例","textPreview":"输出格式 + 样例","textChars":9,"textLines":1,"bbox":[732,457.33,506.67,68]}
+{"kind":"shape","id":"sh/vit0rqhg","slide":22,"name":"Content-Placeholder-10-9","bbox":[509.33,457.33,196,68]}
+{"kind":"textbox","id":"sh/uhkzil0b","slide":22,"name":"Content-Placeholder-10-10","text":"自检 + 失败条件","textPreview":"自检 + 失败条件","textChars":9,"textLines":1,"bbox":[732,562.67,506.67,68]}
+{"kind":"shape","id":"sh/03qp0reh","slide":22,"name":"Content-Placeholder-10-11","bbox":[509.33,562.67,196,68]}
+{"kind":"textbox","id":"sh/14jqtwv2","slide":22,"name":"Google-Shape-534-p58-12","text":"复制这个骨架\n背景：我在做什么，听众/读者是谁。\n任务：这一次只完成一个动作。\n约束：哪些不能改，哪些证据不能越界。\n输入：文件、表格、段落或代码。\n输出：指定格式、长度和字段。\n自检：列出不确定项、反例和验证步骤。\n","textPreview":"复制这个骨架 | 背景：我在做什么，听众/读者是谁。 | 任务：这一次只完成一个动作。 | 约束：哪些不能改，哪些证据不能越界。 | 输入：文件、表格、段落或代码。 | 输出：指定格式、长度和字段。 | 自检：列出不确定项、反例和验证步骤。 |","textChars":109,"textLines":8,"bbox":[41.33,249.33,374.67,380]}
+{"kind":"notes","id":"nt/cx6kzf","slide":22,"text":"建议讲法（1:20）\n• 把它解释成任务合同：告诉 AI 做什么，也告诉它什么情况下应该停下并说不知道。\n• 示范一句自检要求：‘输出后列出三项最可能错误的地方，以及我应该打开哪个文件、哪张表来验证。’\n• 对于复杂任务，用两轮：第一轮只让 AI 复述理解与计划；确认后第二轮才生成结果。"}
+{"kind":"slide","id":"sl/xqr307","slide":23,"title":"AI 把科研循环变快","textShapes":3}
+{"kind":"textbox","id":"sh/5c7q9cby","slide":23,"name":"Title-3-1","text":"AI 把科研循环变快\n人把它变成科学","textPreview":"AI 把科研循环变快 | 人把它变成科学","textChars":18,"textLines":2,"bbox":[41.33,182.55,992,261.57]}
+{"kind":"textbox","id":"sh/ipw7yxsn","slide":23,"name":"Subtitle-4-2","text":"明天就做：选一个最卡的步骤\n用“任务合同”跑 3 轮\n逐条验证后，只保留有证据的结果","textPreview":"明天就做：选一个最卡的步骤 | 用“任务合同”跑 3 轮 | 逐条验证后，只保留有证据的结果","textChars":42,"textLines":3,"bbox":[41.33,522.13,374.67,113.41]}
+{"kind":"textbox","id":"sh/jq5872ts","slide":23,"name":"Subtitle-4-3","text":"带走一句话","textPreview":"带走一句话","textChars":5,"textLines":1,"bbox":[41.33,41.18,169.33,68.15]}
+{"kind":"shape","id":"sh/sfy947ap","slide":23,"bbox":[1038,545,200,12]}
+{"kind":"notes","id":"nt/xqr307","slide":23,"text":"建议讲法（0:50）\n• 回扣开场：AI 的真正价值是缩短观察—假设—实现—验证—表达的循环。\n• 给听众一个具体行动：不要一次改造整个工作流；只挑当前最卡的一步，按任务合同跑三轮，并留下验证记录。\n• 结束时邀请提问：你们可以把自己的研究卡点说出来，我们现场把它改写成一个可验证的 AI 任务。"}

@@ -1,0 +1,1376 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/h8ydmi",
+    "id": "h8ydmi",
+    "slide": 14,
+    "layoutId": "a3589779-6b67-4ddb-87f5-c8c1eeb66327",
+    "layoutName": "Title Slide",
+    "layoutType": "title",
+    "masterLayoutId": "ad4ede6b-54e6-4ad5-9a5a-b133745c6305",
+    "masterLayoutName": "Master",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "theme": {
+    "colorSchemeName": "ChatGPT",
+    "colors": {
+      "accent1": "#156082",
+      "accent2": "#E97132",
+      "accent3": "#196B24",
+      "accent4": "#0F9ED5",
+      "accent5": "#A02B93",
+      "accent6": "#4EA72E",
+      "bg1": "#FFFFFF",
+      "bg2": "#000000",
+      "tx1": "#1F1F1F",
+      "tx2": "#FFFFFF",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#0E2841",
+      "lt2": "#E8E8E8",
+      "hlink": "#467886",
+      "folHlink": "#96607D"
+    },
+    "typefaces": [
+      "Helvetica Neue",
+      "PingFang SC",
+      "SFMono-Regular"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "a3589779-6b67-4ddb-87f5-c8c1eeb66327",
+      "name": "Title Slide",
+      "type": "title",
+      "parentLayoutId": "ad4ede6b-54e6-4ad5-9a5a-b133745c6305",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "ad4ede6b-54e6-4ad5-9a5a-b133745c6305",
+      "name": "Master",
+      "type": "master",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/f2p8jeh8",
+      "id": "1",
+      "name": "Google-Shape-532-p58-2",
+      "bbox": [
+        1184.18,
+        659.24,
+        54.48,
+        25.33
+      ],
+      "composeSource": {
+        "run": 1,
+        "path": "0.0"
+      },
+      "geometry": "rect",
+      "text": "14",
+      "textPreview": "14",
+      "resolvedFontSize": 13.33,
+      "resolvedTextStyle": {
+        "anchor": 3,
+        "fontSize": 13.33,
+        "typeface": "Helvetica Neue",
+        "color": "#000000",
+        "alignment": "right",
+        "verticalAlignment": "bottom",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "14"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "14",
+          "lineSpacingPercent": 112000,
+          "resolvedTextStyle": {
+            "anchor": 3,
+            "fontSize": 13.33,
+            "typeface": "Helvetica Neue",
+            "color": "#000000",
+            "alignment": "right",
+            "verticalAlignment": "bottom",
+            "wrap": "square",
+            "autoFit": "none",
+            "insets": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "14",
+              "fontSize": 14,
+              "typeface": "PingFang SC",
+              "color": "#4B5563"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ]
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/g3y9cjit",
+      "id": "2",
+      "name": "Google-Shape-533-p58-3",
+      "bbox": [
+        41.33,
+        36.12,
+        1197.33,
+        109.97
+      ],
+      "composeSource": {
+        "run": 1,
+        "path": "0.1"
+      },
+      "geometry": "rect",
+      "text": "案例 3｜让 AI 改“最小接口”，不要重写整个项目",
+      "textPreview": "案例 3｜让 AI 改“最小接口”，不要重写整个项目",
+      "resolvedFontSize": 38.67,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 38.67,
+        "typeface": "Helvetica Neue",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "案例 3｜让 AI 改“最小接口”，不要重写整个项目"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "案例 3｜让 AI 改“最小接口”，不要重写整个项目",
+          "lineSpacingPercent": 100000,
+          "resolvedTextStyle": {
+            "anchor": 1,
+            "fontSize": 38.67,
+            "typeface": "Helvetica Neue",
+            "color": "#000000",
+            "alignment": "left",
+            "verticalAlignment": "top",
+            "wrap": "square",
+            "autoFit": "none",
+            "insets": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "案例 3｜让 AI 改“最小接口”，不要重写整个项目",
+              "fontSize": 48,
+              "typeface": "PingFang SC",
+              "color": "#000000",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ]
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/147qloze",
+      "id": "3",
+      "name": "Google-Shape-534-p58-4",
+      "bbox": [
+        41.33,
+        213.33,
+        581.33,
+        371.11
+      ],
+      "composeSource": {
+        "run": 1,
+        "path": "0.2"
+      },
+      "geometry": "rect",
+      "resolvedFontSize": 32,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 32,
+        "typeface": "Helvetica Neue",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          },
+          {
+            "index": 2,
+            "text": ""
+          }
+        ]
+      }
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/6xw76p0r",
+      "id": "4",
+      "name": "Content-Placeholder-3-5",
+      "bbox": [
+        656.86,
+        213.33,
+        581.33,
+        371.11
+      ],
+      "composeSource": {
+        "run": 1,
+        "path": "0.3"
+      },
+      "geometry": "rect",
+      "resolvedFontSize": 32,
+      "resolvedTextStyle": {
+        "fontSize": 32,
+        "typeface": "Helvetica Neue",
+        "color": "#000000",
+        "alignment": "left",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          },
+          {
+            "index": 2,
+            "text": ""
+          }
+        ]
+      }
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ry58fu1c",
+      "id": "5",
+      "bbox": [
+        35,
+        175,
+        1210,
+        450
+      ],
+      "geometry": "rect",
+      "fillColor": "#FFFFFF",
+      "lineColor": "#FFFFFF",
+      "lineWidth": 0
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/sze98zix",
+      "id": "6",
+      "bbox": [
+        42,
+        205,
+        572,
+        320
+      ],
+      "geometry": "roundRect",
+      "fillColor": "#111827",
+      "lineColor": "#111827",
+      "lineWidth": 1
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/t0nqh4ji",
+      "id": "7",
+      "bbox": [
+        60,
+        219,
+        536,
+        28
+      ],
+      "geometry": "rect",
+      "text": "CMCA：只替换瓶颈交互",
+      "textPreview": "CMCA：只替换瓶颈交互",
+      "resolvedFontSize": 20,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 20,
+        "typeface": "PingFang SC",
+        "color": "#6DCBF4",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "CMCA：只替换瓶颈交互"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "CMCA：只替换瓶颈交互",
+          "resolvedTextStyle": {
+            "fontSize": 20,
+            "typeface": "PingFang SC",
+            "color": "#6DCBF4",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "CMCA：只替换瓶颈交互",
+              "fontSize": 20,
+              "typeface": "PingFang SC",
+              "color": "#6DCBF4",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/qt0rit0v",
+      "id": "8",
+      "bbox": [
+        60,
+        255,
+        536,
+        254
+      ],
+      "geometry": "rect",
+      "text": "# Optical asks; SAR answers\nQ = q_proj(opt_feat)\nK = k_proj(reduce(sar_feat))\nV = v_proj(reduce(sar_feat))\nattn = softmax(Q @ K.T * scale)\naligned_sar = attn @ V\nchange = change_proj([aligned_sar, opt_feat])",
+      "textPreview": "# Optical asks; SAR answers | Q = q_proj(opt_feat) | K = k_proj(reduce(sar_feat)) | V = v_proj(reduce(sar_feat)) | attn = softmax(Q @ K.T...",
+      "resolvedFontSize": 16,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 16,
+        "typeface": "SFMono-Regular",
+        "color": "#F9FAFB",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 7,
+        "lines": [
+          {
+            "index": 1,
+            "text": "# Optical asks; SAR answers"
+          },
+          {
+            "index": 2,
+            "text": "Q = q_proj(opt_feat)"
+          },
+          {
+            "index": 3,
+            "text": "K = k_proj(reduce(sar_feat))"
+          },
+          {
+            "index": 4,
+            "text": "V = v_proj(reduce(sar_feat))"
+          },
+          {
+            "index": 5,
+            "text": "attn = softmax(Q @ K.T * scale)"
+          },
+          {
+            "index": 6,
+            "text": "aligned_sar = attn @ V"
+          },
+          {
+            "index": 7,
+            "text": "change = change_proj([aligned_sar, opt_feat])"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "# Optical asks; SAR answers",
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "SFMono-Regular",
+            "color": "#F9FAFB",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "# Optical asks; SAR answers",
+              "fontSize": 16,
+              "typeface": "SFMono-Regular",
+              "color": "#F9FAFB",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "Q = q_proj(opt_feat)",
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "SFMono-Regular",
+            "color": "#F9FAFB",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Q = q_proj(opt_feat)",
+              "fontSize": 16,
+              "typeface": "SFMono-Regular",
+              "color": "#F9FAFB",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 3,
+          "text": "K = k_proj(reduce(sar_feat))",
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "SFMono-Regular",
+            "color": "#F9FAFB",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "K = k_proj(reduce(sar_feat))",
+              "fontSize": 16,
+              "typeface": "SFMono-Regular",
+              "color": "#F9FAFB",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 4,
+          "text": "V = v_proj(reduce(sar_feat))",
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "SFMono-Regular",
+            "color": "#F9FAFB",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "V = v_proj(reduce(sar_feat))",
+              "fontSize": 16,
+              "typeface": "SFMono-Regular",
+              "color": "#F9FAFB",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 5,
+          "text": "attn = softmax(Q @ K.T * scale)",
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "SFMono-Regular",
+            "color": "#F9FAFB",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "attn = softmax(Q @ K.T * scale)",
+              "fontSize": 16,
+              "typeface": "SFMono-Regular",
+              "color": "#F9FAFB",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 6,
+          "text": "aligned_sar = attn @ V",
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "SFMono-Regular",
+            "color": "#F9FAFB",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "aligned_sar = attn @ V",
+              "fontSize": 16,
+              "typeface": "SFMono-Regular",
+              "color": "#F9FAFB",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 7,
+          "text": "change = change_proj([aligned_sar, opt_feat])",
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "SFMono-Regular",
+            "color": "#F9FAFB",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "change = change_proj([aligned_sar, opt_feat])",
+              "fontSize": 16,
+              "typeface": "SFMono-Regular",
+              "color": "#F9FAFB",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/bu98ryhg",
+      "id": "9",
+      "bbox": [
+        666,
+        205,
+        572,
+        320
+      ],
+      "geometry": "roundRect",
+      "fillColor": "#111827",
+      "lineColor": "#111827",
+      "lineWidth": 1
+    },
+    {
+      "order": 10,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/nmt0zeh0",
+      "id": "10",
+      "bbox": [
+        684,
+        219,
+        536,
+        28
+      ],
+      "geometry": "rect",
+      "text": "DA-CutMix：只改训练数据",
+      "textPreview": "DA-CutMix：只改训练数据",
+      "resolvedFontSize": 20,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 20,
+        "typeface": "PingFang SC",
+        "color": "#6DCBF4",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "DA-CutMix：只改训练数据"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "DA-CutMix：只改训练数据",
+          "resolvedTextStyle": {
+            "fontSize": 20,
+            "typeface": "PingFang SC",
+            "color": "#6DCBF4",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "DA-CutMix：只改训练数据",
+              "fontSize": 20,
+              "typeface": "PingFang SC",
+              "color": "#6DCBF4",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 11,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/mlkz69gf",
+      "id": "11",
+      "bbox": [
+        684,
+        255,
+        536,
+        254
+      ],
+      "geometry": "rect",
+      "text": "donor = sample(different_event)\nbox = find_patch(\n  damage_pixels >= threshold\n)\npre[box]   = donor_pre[box]\npost[box]  = donor_post[box]\nlabel[box] = donor_label[box]\n# inference path unchanged",
+      "textPreview": "donor = sample(different_event) | box = find_patch( |   damage_pixels >= threshold | ) | pre[box]   = donor_pre[box] | post[box]  = donor...",
+      "resolvedFontSize": 16,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 16,
+        "typeface": "SFMono-Regular",
+        "color": "#F9FAFB",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 8,
+        "lines": [
+          {
+            "index": 1,
+            "text": "donor = sample(different_event)"
+          },
+          {
+            "index": 2,
+            "text": "box = find_patch("
+          },
+          {
+            "index": 3,
+            "text": "  damage_pixels >= threshold"
+          },
+          {
+            "index": 4,
+            "text": ")"
+          },
+          {
+            "index": 5,
+            "text": "pre[box]   = donor_pre[box]"
+          },
+          {
+            "index": 6,
+            "text": "post[box]  = donor_post[box]"
+          },
+          {
+            "index": 7,
+            "text": "label[box] = donor_label[box]"
+          },
+          {
+            "index": 8,
+            "text": "# inference path unchanged"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "donor = sample(different_event)",
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "SFMono-Regular",
+            "color": "#F9FAFB",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "donor = sample(different_event)",
+              "fontSize": 16,
+              "typeface": "SFMono-Regular",
+              "color": "#F9FAFB",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "box = find_patch(",
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "SFMono-Regular",
+            "color": "#F9FAFB",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "box = find_patch(",
+              "fontSize": 16,
+              "typeface": "SFMono-Regular",
+              "color": "#F9FAFB",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 3,
+          "text": "  damage_pixels >= threshold",
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "SFMono-Regular",
+            "color": "#F9FAFB",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "  damage_pixels >= threshold",
+              "fontSize": 16,
+              "typeface": "SFMono-Regular",
+              "color": "#F9FAFB",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 4,
+          "text": ")",
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "SFMono-Regular",
+            "color": "#F9FAFB",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": ")",
+              "fontSize": 16,
+              "typeface": "SFMono-Regular",
+              "color": "#F9FAFB",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 5,
+          "text": "pre[box]   = donor_pre[box]",
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "SFMono-Regular",
+            "color": "#F9FAFB",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "pre[box]   = donor_pre[box]",
+              "fontSize": 16,
+              "typeface": "SFMono-Regular",
+              "color": "#F9FAFB",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 6,
+          "text": "post[box]  = donor_post[box]",
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "SFMono-Regular",
+            "color": "#F9FAFB",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "post[box]  = donor_post[box]",
+              "fontSize": 16,
+              "typeface": "SFMono-Regular",
+              "color": "#F9FAFB",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 7,
+          "text": "label[box] = donor_label[box]",
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "SFMono-Regular",
+            "color": "#F9FAFB",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "label[box] = donor_label[box]",
+              "fontSize": 16,
+              "typeface": "SFMono-Regular",
+              "color": "#F9FAFB",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 8,
+          "text": "# inference path unchanged",
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "SFMono-Regular",
+            "color": "#F9FAFB",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "# inference path unchanged",
+              "fontSize": 16,
+              "typeface": "SFMono-Regular",
+              "color": "#F9FAFB",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 12,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/9ovi1oz6",
+      "id": "12",
+      "bbox": [
+        42,
+        553,
+        1197,
+        58
+      ],
+      "geometry": "roundRect",
+      "text": "我给编程 AI 的要求：先列接口与 shape → 只生成最小补丁 → 补一个最小张量测试 → 显存/随机性/推理路径自检",
+      "textPreview": "我给编程 AI 的要求：先列接口与 shape → 只生成最小补丁 → 补一个最小张量测试 → 显存/随机性/推理路径自检",
+      "resolvedFontSize": 21,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 21,
+        "typeface": "PingFang SC",
+        "color": "#3D8DFF",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "insets": {
+          "top": 8,
+          "right": 14,
+          "bottom": 8,
+          "left": 14
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "我给编程 AI 的要求：先列接口与 shape → 只生成最小补丁 → 补一个最小张量测试 → 显存/随机性/推理路径自检"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "我给编程 AI 的要求：先列接口与 shape → 只生成最小补丁 → 补一个最小张量测试 → 显存/随机性/推理路径自检",
+          "resolvedTextStyle": {
+            "fontSize": 21,
+            "typeface": "PingFang SC",
+            "color": "#3D8DFF",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "我给编程 AI 的要求：先列接口与 shape → 只生成最小补丁 → 补一个最小张量测试 → 显存/随机性/推理路径自检",
+              "fontSize": 21,
+              "typeface": "PingFang SC",
+              "color": "#3D8DFF",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "fillColor": "#EDF5FF",
+      "lineColor": "#D0EDFA",
+      "lineWidth": 1
+    },
+    {
+      "order": 13,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/8n218jyl",
+      "id": "13",
+      "bbox": [
+        42,
+        152,
+        9,
+        28
+      ],
+      "geometry": "rect",
+      "fillColor": "#3D8DFF",
+      "lineColor": "#3D8DFF",
+      "lineWidth": 0
+    },
+    {
+      "order": 14,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/vqd03ehc",
+      "id": "14",
+      "bbox": [
+        60,
+        150,
+        440,
+        34
+      ],
+      "geometry": "rect",
+      "text": "代码实践 · 接口优先",
+      "textPreview": "代码实践 · 接口优先",
+      "resolvedFontSize": 18,
+      "resolvedTextStyle": {
+        "fontSize": 18,
+        "typeface": "PingFang SC",
+        "color": "#3D8DFF",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "代码实践 · 接口优先"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "代码实践 · 接口优先",
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "typeface": "PingFang SC",
+            "color": "#3D8DFF",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "代码实践 · 接口优先",
+              "fontSize": 18,
+              "typeface": "PingFang SC",
+              "color": "#3D8DFF",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    }
+  ],
+  "composeRuns": [
+    {
+      "index": 1,
+      "frame": {
+        "left": 0,
+        "top": 0,
+        "width": 1280,
+        "height": 720
+      },
+      "baseUnit": 1,
+      "root": {
+        "path": "0",
+        "kind": "layers",
+        "name": "codex-grid-layout-library#slide-05",
+        "requestedSize": {
+          "width": {
+            "mode": "fill",
+            "value": 1
+          },
+          "height": {
+            "mode": "fill",
+            "value": 1
+          }
+        },
+        "intrinsicSize": {
+          "width": 1238.66,
+          "height": 684.57
+        },
+        "frame": {
+          "left": 0,
+          "top": 0,
+          "width": 1280,
+          "height": 720
+        },
+        "children": [
+          {
+            "path": "0.0",
+            "kind": "text",
+            "name": "Google-Shape-532-p58-2",
+            "position": {
+              "left": 1184.18,
+              "top": 659.24
+            },
+            "requestedSize": {
+              "width": {
+                "mode": "fixed",
+                "value": 54.48
+              },
+              "height": {
+                "mode": "fixed",
+                "value": 25.33
+              }
+            },
+            "intrinsicSize": {
+              "width": 54.48,
+              "height": 25.33
+            },
+            "frame": {
+              "left": 1184.18,
+              "top": 659.24,
+              "width": 54.48,
+              "height": 25.33
+            },
+            "snappedFrame": {
+              "left": 1184.18,
+              "top": 659.24,
+              "width": 54.48,
+              "height": 25.33
+            },
+            "children": [],
+            "text": "14",
+            "transform": "none",
+            "element": {
+              "aid": "sh/f2p8jeh8",
+              "id": "1",
+              "kind": "shape"
+            }
+          },
+          {
+            "path": "0.1",
+            "kind": "text",
+            "name": "Google-Shape-533-p58-3",
+            "position": {
+              "left": 41.33,
+              "top": 36.12
+            },
+            "requestedSize": {
+              "width": {
+                "mode": "fixed",
+                "value": 1197.33
+              },
+              "height": {
+                "mode": "fixed",
+                "value": 109.97
+              }
+            },
+            "intrinsicSize": {
+              "width": 1197.33,
+              "height": 109.97
+            },
+            "frame": {
+              "left": 41.33,
+              "top": 36.12,
+              "width": 1197.33,
+              "height": 109.97
+            },
+            "snappedFrame": {
+              "left": 41.33,
+              "top": 36.12,
+              "width": 1197.33,
+              "height": 109.97
+            },
+            "children": [],
+            "text": "案例 3｜让 AI 改“最小接口”，不要重写整个项目",
+            "transform": "none",
+            "element": {
+              "aid": "sh/g3y9cjit",
+              "id": "2",
+              "kind": "shape"
+            }
+          },
+          {
+            "path": "0.2",
+            "kind": "text",
+            "name": "Google-Shape-534-p58-4",
+            "position": {
+              "left": 41.33,
+              "top": 213.33
+            },
+            "requestedSize": {
+              "width": {
+                "mode": "fixed",
+                "value": 581.33
+              },
+              "height": {
+                "mode": "fixed",
+                "value": 371.11
+              }
+            },
+            "intrinsicSize": {
+              "width": 581.33,
+              "height": 371.11
+            },
+            "frame": {
+              "left": 41.33,
+              "top": 213.33,
+              "width": 581.33,
+              "height": 371.11
+            },
+            "snappedFrame": {
+              "left": 41.33,
+              "top": 213.33,
+              "width": 581.33,
+              "height": 371.11
+            },
+            "children": [],
+            "text": "\n",
+            "transform": "none",
+            "element": {
+              "aid": "sh/147qloze",
+              "id": "3",
+              "kind": "shape"
+            }
+          },
+          {
+            "path": "0.3",
+            "kind": "text",
+            "name": "Content-Placeholder-3-5",
+            "position": {
+              "left": 656.86,
+              "top": 213.33
+            },
+            "requestedSize": {
+              "width": {
+                "mode": "fixed",
+                "value": 581.33
+              },
+              "height": {
+                "mode": "fixed",
+                "value": 371.11
+              }
+            },
+            "intrinsicSize": {
+              "width": 581.33,
+              "height": 371.11
+            },
+            "frame": {
+              "left": 656.86,
+              "top": 213.33,
+              "width": 581.33,
+              "height": 371.11
+            },
+            "snappedFrame": {
+              "left": 656.86,
+              "top": 213.33,
+              "width": 581.33,
+              "height": 371.11
+            },
+            "children": [],
+            "text": "\n",
+            "transform": "none",
+            "element": {
+              "aid": "sh/6xw76p0r",
+              "id": "4",
+              "kind": "shape"
+            }
+          }
+        ],
+        "padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        },
+        "alignItems": "stretch",
+        "justifyItems": "stretch",
+        "contentFrame": {
+          "left": 0,
+          "top": 0,
+          "width": 1280,
+          "height": 720
+        },
+        "items": [
+          {
+            "path": "0.0",
+            "frame": {
+              "left": 1184.18,
+              "top": 659.24,
+              "width": 54.48,
+              "height": 25.33
+            }
+          },
+          {
+            "path": "0.1",
+            "frame": {
+              "left": 41.33,
+              "top": 36.12,
+              "width": 1197.33,
+              "height": 109.97
+            }
+          },
+          {
+            "path": "0.2",
+            "frame": {
+              "left": 41.33,
+              "top": 213.33,
+              "width": 581.33,
+              "height": 371.11
+            }
+          },
+          {
+            "path": "0.3",
+            "frame": {
+              "left": 656.86,
+              "top": 213.33,
+              "width": 581.33,
+              "height": 371.11
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

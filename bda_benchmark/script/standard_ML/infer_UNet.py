@@ -111,6 +111,7 @@ class Inference:
         dataset = MultimodalDamageAssessmentDatset(
             args.test_dataset_path, args.test_data_list,
             1024, None, "test", suffix=".tif",
+            modality_mode=args.modality_mode,
         )
         self.test_loader = DataLoader(dataset, batch_size=1, num_workers=1, drop_last=False)
 
@@ -287,6 +288,9 @@ if __name__ == "__main__":
     parser.add_argument("--test_dataset_path", type=str, required=True)
     parser.add_argument("--test_data_list_path", type=str, required=True)
     parser.add_argument("--output_dir", type=str, required=True)
+    parser.add_argument("--modality_mode", type=str, default="both",
+                        choices=["both", "optical_only", "sar_only", "no_optical", "no_sar"],
+                        help="Modality ablation mode for inference.")
     parser.add_argument(
         "--device",
         type=str,
