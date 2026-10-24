@@ -32,6 +32,7 @@ SAVE_DIR = os.path.join(ROOT, "checkpoints", "unet_dacutmix")
 TRAIN_SCRIPT = os.path.join(BDA_ROOT, "script", "standard_ML", "train_UNet.py")
 
 DEVICE = os.environ.get("BRIGHT_DEVICE", "cuda:0")
+SEED = os.environ.get("SEED", "0")
 
 os.makedirs(SAVE_DIR, exist_ok=True)
 
@@ -93,5 +94,6 @@ run([
     "--pin_memory",
     "--persistent_workers",
     "--prefetch_factor", "2",
+    "--seed", SEED,
     "--device", DEVICE,
 ])

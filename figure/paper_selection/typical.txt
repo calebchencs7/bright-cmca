@@ -1,0 +1,14 @@
+bata-explosion_00000077
+beirut-explosion_00000018
+congo-volcano_00000100
+haiti-earthquake_00000010
+hawaii-wildfire_00000046
+la_palma-volcano_00000494
+libya-flood_00000014
+marshall-wildfire_00000037
+mexico-hurricane_00000152
+morocco-earthquake_00000309
+myanmar-hurricane_00000046
+noto-earthquake_00000049
+turkey-earthquake_00000931
+ukraine-conflict_00000012

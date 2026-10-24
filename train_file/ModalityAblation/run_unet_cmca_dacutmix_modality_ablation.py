@@ -15,6 +15,7 @@ TRAIN_SCRIPT = os.path.join(BDA_ROOT, "script", "standard_ML", "train_UNet.py")
 
 MODALITY_MODE = os.environ.get("BRIGHT_MODALITY_MODE", "optical_only").lower()
 DEVICE = os.environ.get("BRIGHT_DEVICE", "cuda:0")
+SEED = os.environ.get("SEED", "0")
 
 SAVE_DIR = os.path.join(
     ROOT,
@@ -80,5 +81,6 @@ run([
     "--pin_memory",
     "--persistent_workers",
     "--prefetch_factor", "2",
+    "--seed", SEED,
     "--device", DEVICE,
 ])

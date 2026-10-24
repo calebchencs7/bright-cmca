@@ -21,6 +21,7 @@ MODEL_TYPE = os.environ.get("BRIGHT_MODEL_TYPE", "UNetCMCA")
 SAVE_NAME = os.environ.get("BRIGHT_SAVE_NAME", "unet_cmca_dacutmix")
 MODALITY_MODE = os.environ.get("BRIGHT_MODALITY_MODE", "optical_only")
 DEVICE = os.environ.get("BRIGHT_DEVICE", "cuda:0")
+SEED = os.environ.get("SEED", "0")
 
 SAVE_DIR = os.path.join(
     ROOT, "checkpoints", "modality_ablation", SAVE_NAME, MODALITY_MODE
@@ -82,5 +83,6 @@ run([
     "--pin_memory",
     "--persistent_workers",
     "--prefetch_factor", "2",
+    "--seed", SEED,
     "--device", DEVICE,
 ])

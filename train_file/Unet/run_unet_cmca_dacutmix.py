@@ -32,6 +32,7 @@ SAVE_DIR = os.path.join(ROOT, "checkpoints", "unet_cmca_dacutmix")
 TRAIN_SCRIPT = os.path.join(BDA_ROOT, "script", "standard_ML", "train_UNet.py")
 
 DEVICE = os.environ.get("BRIGHT_DEVICE", "cuda:0")
+SEED = os.environ.get("SEED", "0")
 
 os.makedirs(SAVE_DIR, exist_ok=True)
 
@@ -74,7 +75,7 @@ run([
     # DACutMix configuration
     "--damage_class_ids", "2,3",
     "--use_dacutmix",
-    "--dacutmix_prob", "0.25",
+    "--dacutmix_prob", "0.30",
     "--dacutmix_min_damage_pixels", "200",
     "--dacutmix_min_damage_ratio", "0.05",
     "--dacutmix_patch_min_ratio", "0.12",
@@ -93,5 +94,6 @@ run([
     "--pin_memory",
     "--persistent_workers",
     "--prefetch_factor", "2",
+    "--seed", SEED,
     "--device", DEVICE,
 ])

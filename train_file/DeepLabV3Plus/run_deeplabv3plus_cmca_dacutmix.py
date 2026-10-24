@@ -14,6 +14,7 @@ SAVE_DIR = os.path.join(ROOT, "checkpoints", "deeplabv3plus_cmca_dacutmix")
 TRAIN_SCRIPT = os.path.join(BDA_ROOT, "script", "standard_ML", "train_UNet.py")
 
 DEVICE = os.environ.get("BRIGHT_DEVICE", "cuda:0")
+SEED = os.environ.get("SEED", "0")
 
 os.makedirs(SAVE_DIR, exist_ok=True)
 
@@ -38,9 +39,9 @@ run([
     "--test_dataset_path", DATA_PATH,
     "--test_data_list_path", os.path.join(SPLIT_DIR, "test_set.txt"),
 
-    "--train_batch_size", "4",
-    "--eval_batch_size", "2",
-    "--num_workers", "8",
+    "--train_batch_size", "16",
+    "--eval_batch_size", "4",
+    "--num_workers", "16",
     "--crop_size", "640",
     "--max_iters", "800000",
     "--learning_rate", "1e-4",
@@ -69,5 +70,6 @@ run([
     "--pin_memory",
     "--persistent_workers",
     "--prefetch_factor", "2",
+    "--seed", SEED,
     "--device", DEVICE,
 ])

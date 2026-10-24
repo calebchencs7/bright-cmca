@@ -1,0 +1,181 @@
+<!doctype html><meta charset="utf-8"><title>BRIGHT sample selection</title>
+<style>body{font:15px Arial;margin:20px}header{position:sticky;top:0;background:white;
+padding:12px;z-index:1}article{margin:24px 0;border-bottom:1px solid #ccc;padding-bottom:12px}
+img{width:100%}.titles{display:grid;grid-template-columns:repeat(9,1fr);text-align:center;
+font-size:12px;margin:8px 0}button,input{padding:8px}label{font-weight:bold}</style>
+<header><b>BRIGHT: CMCA + DACutMix</b> · <span id="count">0 selected</span>
+<button onclick="download()">Download selected.txt</button>
+<input placeholder="Filter sample ID / event" oninput="filter(this.value)">
+<p>Select representative samples; click a preview to enlarge. Order follows this gallery.</p>
+</header><article data-id="bata-explosion_00000058"><label><input type="checkbox" value="bata-explosion_00000058"> bata-explosion_00000058</label> score=0.186; worst model=0.181; damage pixels=2563<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000000.png" target="_blank"><img loading="lazy" src="previews/000000.png"></a></article>
+<article data-id="bata-explosion_00000084"><label><input type="checkbox" value="bata-explosion_00000084"> bata-explosion_00000084</label> score=0.184; worst model=0.150; damage pixels=2175<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000001.png" target="_blank"><img loading="lazy" src="previews/000001.png"></a></article>
+<article data-id="bata-explosion_00000046"><label><input type="checkbox" value="bata-explosion_00000046"> bata-explosion_00000046</label> score=0.183; worst model=0.181; damage pixels=807<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000002.png" target="_blank"><img loading="lazy" src="previews/000002.png"></a></article>
+<article data-id="beirut-explosion_00000030"><label><input type="checkbox" value="beirut-explosion_00000030"> beirut-explosion_00000030</label> score=0.181; worst model=0.044; damage pixels=337555<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000003.png" target="_blank"><img loading="lazy" src="previews/000003.png"></a></article>
+<article data-id="beirut-explosion_00000005"><label><input type="checkbox" value="beirut-explosion_00000005"> beirut-explosion_00000005</label> score=0.127; worst model=0.014; damage pixels=6203<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000004.png" target="_blank"><img loading="lazy" src="previews/000004.png"></a></article>
+<article data-id="beirut-explosion_00000018"><label><input type="checkbox" value="beirut-explosion_00000018"> beirut-explosion_00000018</label> score=0.071; worst model=0.012; damage pixels=310476<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000005.png" target="_blank"><img loading="lazy" src="previews/000005.png"></a></article>
+<article data-id="congo-volcano_00000043"><label><input type="checkbox" value="congo-volcano_00000043"> congo-volcano_00000043</label> score=0.605; worst model=0.318; damage pixels=3170<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000006.png" target="_blank"><img loading="lazy" src="previews/000006.png"></a></article>
+<article data-id="congo-volcano_00000085"><label><input type="checkbox" value="congo-volcano_00000085"> congo-volcano_00000085</label> score=0.366; worst model=0.322; damage pixels=224279<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000007.png" target="_blank"><img loading="lazy" src="previews/000007.png"></a></article>
+<article data-id="congo-volcano_00000100"><label><input type="checkbox" value="congo-volcano_00000100"> congo-volcano_00000100</label> score=0.326; worst model=0.263; damage pixels=33126<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000008.png" target="_blank"><img loading="lazy" src="previews/000008.png"></a></article>
+<article data-id="haiti-earthquake_00000061"><label><input type="checkbox" value="haiti-earthquake_00000061"> haiti-earthquake_00000061</label> score=0.180; worst model=0.168; damage pixels=1774<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000009.png" target="_blank"><img loading="lazy" src="previews/000009.png"></a></article>
+<article data-id="haiti-earthquake_00000005"><label><input type="checkbox" value="haiti-earthquake_00000005"> haiti-earthquake_00000005</label> score=0.175; worst model=0.168; damage pixels=4208<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000010.png" target="_blank"><img loading="lazy" src="previews/000010.png"></a></article>
+<article data-id="haiti-earthquake_00000024"><label><input type="checkbox" value="haiti-earthquake_00000024"> haiti-earthquake_00000024</label> score=0.165; worst model=0.160; damage pixels=1001<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000011.png" target="_blank"><img loading="lazy" src="previews/000011.png"></a></article>
+<article data-id="hawaii-wildfire_00000058"><label><input type="checkbox" value="hawaii-wildfire_00000058"> hawaii-wildfire_00000058</label> score=0.523; worst model=0.361; damage pixels=179281<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000012.png" target="_blank"><img loading="lazy" src="previews/000012.png"></a></article>
+<article data-id="hawaii-wildfire_00000003"><label><input type="checkbox" value="hawaii-wildfire_00000003"> hawaii-wildfire_00000003</label> score=0.454; worst model=0.424; damage pixels=262984<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000013.png" target="_blank"><img loading="lazy" src="previews/000013.png"></a></article>
+<article data-id="hawaii-wildfire_00000014"><label><input type="checkbox" value="hawaii-wildfire_00000014"> hawaii-wildfire_00000014</label> score=0.446; worst model=0.421; damage pixels=113985<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000014.png" target="_blank"><img loading="lazy" src="previews/000014.png"></a></article>
+<article data-id="la_palma-volcano_00000567"><label><input type="checkbox" value="la_palma-volcano_00000567"> la_palma-volcano_00000567</label> score=0.946; worst model=0.942; damage pixels=388543<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000015.png" target="_blank"><img loading="lazy" src="previews/000015.png"></a></article>
+<article data-id="la_palma-volcano_00000595"><label><input type="checkbox" value="la_palma-volcano_00000595"> la_palma-volcano_00000595</label> score=0.938; worst model=0.931; damage pixels=462973<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000016.png" target="_blank"><img loading="lazy" src="previews/000016.png"></a></article>
+<article data-id="la_palma-volcano_00000613"><label><input type="checkbox" value="la_palma-volcano_00000613"> la_palma-volcano_00000613</label> score=0.832; worst model=0.746; damage pixels=5439<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000017.png" target="_blank"><img loading="lazy" src="previews/000017.png"></a></article>
+<article data-id="libya-flood_00000036"><label><input type="checkbox" value="libya-flood_00000036"> libya-flood_00000036</label> score=0.454; worst model=0.308; damage pixels=277913<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000018.png" target="_blank"><img loading="lazy" src="previews/000018.png"></a></article>
+<article data-id="libya-flood_00000023"><label><input type="checkbox" value="libya-flood_00000023"> libya-flood_00000023</label> score=0.353; worst model=0.241; damage pixels=531377<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000019.png" target="_blank"><img loading="lazy" src="previews/000019.png"></a></article>
+<article data-id="libya-flood_00000010"><label><input type="checkbox" value="libya-flood_00000010"> libya-flood_00000010</label> score=0.349; worst model=0.234; damage pixels=97282<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000020.png" target="_blank"><img loading="lazy" src="previews/000020.png"></a></article>
+<article data-id="marshall-wildfire_00000060"><label><input type="checkbox" value="marshall-wildfire_00000060"> marshall-wildfire_00000060</label> score=0.414; worst model=0.259; damage pixels=25664<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000021.png" target="_blank"><img loading="lazy" src="previews/000021.png"></a></article>
+<article data-id="marshall-wildfire_00000045"><label><input type="checkbox" value="marshall-wildfire_00000045"> marshall-wildfire_00000045</label> score=0.280; worst model=0.210; damage pixels=26247<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000022.png" target="_blank"><img loading="lazy" src="previews/000022.png"></a></article>
+<article data-id="marshall-wildfire_00000064"><label><input type="checkbox" value="marshall-wildfire_00000064"> marshall-wildfire_00000064</label> score=0.243; worst model=0.167; damage pixels=9683<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000023.png" target="_blank"><img loading="lazy" src="previews/000023.png"></a></article>
+<article data-id="mexico-hurricane_00000084"><label><input type="checkbox" value="mexico-hurricane_00000084"> mexico-hurricane_00000084</label> score=0.681; worst model=0.578; damage pixels=5733<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000024.png" target="_blank"><img loading="lazy" src="previews/000024.png"></a></article>
+<article data-id="mexico-hurricane_00000050"><label><input type="checkbox" value="mexico-hurricane_00000050"> mexico-hurricane_00000050</label> score=0.624; worst model=0.348; damage pixels=21619<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000025.png" target="_blank"><img loading="lazy" src="previews/000025.png"></a></article>
+<article data-id="mexico-hurricane_00000105"><label><input type="checkbox" value="mexico-hurricane_00000105"> mexico-hurricane_00000105</label> score=0.552; worst model=0.532; damage pixels=118370<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000026.png" target="_blank"><img loading="lazy" src="previews/000026.png"></a></article>
+<article data-id="morocco-earthquake_00000354"><label><input type="checkbox" value="morocco-earthquake_00000354"> morocco-earthquake_00000354</label> score=0.195; worst model=0.189; damage pixels=840<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000027.png" target="_blank"><img loading="lazy" src="previews/000027.png"></a></article>
+<article data-id="morocco-earthquake_00000422"><label><input type="checkbox" value="morocco-earthquake_00000422"> morocco-earthquake_00000422</label> score=0.189; worst model=0.183; damage pixels=1781<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000028.png" target="_blank"><img loading="lazy" src="previews/000028.png"></a></article>
+<article data-id="morocco-earthquake_00000423"><label><input type="checkbox" value="morocco-earthquake_00000423"> morocco-earthquake_00000423</label> score=0.159; worst model=0.143; damage pixels=1982<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000029.png" target="_blank"><img loading="lazy" src="previews/000029.png"></a></article>
+<article data-id="myanmar-hurricane_00000104"><label><input type="checkbox" value="myanmar-hurricane_00000104"> myanmar-hurricane_00000104</label> score=0.196; worst model=0.125; damage pixels=23211<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000030.png" target="_blank"><img loading="lazy" src="previews/000030.png"></a></article>
+<article data-id="myanmar-hurricane_00000100"><label><input type="checkbox" value="myanmar-hurricane_00000100"> myanmar-hurricane_00000100</label> score=0.187; worst model=0.076; damage pixels=24289<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000031.png" target="_blank"><img loading="lazy" src="previews/000031.png"></a></article>
+<article data-id="myanmar-hurricane_00000112"><label><input type="checkbox" value="myanmar-hurricane_00000112"> myanmar-hurricane_00000112</label> score=0.172; worst model=0.136; damage pixels=9580<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000032.png" target="_blank"><img loading="lazy" src="previews/000032.png"></a></article>
+<article data-id="noto-earthquake_00000061"><label><input type="checkbox" value="noto-earthquake_00000061"> noto-earthquake_00000061</label> score=0.142; worst model=0.109; damage pixels=660<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000033.png" target="_blank"><img loading="lazy" src="previews/000033.png"></a></article>
+<article data-id="noto-earthquake_00000040"><label><input type="checkbox" value="noto-earthquake_00000040"> noto-earthquake_00000040</label> score=0.137; worst model=0.104; damage pixels=3405<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000034.png" target="_blank"><img loading="lazy" src="previews/000034.png"></a></article>
+<article data-id="noto-earthquake_00000051"><label><input type="checkbox" value="noto-earthquake_00000051"> noto-earthquake_00000051</label> score=0.114; worst model=0.109; damage pixels=3537<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000035.png" target="_blank"><img loading="lazy" src="previews/000035.png"></a></article>
+<article data-id="turkey-earthquake_00000398"><label><input type="checkbox" value="turkey-earthquake_00000398"> turkey-earthquake_00000398</label> score=0.484; worst model=0.364; damage pixels=6864<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000036.png" target="_blank"><img loading="lazy" src="previews/000036.png"></a></article>
+<article data-id="turkey-earthquake_00000377"><label><input type="checkbox" value="turkey-earthquake_00000377"> turkey-earthquake_00000377</label> score=0.472; worst model=0.370; damage pixels=8001<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000037.png" target="_blank"><img loading="lazy" src="previews/000037.png"></a></article>
+<article data-id="turkey-earthquake_00000215"><label><input type="checkbox" value="turkey-earthquake_00000215"> turkey-earthquake_00000215</label> score=0.417; worst model=0.358; damage pixels=13033<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000038.png" target="_blank"><img loading="lazy" src="previews/000038.png"></a></article>
+<article data-id="ukraine-conflict_00000395"><label><input type="checkbox" value="ukraine-conflict_00000395"> ukraine-conflict_00000395</label> score=0.576; worst model=0.552; damage pixels=188898<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000039.png" target="_blank"><img loading="lazy" src="previews/000039.png"></a></article>
+<article data-id="ukraine-conflict_00000286"><label><input type="checkbox" value="ukraine-conflict_00000286"> ukraine-conflict_00000286</label> score=0.509; worst model=0.392; damage pixels=54746<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000040.png" target="_blank"><img loading="lazy" src="previews/000040.png"></a></article>
+<article data-id="ukraine-conflict_00000250"><label><input type="checkbox" value="ukraine-conflict_00000250"> ukraine-conflict_00000250</label> score=0.501; worst model=0.388; damage pixels=240129<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000041.png" target="_blank"><img loading="lazy" src="previews/000041.png"></a></article>
+<article data-id="bata-explosion_00000077"><label><input type="checkbox" value="bata-explosion_00000077"> bata-explosion_00000077</label> score=0.161; worst model=0.151; damage pixels=920<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000042.png" target="_blank"><img loading="lazy" src="previews/000042.png"></a></article>
+<article data-id="haiti-earthquake_00000010"><label><input type="checkbox" value="haiti-earthquake_00000010"> haiti-earthquake_00000010</label> score=0.150; worst model=0.144; damage pixels=1045<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000043.png" target="_blank"><img loading="lazy" src="previews/000043.png"></a></article>
+<article data-id="hawaii-wildfire_00000046"><label><input type="checkbox" value="hawaii-wildfire_00000046"> hawaii-wildfire_00000046</label> score=0.324; worst model=0.303; damage pixels=151321<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000044.png" target="_blank"><img loading="lazy" src="previews/000044.png"></a></article>
+<article data-id="la_palma-volcano_00000494"><label><input type="checkbox" value="la_palma-volcano_00000494"> la_palma-volcano_00000494</label> score=0.496; worst model=0.295; damage pixels=50866<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000045.png" target="_blank"><img loading="lazy" src="previews/000045.png"></a></article>
+<article data-id="libya-flood_00000014"><label><input type="checkbox" value="libya-flood_00000014"> libya-flood_00000014</label> score=0.277; worst model=0.202; damage pixels=656466<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000046.png" target="_blank"><img loading="lazy" src="previews/000046.png"></a></article>
+<article data-id="marshall-wildfire_00000037"><label><input type="checkbox" value="marshall-wildfire_00000037"> marshall-wildfire_00000037</label> score=0.166; worst model=0.159; damage pixels=1481<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000047.png" target="_blank"><img loading="lazy" src="previews/000047.png"></a></article>
+<article data-id="mexico-hurricane_00000152"><label><input type="checkbox" value="mexico-hurricane_00000152"> mexico-hurricane_00000152</label> score=0.293; worst model=0.135; damage pixels=39543<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000048.png" target="_blank"><img loading="lazy" src="previews/000048.png"></a></article>
+<article data-id="morocco-earthquake_00000309"><label><input type="checkbox" value="morocco-earthquake_00000309"> morocco-earthquake_00000309</label> score=0.146; worst model=0.138; damage pixels=8475<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000049.png" target="_blank"><img loading="lazy" src="previews/000049.png"></a></article>
+<article data-id="myanmar-hurricane_00000046"><label><input type="checkbox" value="myanmar-hurricane_00000046"> myanmar-hurricane_00000046</label> score=0.131; worst model=0.121; damage pixels=2485<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000050.png" target="_blank"><img loading="lazy" src="previews/000050.png"></a></article>
+<article data-id="noto-earthquake_00000049"><label><input type="checkbox" value="noto-earthquake_00000049"> noto-earthquake_00000049</label> score=0.111; worst model=0.094; damage pixels=19385<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000051.png" target="_blank"><img loading="lazy" src="previews/000051.png"></a></article>
+<article data-id="turkey-earthquake_00000931"><label><input type="checkbox" value="turkey-earthquake_00000931"> turkey-earthquake_00000931</label> score=0.170; worst model=0.156; damage pixels=60473<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000052.png" target="_blank"><img loading="lazy" src="previews/000052.png"></a></article>
+<article data-id="ukraine-conflict_00000012"><label><input type="checkbox" value="ukraine-conflict_00000012"> ukraine-conflict_00000012</label> score=0.172; worst model=0.142; damage pixels=20550<div class="titles"><span>Pre-event
+(optical)</span><span>Post-event
+(SAR)</span><span>Ground truth</span><span>UNet</span><span>DeepLabV3+</span><span>SiamCRNN</span><span>SiamAttnUNet</span><span>DamageFormer</span><span>ChangeMamba</span></div><a href="previews/000053.png" target="_blank"><img loading="lazy" src="previews/000053.png"></a></article><script>
+document.addEventListener('change',()=>document.getElementById('count').textContent=
+document.querySelectorAll('input[type=checkbox]:checked').length+' selected');
+function filter(q){document.querySelectorAll('article').forEach(e=>e.hidden=
+!e.dataset.id.toLowerCase().includes(q.toLowerCase()))}
+function download(){const ids=[...document.querySelectorAll('input[type=checkbox]:checked')]
+.map(e=>e.value);if(!ids.length){alert('Select samples first');return}
+const url=URL.createObjectURL(new Blob([ids.join('\n')+'\n'],{type:'text/plain'}));
+const a=document.createElement('a');a.href=url;a.download='selected.txt';a.click();
+setTimeout(()=>URL.revokeObjectURL(url),1000)}
+</script>

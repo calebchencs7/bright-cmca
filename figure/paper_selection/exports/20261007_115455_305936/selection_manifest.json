@@ -1,0 +1,772 @@
+{
+  "created_at": "2026-10-07T11:55:01.523332+08:00",
+  "configuration": "CMCA + DACutMix",
+  "models": [
+    [
+      "UNet",
+      "unet_cmca_dacutmix"
+    ],
+    [
+      "DeepLabV3+",
+      "deeplabv3plus_cmca_dacutmix"
+    ],
+    [
+      "SiamCRNN",
+      "siamcrnn_cmca_dacutmix"
+    ],
+    [
+      "SiamAttnUNet",
+      "siamattnunet_cmca_dacutmix"
+    ],
+    [
+      "DamageFormer",
+      "damageformer_cmca_dacutmix"
+    ],
+    [
+      "ChangeMamba",
+      "changemamba_cmca_dacutmix"
+    ]
+  ],
+  "crop_xywh": null,
+  "dpi": 600,
+  "palette": [
+    [
+      255,
+      255,
+      255
+    ],
+    [
+      70,
+      181,
+      121
+    ],
+    [
+      228,
+      189,
+      139
+    ],
+    [
+      182,
+      70,
+      69
+    ]
+  ],
+  "score_note": "Full-image selection scores, not scores for cropped panels; null if unavailable.",
+  "display_note": "Non-uint8 imagery: per-image 2–98 percentile stretch; uint8 unchanged.",
+  "samples": [
+    {
+      "row": 1,
+      "sample_id": "beirut-explosion_00000030",
+      "disaster_type": "Explosion",
+      "scores": {
+        "sample_id": "beirut-explosion_00000030",
+        "event": "beirut-explosion",
+        "building_pixels": "389602",
+        "damaged_pixels": "337555",
+        "damage_classes": "2,3",
+        "excluded_reason": "",
+        "UNet_foreground_mIoU": "0.39056507272540114",
+        "UNet_damage_mIoU": "0.4650332783969984",
+        "UNet_IoU_class_1": "0.24162866138220662",
+        "UNet_IoU_class_2": "0.4211557014240339",
+        "UNet_IoU_class_3": "0.5089108553699628",
+        "DeepLabV3+_foreground_mIoU": "0.12393889315524499",
+        "DeepLabV3+_damage_mIoU": "0.12344565069068124",
+        "DeepLabV3+_IoU_class_1": "0.12492537808437251",
+        "DeepLabV3+_IoU_class_2": "0.009505260706649449",
+        "DeepLabV3+_IoU_class_3": "0.23738604067471303",
+        "SiamCRNN_foreground_mIoU": "0.05878159769927393",
+        "SiamCRNN_damage_mIoU": "0.030128476894435124",
+        "SiamCRNN_IoU_class_1": "0.11608783930895153",
+        "SiamCRNN_IoU_class_2": "0.0",
+        "SiamCRNN_IoU_class_3": "0.06025695378887025",
+        "SiamAttnUNet_foreground_mIoU": "0.20792133584987096",
+        "SiamAttnUNet_damage_mIoU": "0.2441280885738709",
+        "SiamAttnUNet_IoU_class_1": "0.1355078304018711",
+        "SiamAttnUNet_IoU_class_2": "0.07034308121260933",
+        "SiamAttnUNet_IoU_class_3": "0.41791309593513243",
+        "DamageFormer_foreground_mIoU": "0.1862108949965167",
+        "DamageFormer_damage_mIoU": "0.21073397034609634",
+        "DamageFormer_IoU_class_1": "0.13716474429735737",
+        "DamageFormer_IoU_class_2": "0.03855509031532447",
+        "DamageFormer_IoU_class_3": "0.38291285037686823",
+        "ChangeMamba_foreground_mIoU": "0.37935183228978325",
+        "ChangeMamba_damage_mIoU": "0.4553367426729395",
+        "ChangeMamba_IoU_class_1": "0.2273820115234706",
+        "ChangeMamba_IoU_class_2": "0.4375615410502175",
+        "ChangeMamba_IoU_class_3": "0.4731119442956615",
+        "mean_model_score": "0.23963131952425934",
+        "worst_model_score": "0.04445503729685453",
+        "selection_score": "0.1810784348560379"
+      },
+      "files": [
+        {
+          "column": 1,
+          "title": "Pre-event\n(optical)",
+          "source": "E:\\haoChen\\BRIGHT\\data\\pre-event\\beirut-explosion_00000030_pre_disaster.tif",
+          "saved_copy": "selected_data/row_01/column_01/beirut-explosion_00000030_pre_disaster.tif"
+        },
+        {
+          "column": 2,
+          "title": "Post-event\n(SAR)",
+          "source": "E:\\haoChen\\BRIGHT\\data\\post-event\\beirut-explosion_00000030_post_disaster.tif",
+          "saved_copy": "selected_data/row_01/column_02/beirut-explosion_00000030_post_disaster.tif"
+        },
+        {
+          "column": 3,
+          "title": "Ground truth",
+          "source": "E:\\haoChen\\BRIGHT\\data\\target\\beirut-explosion_00000030_building_damage.tif",
+          "saved_copy": "selected_data/row_01/column_03/beirut-explosion_00000030_building_damage.tif"
+        },
+        {
+          "column": 4,
+          "title": "UNet",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\unet_cmca_dacutmix\\original\\beirut-explosion_00000030_building_damage.png",
+          "saved_copy": "selected_data/row_01/column_04/beirut-explosion_00000030_building_damage.png"
+        },
+        {
+          "column": 5,
+          "title": "DeepLabV3+",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\deeplabv3plus_cmca_dacutmix\\original\\beirut-explosion_00000030_building_damage.png",
+          "saved_copy": "selected_data/row_01/column_05/beirut-explosion_00000030_building_damage.png"
+        },
+        {
+          "column": 6,
+          "title": "SiamCRNN",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\siamcrnn_cmca_dacutmix\\original\\beirut-explosion_00000030_building_damage.png",
+          "saved_copy": "selected_data/row_01/column_06/beirut-explosion_00000030_building_damage.png"
+        },
+        {
+          "column": 7,
+          "title": "SiamAttnUNet",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\siamattnunet_cmca_dacutmix\\original\\beirut-explosion_00000030_building_damage.png",
+          "saved_copy": "selected_data/row_01/column_07/beirut-explosion_00000030_building_damage.png"
+        },
+        {
+          "column": 8,
+          "title": "DamageFormer",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\damageformer_cmca_dacutmix\\original\\beirut-explosion_00000030_building_damage.png",
+          "saved_copy": "selected_data/row_01/column_08/beirut-explosion_00000030_building_damage.png"
+        },
+        {
+          "column": 9,
+          "title": "ChangeMamba",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\changemamba_cmca_dacutmix\\original\\beirut-explosion_00000030_building_damage.png",
+          "saved_copy": "selected_data/row_01/column_09/beirut-explosion_00000030_building_damage.png"
+        }
+      ]
+    },
+    {
+      "row": 2,
+      "sample_id": "congo-volcano_00000085",
+      "disaster_type": "Volcano",
+      "scores": {
+        "sample_id": "congo-volcano_00000085",
+        "event": "congo-volcano",
+        "building_pixels": "269344",
+        "damaged_pixels": "224279",
+        "damage_classes": "2,3",
+        "excluded_reason": "",
+        "UNet_foreground_mIoU": "0.429515609401607",
+        "UNet_damage_mIoU": "0.37075503450751174",
+        "UNet_IoU_class_1": "0.5470367591897974",
+        "UNet_IoU_class_2": "0.006816563231254451",
+        "UNet_IoU_class_3": "0.734693505783769",
+        "DeepLabV3+_foreground_mIoU": "0.3504205635458982",
+        "DeepLabV3+_damage_mIoU": "0.2935045878047487",
+        "DeepLabV3+_IoU_class_1": "0.46425251502819725",
+        "DeepLabV3+_IoU_class_2": "0.0",
+        "DeepLabV3+_IoU_class_3": "0.5870091756094974",
+        "SiamCRNN_foreground_mIoU": "0.411252089663755",
+        "SiamCRNN_damage_mIoU": "0.35523169010569117",
+        "SiamCRNN_IoU_class_1": "0.5232928887798826",
+        "SiamCRNN_IoU_class_2": "0.0",
+        "SiamCRNN_IoU_class_3": "0.7104633802113823",
+        "SiamAttnUNet_foreground_mIoU": "0.41245992307908247",
+        "SiamAttnUNet_damage_mIoU": "0.36382273633896167",
+        "SiamAttnUNet_IoU_class_1": "0.5097342965593241",
+        "SiamAttnUNet_IoU_class_2": "0.0",
+        "SiamAttnUNet_IoU_class_3": "0.7276454726779233",
+        "DamageFormer_foreground_mIoU": "0.43181156967829454",
+        "DamageFormer_damage_mIoU": "0.367106795940476",
+        "DamageFormer_IoU_class_1": "0.5612211171539316",
+        "DamageFormer_IoU_class_2": "0.0",
+        "DamageFormer_IoU_class_3": "0.734213591880952",
+        "ChangeMamba_foreground_mIoU": "0.44476690302989014",
+        "ChangeMamba_damage_mIoU": "0.380246852562432",
+        "ChangeMamba_IoU_class_1": "0.5738070039648064",
+        "ChangeMamba_IoU_class_2": "0.0",
+        "ChangeMamba_IoU_class_3": "0.760493705124864",
+        "mean_model_score": "0.38424119630486236",
+        "worst_model_score": "0.32196257567532344",
+        "selection_score": "0.3655576101160007"
+      },
+      "files": [
+        {
+          "column": 1,
+          "title": "Pre-event\n(optical)",
+          "source": "E:\\haoChen\\BRIGHT\\data\\pre-event\\congo-volcano_00000085_pre_disaster.tif",
+          "saved_copy": "selected_data/row_02/column_01/congo-volcano_00000085_pre_disaster.tif"
+        },
+        {
+          "column": 2,
+          "title": "Post-event\n(SAR)",
+          "source": "E:\\haoChen\\BRIGHT\\data\\post-event\\congo-volcano_00000085_post_disaster.tif",
+          "saved_copy": "selected_data/row_02/column_02/congo-volcano_00000085_post_disaster.tif"
+        },
+        {
+          "column": 3,
+          "title": "Ground truth",
+          "source": "E:\\haoChen\\BRIGHT\\data\\target\\congo-volcano_00000085_building_damage.tif",
+          "saved_copy": "selected_data/row_02/column_03/congo-volcano_00000085_building_damage.tif"
+        },
+        {
+          "column": 4,
+          "title": "UNet",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\unet_cmca_dacutmix\\original\\congo-volcano_00000085_building_damage.png",
+          "saved_copy": "selected_data/row_02/column_04/congo-volcano_00000085_building_damage.png"
+        },
+        {
+          "column": 5,
+          "title": "DeepLabV3+",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\deeplabv3plus_cmca_dacutmix\\original\\congo-volcano_00000085_building_damage.png",
+          "saved_copy": "selected_data/row_02/column_05/congo-volcano_00000085_building_damage.png"
+        },
+        {
+          "column": 6,
+          "title": "SiamCRNN",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\siamcrnn_cmca_dacutmix\\original\\congo-volcano_00000085_building_damage.png",
+          "saved_copy": "selected_data/row_02/column_06/congo-volcano_00000085_building_damage.png"
+        },
+        {
+          "column": 7,
+          "title": "SiamAttnUNet",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\siamattnunet_cmca_dacutmix\\original\\congo-volcano_00000085_building_damage.png",
+          "saved_copy": "selected_data/row_02/column_07/congo-volcano_00000085_building_damage.png"
+        },
+        {
+          "column": 8,
+          "title": "DamageFormer",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\damageformer_cmca_dacutmix\\original\\congo-volcano_00000085_building_damage.png",
+          "saved_copy": "selected_data/row_02/column_08/congo-volcano_00000085_building_damage.png"
+        },
+        {
+          "column": 9,
+          "title": "ChangeMamba",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\changemamba_cmca_dacutmix\\original\\congo-volcano_00000085_building_damage.png",
+          "saved_copy": "selected_data/row_02/column_09/congo-volcano_00000085_building_damage.png"
+        }
+      ]
+    },
+    {
+      "row": 3,
+      "sample_id": "hawaii-wildfire_00000003",
+      "disaster_type": "Wildfire",
+      "scores": {
+        "sample_id": "hawaii-wildfire_00000003",
+        "event": "hawaii-wildfire",
+        "building_pixels": "292244",
+        "damaged_pixels": "262984",
+        "damage_classes": "2,3",
+        "excluded_reason": "",
+        "UNet_foreground_mIoU": "0.3839188969338149",
+        "UNet_damage_mIoU": "0.5055839921768537",
+        "UNet_IoU_class_1": "0.14058870644773727",
+        "UNet_IoU_class_2": "0.20032796338342884",
+        "UNet_IoU_class_3": "0.8108400209702786",
+        "DeepLabV3+_foreground_mIoU": "0.36907031510480265",
+        "DeepLabV3+_damage_mIoU": "0.5489680977635993",
+        "DeepLabV3+_IoU_class_1": "0.009274749787209064",
+        "DeepLabV3+_IoU_class_2": "0.33808494074907014",
+        "DeepLabV3+_IoU_class_3": "0.7598512547781286",
+        "SiamCRNN_foreground_mIoU": "0.38646037109023407",
+        "SiamCRNN_damage_mIoU": "0.46111272068085724",
+        "SiamCRNN_IoU_class_1": "0.23715567190898765",
+        "SiamCRNN_IoU_class_2": "0.12398587177566092",
+        "SiamCRNN_IoU_class_3": "0.7982395695860536",
+        "SiamAttnUNet_foreground_mIoU": "0.3901620893926767",
+        "SiamAttnUNet_damage_mIoU": "0.545581038475711",
+        "SiamAttnUNet_IoU_class_1": "0.07932419122660808",
+        "SiamAttnUNet_IoU_class_2": "0.28021007002334114",
+        "SiamAttnUNet_IoU_class_3": "0.8109520069280809",
+        "DamageFormer_foreground_mIoU": "0.49518590779024363",
+        "DamageFormer_damage_mIoU": "0.62324687196536",
+        "DamageFormer_IoU_class_1": "0.23906397944001082",
+        "DamageFormer_IoU_class_2": "0.41900263280161065",
+        "DamageFormer_IoU_class_3": "0.8274911111291093",
+        "ChangeMamba_foreground_mIoU": "0.3894349531257481",
+        "ChangeMamba_damage_mIoU": "0.5062663981943432",
+        "ChangeMamba_IoU_class_1": "0.15577206298855784",
+        "ChangeMamba_IoU_class_2": "0.20588631854691142",
+        "ChangeMamba_IoU_class_3": "0.806646477841775",
+        "mean_model_score": "0.46708263772452036",
+        "worst_model_score": "0.42378654588554565",
+        "selection_score": "0.4540938101728279"
+      },
+      "files": [
+        {
+          "column": 1,
+          "title": "Pre-event\n(optical)",
+          "source": "E:\\haoChen\\BRIGHT\\data\\pre-event\\hawaii-wildfire_00000003_pre_disaster.tif",
+          "saved_copy": "selected_data/row_03/column_01/hawaii-wildfire_00000003_pre_disaster.tif"
+        },
+        {
+          "column": 2,
+          "title": "Post-event\n(SAR)",
+          "source": "E:\\haoChen\\BRIGHT\\data\\post-event\\hawaii-wildfire_00000003_post_disaster.tif",
+          "saved_copy": "selected_data/row_03/column_02/hawaii-wildfire_00000003_post_disaster.tif"
+        },
+        {
+          "column": 3,
+          "title": "Ground truth",
+          "source": "E:\\haoChen\\BRIGHT\\data\\target\\hawaii-wildfire_00000003_building_damage.tif",
+          "saved_copy": "selected_data/row_03/column_03/hawaii-wildfire_00000003_building_damage.tif"
+        },
+        {
+          "column": 4,
+          "title": "UNet",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\unet_cmca_dacutmix\\original\\hawaii-wildfire_00000003_building_damage.png",
+          "saved_copy": "selected_data/row_03/column_04/hawaii-wildfire_00000003_building_damage.png"
+        },
+        {
+          "column": 5,
+          "title": "DeepLabV3+",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\deeplabv3plus_cmca_dacutmix\\original\\hawaii-wildfire_00000003_building_damage.png",
+          "saved_copy": "selected_data/row_03/column_05/hawaii-wildfire_00000003_building_damage.png"
+        },
+        {
+          "column": 6,
+          "title": "SiamCRNN",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\siamcrnn_cmca_dacutmix\\original\\hawaii-wildfire_00000003_building_damage.png",
+          "saved_copy": "selected_data/row_03/column_06/hawaii-wildfire_00000003_building_damage.png"
+        },
+        {
+          "column": 7,
+          "title": "SiamAttnUNet",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\siamattnunet_cmca_dacutmix\\original\\hawaii-wildfire_00000003_building_damage.png",
+          "saved_copy": "selected_data/row_03/column_07/hawaii-wildfire_00000003_building_damage.png"
+        },
+        {
+          "column": 8,
+          "title": "DamageFormer",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\damageformer_cmca_dacutmix\\original\\hawaii-wildfire_00000003_building_damage.png",
+          "saved_copy": "selected_data/row_03/column_08/hawaii-wildfire_00000003_building_damage.png"
+        },
+        {
+          "column": 9,
+          "title": "ChangeMamba",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\changemamba_cmca_dacutmix\\original\\hawaii-wildfire_00000003_building_damage.png",
+          "saved_copy": "selected_data/row_03/column_09/hawaii-wildfire_00000003_building_damage.png"
+        }
+      ]
+    },
+    {
+      "row": 4,
+      "sample_id": "libya-flood_00000023",
+      "disaster_type": "Flood",
+      "scores": {
+        "sample_id": "libya-flood_00000023",
+        "event": "libya-flood",
+        "building_pixels": "531377",
+        "damaged_pixels": "531377",
+        "damage_classes": "2,3",
+        "excluded_reason": "",
+        "UNet_foreground_mIoU": "0.3424972773615788",
+        "UNet_damage_mIoU": "0.5137459160423682",
+        "UNet_IoU_class_1": "0.0",
+        "UNet_IoU_class_2": "0.5506765697939602",
+        "UNet_IoU_class_3": "0.47681526229077625",
+        "DeepLabV3+_foreground_mIoU": "0.24137093488275538",
+        "DeepLabV3+_damage_mIoU": "0.24137093488275538",
+        "DeepLabV3+_IoU_class_1": "nan",
+        "DeepLabV3+_IoU_class_2": "0.4507691447780799",
+        "DeepLabV3+_IoU_class_3": "0.03197272498743087",
+        "SiamCRNN_foreground_mIoU": "0.3257426755941613",
+        "SiamCRNN_damage_mIoU": "0.488614013391242",
+        "SiamCRNN_IoU_class_1": "0.0",
+        "SiamCRNN_IoU_class_2": "0.5415934247459756",
+        "SiamCRNN_IoU_class_3": "0.43563460203650833",
+        "SiamAttnUNet_foreground_mIoU": "0.5018146184159222",
+        "SiamAttnUNet_damage_mIoU": "0.5018146184159222",
+        "SiamAttnUNet_IoU_class_1": "nan",
+        "SiamAttnUNet_IoU_class_2": "0.5021355680781593",
+        "SiamAttnUNet_IoU_class_3": "0.5014936687536851",
+        "DamageFormer_foreground_mIoU": "0.33048850760103576",
+        "DamageFormer_damage_mIoU": "0.49573276140155365",
+        "DamageFormer_IoU_class_1": "0.0",
+        "DamageFormer_IoU_class_2": "0.53835062949662",
+        "DamageFormer_IoU_class_3": "0.4531148933064872",
+        "ChangeMamba_foreground_mIoU": "0.3341718211627131",
+        "ChangeMamba_damage_mIoU": "0.5012577317440696",
+        "ChangeMamba_IoU_class_1": "0.0",
+        "ChangeMamba_IoU_class_2": "0.5090417220815385",
+        "ChangeMamba_IoU_class_3": "0.49347374140660066",
+        "mean_model_score": "0.4015518175746731",
+        "worst_model_score": "0.24137093488275538",
+        "selection_score": "0.3534975527670978"
+      },
+      "files": [
+        {
+          "column": 1,
+          "title": "Pre-event\n(optical)",
+          "source": "E:\\haoChen\\BRIGHT\\data\\pre-event\\libya-flood_00000023_pre_disaster.tif",
+          "saved_copy": "selected_data/row_04/column_01/libya-flood_00000023_pre_disaster.tif"
+        },
+        {
+          "column": 2,
+          "title": "Post-event\n(SAR)",
+          "source": "E:\\haoChen\\BRIGHT\\data\\post-event\\libya-flood_00000023_post_disaster.tif",
+          "saved_copy": "selected_data/row_04/column_02/libya-flood_00000023_post_disaster.tif"
+        },
+        {
+          "column": 3,
+          "title": "Ground truth",
+          "source": "E:\\haoChen\\BRIGHT\\data\\target\\libya-flood_00000023_building_damage.tif",
+          "saved_copy": "selected_data/row_04/column_03/libya-flood_00000023_building_damage.tif"
+        },
+        {
+          "column": 4,
+          "title": "UNet",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\unet_cmca_dacutmix\\original\\libya-flood_00000023_building_damage.png",
+          "saved_copy": "selected_data/row_04/column_04/libya-flood_00000023_building_damage.png"
+        },
+        {
+          "column": 5,
+          "title": "DeepLabV3+",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\deeplabv3plus_cmca_dacutmix\\original\\libya-flood_00000023_building_damage.png",
+          "saved_copy": "selected_data/row_04/column_05/libya-flood_00000023_building_damage.png"
+        },
+        {
+          "column": 6,
+          "title": "SiamCRNN",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\siamcrnn_cmca_dacutmix\\original\\libya-flood_00000023_building_damage.png",
+          "saved_copy": "selected_data/row_04/column_06/libya-flood_00000023_building_damage.png"
+        },
+        {
+          "column": 7,
+          "title": "SiamAttnUNet",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\siamattnunet_cmca_dacutmix\\original\\libya-flood_00000023_building_damage.png",
+          "saved_copy": "selected_data/row_04/column_07/libya-flood_00000023_building_damage.png"
+        },
+        {
+          "column": 8,
+          "title": "DamageFormer",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\damageformer_cmca_dacutmix\\original\\libya-flood_00000023_building_damage.png",
+          "saved_copy": "selected_data/row_04/column_08/libya-flood_00000023_building_damage.png"
+        },
+        {
+          "column": 9,
+          "title": "ChangeMamba",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\changemamba_cmca_dacutmix\\original\\libya-flood_00000023_building_damage.png",
+          "saved_copy": "selected_data/row_04/column_09/libya-flood_00000023_building_damage.png"
+        }
+      ]
+    },
+    {
+      "row": 5,
+      "sample_id": "mexico-hurricane_00000105",
+      "disaster_type": "Hurricane",
+      "scores": {
+        "sample_id": "mexico-hurricane_00000105",
+        "event": "mexico-hurricane",
+        "building_pixels": "122047",
+        "damaged_pixels": "118370",
+        "damage_classes": "2",
+        "excluded_reason": "",
+        "UNet_foreground_mIoU": "0.3549015960126813",
+        "UNet_damage_mIoU": "0.7098031920253626",
+        "UNet_IoU_class_1": "0.0",
+        "UNet_IoU_class_2": "0.7098031920253626",
+        "UNet_IoU_class_3": "nan",
+        "DeepLabV3+_foreground_mIoU": "0.3893472865096934",
+        "DeepLabV3+_damage_mIoU": "0.7786945730193868",
+        "DeepLabV3+_IoU_class_1": "0.0",
+        "DeepLabV3+_IoU_class_2": "0.7786945730193868",
+        "DeepLabV3+_IoU_class_3": "nan",
+        "SiamCRNN_foreground_mIoU": "0.39404629562067295",
+        "SiamCRNN_damage_mIoU": "0.7769623560147251",
+        "SiamCRNN_IoU_class_1": "0.01113023522662077",
+        "SiamCRNN_IoU_class_2": "0.7769623560147251",
+        "SiamCRNN_IoU_class_3": "nan",
+        "SiamAttnUNet_foreground_mIoU": "0.376508723709369",
+        "SiamAttnUNet_damage_mIoU": "0.753017447418738",
+        "SiamAttnUNet_IoU_class_1": "0.0",
+        "SiamAttnUNet_IoU_class_2": "0.753017447418738",
+        "SiamAttnUNet_IoU_class_3": "nan",
+        "DamageFormer_foreground_mIoU": "0.37454688488176585",
+        "DamageFormer_damage_mIoU": "0.7490937697635317",
+        "DamageFormer_IoU_class_1": "0.0",
+        "DamageFormer_IoU_class_2": "0.7490937697635317",
+        "DamageFormer_IoU_class_3": "nan",
+        "ChangeMamba_foreground_mIoU": "0.35670599023905003",
+        "ChangeMamba_damage_mIoU": "0.7134119804781001",
+        "ChangeMamba_IoU_class_1": "0.0",
+        "ChangeMamba_IoU_class_2": "0.7134119804781001",
+        "ChangeMamba_IoU_class_3": "nan",
+        "mean_model_score": "0.5605866746410897",
+        "worst_model_score": "0.5323523940190219",
+        "selection_score": "0.5521163904544693"
+      },
+      "files": [
+        {
+          "column": 1,
+          "title": "Pre-event\n(optical)",
+          "source": "E:\\haoChen\\BRIGHT\\data\\pre-event\\mexico-hurricane_00000105_pre_disaster.tif",
+          "saved_copy": "selected_data/row_05/column_01/mexico-hurricane_00000105_pre_disaster.tif"
+        },
+        {
+          "column": 2,
+          "title": "Post-event\n(SAR)",
+          "source": "E:\\haoChen\\BRIGHT\\data\\post-event\\mexico-hurricane_00000105_post_disaster.tif",
+          "saved_copy": "selected_data/row_05/column_02/mexico-hurricane_00000105_post_disaster.tif"
+        },
+        {
+          "column": 3,
+          "title": "Ground truth",
+          "source": "E:\\haoChen\\BRIGHT\\data\\target\\mexico-hurricane_00000105_building_damage.tif",
+          "saved_copy": "selected_data/row_05/column_03/mexico-hurricane_00000105_building_damage.tif"
+        },
+        {
+          "column": 4,
+          "title": "UNet",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\unet_cmca_dacutmix\\original\\mexico-hurricane_00000105_building_damage.png",
+          "saved_copy": "selected_data/row_05/column_04/mexico-hurricane_00000105_building_damage.png"
+        },
+        {
+          "column": 5,
+          "title": "DeepLabV3+",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\deeplabv3plus_cmca_dacutmix\\original\\mexico-hurricane_00000105_building_damage.png",
+          "saved_copy": "selected_data/row_05/column_05/mexico-hurricane_00000105_building_damage.png"
+        },
+        {
+          "column": 6,
+          "title": "SiamCRNN",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\siamcrnn_cmca_dacutmix\\original\\mexico-hurricane_00000105_building_damage.png",
+          "saved_copy": "selected_data/row_05/column_06/mexico-hurricane_00000105_building_damage.png"
+        },
+        {
+          "column": 7,
+          "title": "SiamAttnUNet",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\siamattnunet_cmca_dacutmix\\original\\mexico-hurricane_00000105_building_damage.png",
+          "saved_copy": "selected_data/row_05/column_07/mexico-hurricane_00000105_building_damage.png"
+        },
+        {
+          "column": 8,
+          "title": "DamageFormer",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\damageformer_cmca_dacutmix\\original\\mexico-hurricane_00000105_building_damage.png",
+          "saved_copy": "selected_data/row_05/column_08/mexico-hurricane_00000105_building_damage.png"
+        },
+        {
+          "column": 9,
+          "title": "ChangeMamba",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\changemamba_cmca_dacutmix\\original\\mexico-hurricane_00000105_building_damage.png",
+          "saved_copy": "selected_data/row_05/column_09/mexico-hurricane_00000105_building_damage.png"
+        }
+      ]
+    },
+    {
+      "row": 6,
+      "sample_id": "turkey-earthquake_00000215",
+      "disaster_type": "Earthquake",
+      "scores": {
+        "sample_id": "turkey-earthquake_00000215",
+        "event": "turkey-earthquake",
+        "building_pixels": "323988",
+        "damaged_pixels": "13033",
+        "damage_classes": "2,3",
+        "excluded_reason": "",
+        "UNet_foreground_mIoU": "0.5378914253383618",
+        "UNet_damage_mIoU": "0.40374656694944117",
+        "UNet_IoU_class_1": "0.806181142116203",
+        "UNet_IoU_class_2": "0.028502683694243938",
+        "UNet_IoU_class_3": "0.7789904502046384",
+        "DeepLabV3+_foreground_mIoU": "0.4470536666688723",
+        "DeepLabV3+_damage_mIoU": "0.2682543227200064",
+        "DeepLabV3+_IoU_class_1": "0.8046523545666042",
+        "DeepLabV3+_IoU_class_2": "0.03468001430103682",
+        "DeepLabV3+_IoU_class_3": "0.5018286311389759",
+        "SiamCRNN_foreground_mIoU": "0.5494140534925094",
+        "SiamCRNN_damage_mIoU": "0.42509680542110356",
+        "SiamCRNN_IoU_class_1": "0.798048549635321",
+        "SiamCRNN_IoU_class_2": "0.0",
+        "SiamCRNN_IoU_class_3": "0.8501936108422071",
+        "SiamAttnUNet_foreground_mIoU": "0.5483539104191077",
+        "SiamAttnUNet_damage_mIoU": "0.4219080831984058",
+        "SiamAttnUNet_IoU_class_1": "0.8012455648605117",
+        "SiamAttnUNet_IoU_class_2": "0.0",
+        "SiamAttnUNet_IoU_class_3": "0.8438161663968116",
+        "DamageFormer_foreground_mIoU": "0.552559271958844",
+        "DamageFormer_damage_mIoU": "0.4302341657702289",
+        "DamageFormer_IoU_class_1": "0.7972094843360744",
+        "DamageFormer_IoU_class_2": "0.0333889816360601",
+        "DamageFormer_IoU_class_3": "0.8270793499043977",
+        "ChangeMamba_foreground_mIoU": "0.44993392744354205",
+        "ChangeMamba_damage_mIoU": "0.2777467708499442",
+        "ChangeMamba_IoU_class_1": "0.7943082406307377",
+        "ChangeMamba_IoU_class_2": "0.0",
+        "ChangeMamba_IoU_class_3": "0.5554935416998884",
+        "mean_model_score": "0.44268274751919723",
+        "worst_model_score": "0.35765399469443937",
+        "selection_score": "0.41717412167176987"
+      },
+      "files": [
+        {
+          "column": 1,
+          "title": "Pre-event\n(optical)",
+          "source": "E:\\haoChen\\BRIGHT\\data\\pre-event\\turkey-earthquake_00000215_pre_disaster.tif",
+          "saved_copy": "selected_data/row_06/column_01/turkey-earthquake_00000215_pre_disaster.tif"
+        },
+        {
+          "column": 2,
+          "title": "Post-event\n(SAR)",
+          "source": "E:\\haoChen\\BRIGHT\\data\\post-event\\turkey-earthquake_00000215_post_disaster.tif",
+          "saved_copy": "selected_data/row_06/column_02/turkey-earthquake_00000215_post_disaster.tif"
+        },
+        {
+          "column": 3,
+          "title": "Ground truth",
+          "source": "E:\\haoChen\\BRIGHT\\data\\target\\turkey-earthquake_00000215_building_damage.tif",
+          "saved_copy": "selected_data/row_06/column_03/turkey-earthquake_00000215_building_damage.tif"
+        },
+        {
+          "column": 4,
+          "title": "UNet",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\unet_cmca_dacutmix\\original\\turkey-earthquake_00000215_building_damage.png",
+          "saved_copy": "selected_data/row_06/column_04/turkey-earthquake_00000215_building_damage.png"
+        },
+        {
+          "column": 5,
+          "title": "DeepLabV3+",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\deeplabv3plus_cmca_dacutmix\\original\\turkey-earthquake_00000215_building_damage.png",
+          "saved_copy": "selected_data/row_06/column_05/turkey-earthquake_00000215_building_damage.png"
+        },
+        {
+          "column": 6,
+          "title": "SiamCRNN",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\siamcrnn_cmca_dacutmix\\original\\turkey-earthquake_00000215_building_damage.png",
+          "saved_copy": "selected_data/row_06/column_06/turkey-earthquake_00000215_building_damage.png"
+        },
+        {
+          "column": 7,
+          "title": "SiamAttnUNet",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\siamattnunet_cmca_dacutmix\\original\\turkey-earthquake_00000215_building_damage.png",
+          "saved_copy": "selected_data/row_06/column_07/turkey-earthquake_00000215_building_damage.png"
+        },
+        {
+          "column": 8,
+          "title": "DamageFormer",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\damageformer_cmca_dacutmix\\original\\turkey-earthquake_00000215_building_damage.png",
+          "saved_copy": "selected_data/row_06/column_08/turkey-earthquake_00000215_building_damage.png"
+        },
+        {
+          "column": 9,
+          "title": "ChangeMamba",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\changemamba_cmca_dacutmix\\original\\turkey-earthquake_00000215_building_damage.png",
+          "saved_copy": "selected_data/row_06/column_09/turkey-earthquake_00000215_building_damage.png"
+        }
+      ]
+    },
+    {
+      "row": 7,
+      "sample_id": "ukraine-conflict_00000395",
+      "disaster_type": "Conflict",
+      "scores": {
+        "sample_id": "ukraine-conflict_00000395",
+        "event": "ukraine-conflict",
+        "building_pixels": "225717",
+        "damaged_pixels": "188898",
+        "damage_classes": "2",
+        "excluded_reason": "",
+        "UNet_foreground_mIoU": "0.44248368683248496",
+        "UNet_damage_mIoU": "0.7298229856334233",
+        "UNet_IoU_class_1": "0.15514438803154662",
+        "UNet_IoU_class_2": "0.7298229856334233",
+        "UNet_IoU_class_3": "nan",
+        "DeepLabV3+_foreground_mIoU": "0.41956455044101426",
+        "DeepLabV3+_damage_mIoU": "0.6849896764384388",
+        "DeepLabV3+_IoU_class_1": "0.15413942444358977",
+        "DeepLabV3+_IoU_class_2": "0.6849896764384388",
+        "DeepLabV3+_IoU_class_3": "nan",
+        "SiamCRNN_foreground_mIoU": "0.509025026656519",
+        "SiamCRNN_damage_mIoU": "0.7387344154316632",
+        "SiamCRNN_IoU_class_1": "0.2793156378813749",
+        "SiamCRNN_IoU_class_2": "0.7387344154316632",
+        "SiamCRNN_IoU_class_3": "nan",
+        "SiamAttnUNet_foreground_mIoU": "0.3850048614339814",
+        "SiamAttnUNet_damage_mIoU": "0.7296339663870667",
+        "SiamAttnUNet_IoU_class_1": "0.04037575648089604",
+        "SiamAttnUNet_IoU_class_2": "0.7296339663870667",
+        "SiamAttnUNet_IoU_class_3": "nan",
+        "DamageFormer_foreground_mIoU": "0.446645446149153",
+        "DamageFormer_damage_mIoU": "0.7251823289633139",
+        "DamageFormer_IoU_class_1": "0.16810856333499216",
+        "DamageFormer_IoU_class_2": "0.7251823289633139",
+        "DamageFormer_IoU_class_3": "nan",
+        "ChangeMamba_foreground_mIoU": "0.4448993624596333",
+        "ChangeMamba_damage_mIoU": "0.773279511925737",
+        "ChangeMamba_IoU_class_1": "0.11651921299352964",
+        "ChangeMamba_IoU_class_2": "0.773279511925737",
+        "ChangeMamba_IoU_class_3": "nan",
+        "mean_model_score": "0.5857721515627025",
+        "worst_model_score": "0.5522771134397265",
+        "selection_score": "0.5757236401258097"
+      },
+      "files": [
+        {
+          "column": 1,
+          "title": "Pre-event\n(optical)",
+          "source": "E:\\haoChen\\BRIGHT\\data\\pre-event\\ukraine-conflict_00000395_pre_disaster.tif",
+          "saved_copy": "selected_data/row_07/column_01/ukraine-conflict_00000395_pre_disaster.tif"
+        },
+        {
+          "column": 2,
+          "title": "Post-event\n(SAR)",
+          "source": "E:\\haoChen\\BRIGHT\\data\\post-event\\ukraine-conflict_00000395_post_disaster.tif",
+          "saved_copy": "selected_data/row_07/column_02/ukraine-conflict_00000395_post_disaster.tif"
+        },
+        {
+          "column": 3,
+          "title": "Ground truth",
+          "source": "E:\\haoChen\\BRIGHT\\data\\target\\ukraine-conflict_00000395_building_damage.tif",
+          "saved_copy": "selected_data/row_07/column_03/ukraine-conflict_00000395_building_damage.tif"
+        },
+        {
+          "column": 4,
+          "title": "UNet",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\unet_cmca_dacutmix\\original\\ukraine-conflict_00000395_building_damage.png",
+          "saved_copy": "selected_data/row_07/column_04/ukraine-conflict_00000395_building_damage.png"
+        },
+        {
+          "column": 5,
+          "title": "DeepLabV3+",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\deeplabv3plus_cmca_dacutmix\\original\\ukraine-conflict_00000395_building_damage.png",
+          "saved_copy": "selected_data/row_07/column_05/ukraine-conflict_00000395_building_damage.png"
+        },
+        {
+          "column": 6,
+          "title": "SiamCRNN",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\siamcrnn_cmca_dacutmix\\original\\ukraine-conflict_00000395_building_damage.png",
+          "saved_copy": "selected_data/row_07/column_06/ukraine-conflict_00000395_building_damage.png"
+        },
+        {
+          "column": 7,
+          "title": "SiamAttnUNet",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\siamattnunet_cmca_dacutmix\\original\\ukraine-conflict_00000395_building_damage.png",
+          "saved_copy": "selected_data/row_07/column_07/ukraine-conflict_00000395_building_damage.png"
+        },
+        {
+          "column": 8,
+          "title": "DamageFormer",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\damageformer_cmca_dacutmix\\original\\ukraine-conflict_00000395_building_damage.png",
+          "saved_copy": "selected_data/row_07/column_08/ukraine-conflict_00000395_building_damage.png"
+        },
+        {
+          "column": 9,
+          "title": "ChangeMamba",
+          "source": "E:\\haoChen\\BRIGHT\\infer_results\\changemamba_cmca_dacutmix\\original\\ukraine-conflict_00000395_building_damage.png",
+          "saved_copy": "selected_data/row_07/column_09/ukraine-conflict_00000395_building_damage.png"
+        }
+      ]
+    }
+  ]
+}

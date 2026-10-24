@@ -5,6 +5,7 @@ Default hyper-parameters reproduce the BRIGHT paper baselines exactly.
 
 Extensions (all opt-in, zero impact on baseline when unused):
     - DACutMix: event-aware, damage-aware CutMix across disaster events
+    - CutMix: random paired CutMix control for the DACutMix ablation
     - Ordinal Damage Loss (ODL): exploits ordinal structure of damage levels
     - Damage Prototype Contrastive Learning (DPCL): organises pixel features
         into class-discriminative clusters via prototype InfoNCE on a 128-d
@@ -24,6 +25,7 @@ Architecture when DPCL is enabled:
 import os
 import sys
 import argparse
+import random
 
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 if PROJECT_ROOT not in sys.path:
@@ -47,6 +49,25 @@ import util_func.lovasz_loss as L
 from util_func.training_curve import TrainingCurveRecorder
 
 
+def seed_worker(_worker_id):
+    """Seed Python and NumPy from the worker seed assigned by PyTorch."""
+    worker_seed = torch.initial_seed() % (2 ** 32)
+    random.seed(worker_seed)
+    np.random.seed(worker_seed)
+
+
+def set_random_seed(seed):
+    """Fix all controllable random sources used by training and augmentation."""
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(seed)
+    if hasattr(torch.backends, "cudnn"):
+        torch.backends.cudnn.benchmark = False
+        torch.backends.cudnn.deterministic = True
+
+
 # ---------------------------------------------------------------------------
 # Helper: build backbone by name
 # ---------------------------------------------------------------------------
@@ -68,13 +89,29 @@ def build_backbone(model_type, in_channels, num_classes):
         from model.UNetCMCA import UNetCMCA
         return UNetCMCA(in_channels=in_channels, num_classes=num_classes)
 
+    if mt == "unetca":
+        from model.UNetCA import UNetCA
+        return UNetCA(in_channels=in_channels, num_classes=num_classes)
+
     if mt in ("siamattnunetcmca", "siamattncmca"):
         from model.SiamAttnUNetCMCA import SiamAttnUNetCMCA
         return SiamAttnUNetCMCA(in_channels=3, num_classes=num_classes)
 
+    if mt in ("siamattnunetca", "siamattnca"):
+        from model.SiamAttnUNetCA import SiamAttnUNetCA
+        return SiamAttnUNetCA(in_channels=3, num_classes=num_classes)
+
+    if mt == "damageformercmcadeep":
+        from model.DamageFormerCMCADeep import DamageFormerCMCADeep
+        return DamageFormerCMCADeep(num_classes=num_classes)
+
     if mt == "damageformercmca":
         from model.DamageFormerCMCA import DamageFormerCMCA
         return DamageFormerCMCA(num_classes=num_classes)
+
+    if mt == "damageformerca":
+        from model.DamageFormerCA import DamageFormerCA
+        return DamageFormerCA(num_classes=num_classes)
 
     if mt == "damageformer":
         from model.DamageFormer import DamageFormer
@@ -88,6 +125,10 @@ def build_backbone(model_type, in_channels, num_classes):
         from model.ChangeMamba import ChangeMambaCMCA
         return ChangeMambaCMCA(in_channels=in_channels, num_classes=num_classes)
 
+    if mt in ("changemambaca", "mambabdaca", "mambabda_tiny_ca"):
+        from model.ChangeMamba import ChangeMambaCA
+        return ChangeMambaCA(in_channels=in_channels, num_classes=num_classes)
+
     if mt in ("deeplabv3plus", "deeplabv3+"):
         from model.DeepLabV3Plus import DeepLabV3Plus
         return DeepLabV3Plus(in_channels=in_channels, num_classes=num_classes)
@@ -96,6 +137,10 @@ def build_backbone(model_type, in_channels, num_classes):
         from model.DeepLabV3PlusCMCA import DeepLabV3PlusCMCA
         return DeepLabV3PlusCMCA(in_channels=in_channels, num_classes=num_classes)
 
+    if mt in ("deeplabv3plusca", "deeplabv3+ca"):
+        from model.DeepLabV3PlusCA import DeepLabV3PlusCA
+        return DeepLabV3PlusCA(in_channels=in_channels, num_classes=num_classes)
+
     if mt == "siamattnunet":
         from model.SiamAttnUNet import SiamAttnUNet
         return SiamAttnUNet(in_channels=3, num_classes=num_classes)
@@ -103,6 +148,10 @@ def build_backbone(model_type, in_channels, num_classes):
     if mt == "siamcrnncmca":
         from model.SiamCRNNCMCA import SiamCRNNCMCA
         return SiamCRNNCMCA(num_classes=num_classes)
+
+    if mt == "siamcrnnca":
+        from model.SiamCRNNCA import SiamCRNNCA
+        return SiamCRNNCA(num_classes=num_classes)
 
     if mt == "siamcrnn":
         from model.SiamCRNN import SiamCRNN
@@ -200,6 +249,11 @@ class Trainer:
                 f"min_pixels={args.dacutmix_min_damage_pixels}, "
                 f"min_ratio={args.dacutmix_min_damage_ratio})"
             )
+        if args.use_cutmix:
+            print(
+                "CutMix enabled "
+                f"(p={args.cutmix_prob}, random donor, random patch)"
+            )
         # Intervals
         self.eval_interval = max(1, int(args.eval_interval))
         self.log_interval = max(1, int(args.curve_log_interval))
@@ -223,14 +277,20 @@ class Trainer:
         else:
             self.scaler = None
 
-        # CUDA optimizations
-        if self.device.type == "cuda":
-            torch.backends.cudnn.benchmark = True
+        print(f"Random seed: {args.seed}")
 
         # ---- Build backbone ----
         in_channels = 6  # pre(3) + post(3), always 6
         self.backbone = build_backbone(args.model_type, in_channels, num_classes=4)
         self.backbone = self.backbone.to(self.device)
+        total_params = sum(p.numel() for p in self.backbone.parameters())
+        trainable_params = sum(
+            p.numel() for p in self.backbone.parameters() if p.requires_grad
+        )
+        print(
+            f"Model parameters: total={total_params:,}, "
+            f"trainable={trainable_params:,}"
+        )
 
         self.grad_clip_norm = max(0.0, float(getattr(args, "grad_clip_norm", 0.0)))
 
@@ -325,10 +385,12 @@ class Trainer:
             suffix_parts.append(dpcl_suffix)
         if args.use_dacutmix:
             suffix_parts.append("DACutMix")
+        if args.use_cutmix:
+            suffix_parts.append("CutMix")
         suffix = ("_" + "_".join(suffix_parts)) if suffix_parts else ""
         self.model_save_path = os.path.join(
             args.model_param_path, args.dataset,
-            args.model_type + suffix + "_" + now_str
+            args.model_type + suffix + f"_Seed{args.seed}_" + now_str
         )
         os.makedirs(self.model_save_path, exist_ok=True)
         self.curve_recorder = TrainingCurveRecorder(self.model_save_path)
@@ -436,6 +498,10 @@ class Trainer:
             suffix=".tif",
             use_dacutmix=(split == "train" and self.args.use_dacutmix),
             dacutmix_prob=self.args.dacutmix_prob,
+            use_cutmix=(split == "train" and self.args.use_cutmix),
+            cutmix_prob=self.args.cutmix_prob,
+            cutmix_patch_min_ratio=self.args.cutmix_patch_min_ratio,
+            cutmix_patch_max_ratio=self.args.cutmix_patch_max_ratio,
             damage_class_ids=self.damage_class_ids,
             dacutmix_min_damage_pixels=self.args.dacutmix_min_damage_pixels,
             dacutmix_min_damage_ratio=self.args.dacutmix_min_damage_ratio,
@@ -443,7 +509,10 @@ class Trainer:
             dacutmix_patch_max_ratio=self.args.dacutmix_patch_max_ratio,
             dacutmix_box_tries=self.args.dacutmix_box_tries,
             dacutmix_donor_tries=self.args.dacutmix_donor_tries,
-            return_dacutmix_stats=(split == "train" and self.args.use_dacutmix),
+            return_dacutmix_stats=(
+                split == "train"
+                and (self.args.use_dacutmix or self.args.use_cutmix)
+            ),
             modality_mode=self.args.modality_mode,
         )
 
@@ -610,7 +679,11 @@ class Trainer:
             "num_workers": self.args.num_workers,
             "drop_last": False,
             "pin_memory": self.pin_memory,
+            "worker_init_fn": seed_worker,
         }
+        loader_generator = torch.Generator()
+        loader_generator.manual_seed(self.args.seed)
+        loader_kwargs["generator"] = loader_generator
         if self.args.num_workers and self.args.num_workers > 0:
             loader_kwargs["persistent_workers"] = self.persistent_workers
             loader_kwargs["prefetch_factor"] = self.prefetch_factor
@@ -735,13 +808,17 @@ class Trainer:
                         eff_w_dpcl = self.dpcl.effective_weight(itera, self.dpcl_weight)
                         msg += f" dpcl={dpcl_loss.item():.4f}(w={eff_w_dpcl:.4f})"
                     msg += f" lr={lr:.2e}"
-                    if self.args.use_dacutmix and dacutmix_seen_window > 0:
+                    if (
+                        (self.args.use_dacutmix or self.args.use_cutmix)
+                        and dacutmix_seen_window > 0
+                    ):
                         attempt_rate = 100.0 * dacutmix_attempted_window / max(1, dacutmix_seen_window)
                         success_rate = 100.0 * dacutmix_applied_window / max(1, dacutmix_seen_window)
                         accept_rate = 100.0 * dacutmix_applied_window / max(1, dacutmix_attempted_window)
                         total_success = 100.0 * dacutmix_applied_total / max(1, dacutmix_seen_total)
+                        mix_name = "dacutmix" if self.args.use_dacutmix else "cutmix"
                         msg += (
-                            f" dacutmix={dacutmix_applied_window}/{dacutmix_attempted_window}"
+                            f" {mix_name}={dacutmix_applied_window}/{dacutmix_attempted_window}"
                             f"/{dacutmix_seen_window}"
                             f"(succ={success_rate:.1f}%,"
                             f" try={attempt_rate:.1f}%,"
@@ -920,7 +997,11 @@ class Trainer:
 
     def _save_checkpoint(self, step):
         """Save backbone + optional DPCL state dict."""
-        state = {"backbone": self.backbone.state_dict(), "step": step}
+        state = {
+            "backbone": self.backbone.state_dict(),
+            "step": step,
+            "seed": self.args.seed,
+        }
         if self.dpcl is not None:
             # Save the full DPCL state (projection head weights + prototype
             # buffers + assignment counters), in case we want to inspect or
@@ -980,6 +1061,9 @@ def main():
     parser.add_argument("--num_workers", type=int, default=8)
     parser.add_argument("--start_iter", type=int, default=0)
     parser.add_argument("--max_iters", type=int, default=800000)
+    parser.add_argument("--seed", type=int,
+                        default=int(os.environ.get("SEED", "0")),
+                        help="Random seed for Python, NumPy, PyTorch, CUDA, and DataLoader workers.")
 
     # Model
     parser.add_argument("--model_type", type=str, default="UNet")
@@ -1028,6 +1112,15 @@ def main():
     parser.add_argument("--dacutmix_donor_tries", type=int, default=10,
                         help="Cross-event donor samples to try before falling back "
                              "to the un-mixed image.")
+    parser.add_argument("--use_cutmix", action="store_true",
+                        help="Enable ordinary paired CutMix with a random donor "
+                             "and random patch (no event/damage constraints).")
+    parser.add_argument("--cutmix_prob", type=float, default=0.5,
+                        help="Probability of applying ordinary CutMix.")
+    parser.add_argument("--cutmix_patch_min_ratio", type=float, default=0.20,
+                        help="Minimum ordinary CutMix patch side ratio.")
+    parser.add_argument("--cutmix_patch_max_ratio", type=float, default=0.50,
+                        help="Maximum ordinary CutMix patch side ratio.")
 
     # Ordinal Damage Loss (ODL) — opt-in
     parser.add_argument("--use_ordinal_loss", action="store_true",
@@ -1098,6 +1191,10 @@ def main():
     parser.add_argument("--test_data_name_list", type=list, default=None)
 
     args = parser.parse_args()
+
+    if args.use_dacutmix and args.use_cutmix:
+        parser.error("--use_dacutmix and --use_cutmix are mutually exclusive.")
+    set_random_seed(args.seed)
 
     # Load split files
     with open(args.train_data_list_path) as f:

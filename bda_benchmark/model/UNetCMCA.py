@@ -122,6 +122,73 @@ class CrossModalChangeAttention(nn.Module):
         return change
 
 
+class CrossModalAttention(nn.Module):
+    """Standard cross-attention control used by the CMCA ablation.
+
+    The Q/K/V layout, attention heads, insertion level, and optional spatial
+    reduction match CMCA. Unlike CMCA, this module directly projects the
+    attended SAR feature and does not compare it with the optical feature via
+    a learned change projection.
+    """
+
+    def __init__(self, dim, num_heads=4, sr_ratio=2, force_fp32=False):
+        super().__init__()
+        if dim % num_heads != 0:
+            raise ValueError(
+                f"dim ({dim}) must be divisible by num_heads ({num_heads})"
+            )
+        self.num_heads = num_heads
+        self.head_dim = dim // num_heads
+        self.scale = self.head_dim ** -0.5
+        self.force_fp32 = bool(force_fp32)
+
+        self.q_proj = nn.Conv2d(dim, dim, 1, bias=False)
+        self.k_proj = nn.Conv2d(dim, dim, 1, bias=False)
+        self.v_proj = nn.Conv2d(dim, dim, 1, bias=False)
+
+        self.sr_ratio = sr_ratio
+        if sr_ratio > 1:
+            self.sr = nn.Sequential(
+                nn.Conv2d(
+                    dim,
+                    dim,
+                    kernel_size=sr_ratio,
+                    stride=sr_ratio,
+                    groups=dim,
+                ),
+                nn.BatchNorm2d(dim),
+            )
+
+        self.out_proj = nn.Sequential(
+            nn.Conv2d(dim, dim, 1),
+            nn.BatchNorm2d(dim),
+            nn.ReLU(inplace=True),
+        )
+
+    def forward(self, opt_feat, sar_feat):
+        B, C, H, W = opt_feat.shape
+        h, d = self.num_heads, self.head_dim
+
+        Q = self.q_proj(opt_feat).reshape(B, h, d, H * W).permute(0, 1, 3, 2)
+
+        sar_kv = self.sr(sar_feat) if self.sr_ratio > 1 else sar_feat
+        Ns = sar_kv.shape[2] * sar_kv.shape[3]
+        K = self.k_proj(sar_kv).reshape(B, h, d, Ns).permute(0, 1, 3, 2)
+        V = self.v_proj(sar_kv).reshape(B, h, d, Ns).permute(0, 1, 3, 2)
+
+        if self.force_fp32:
+            with torch.autocast(device_type=opt_feat.device.type, enabled=False):
+                attn = (Q.float() @ K.float().transpose(-1, -2)) * self.scale
+                aligned_sar = F.softmax(attn, dim=-1) @ V.float()
+            aligned_sar = aligned_sar.to(opt_feat.dtype)
+        else:
+            attn = (Q @ K.transpose(-1, -2)) * self.scale
+            aligned_sar = F.softmax(attn, dim=-1) @ V
+
+        aligned_sar = aligned_sar.permute(0, 1, 3, 2).reshape(B, C, H, W)
+        return self.out_proj(aligned_sar)
+
+
 # --------------------------------------------------------------------------
 # UNet-CMCA model
 # --------------------------------------------------------------------------

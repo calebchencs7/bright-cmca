@@ -2,41 +2,56 @@ import os
 import sys
 import subprocess
 
-# ========= 修改这三个 =========
+ROOT = os.environ.get("BRIGHT_ROOT", r"E:\haoChen\BRIGHT")
+BDA_ROOT = os.path.join(ROOT, "bda_benchmark")
+SPLIT_DIR = os.path.join(BDA_ROOT, "dataset", "splitname", "standard_ML")
 
-MODEL_PATH = r"E:\haoChen\BRIGHT\checkpoints\unet\BRIGHT\UNet_YYYYMMDD_HHMMSS\best_model.pth"
-DATA_PATH = r"E:\haoChen\BRIGHT\data"
-TEST_LIST = r"E:\haoChen\BRIGHT\bda_benchmark\dataset\splitname\standard_ML\test_set.txt"
-OUTPUT_DIR = r"E:\haoChen\BRIGHT\infer_results\unet_best_001"
+MODEL_PATH = os.path.join(
+    ROOT,
+    "checkpoints",
+    "unet",
+    "BRIGHT",
+    "<run_folder>",
+    "best_model.pth",
+)
+DATA_PATH = os.path.join(ROOT, "data")
+TEST_LIST = os.path.join(SPLIT_DIR, "test_set.txt")
+OUTPUT_DIR = os.path.join(ROOT, "infer_results", "unet_baseline")
+DEVICE = os.environ.get("BRIGHT_DEVICE", "cuda:0")
 
-# ===============================
+PROJECT_ROOT = ROOT
 
-PROJECT_ROOT = r"E:\haoChen\BRIGHT"
-BDA_ROOT = os.path.join(PROJECT_ROOT, "bda_benchmark")
 
 def main():
 
     # 强制把 bda_benchmark 加入 PYTHONPATH
     env = os.environ.copy()
-    env["PYTHONPATH"] = BDA_ROOT
+    prev = env.get("PYTHONPATH", "")
+    env["PYTHONPATH"] = BDA_ROOT if not prev else BDA_ROOT + os.pathsep + prev
 
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
     cmd = [
         sys.executable,
         os.path.join(BDA_ROOT, "script", "standard_ML", "infer_UNet.py"),
-        "--model_path", MODEL_PATH,
-        "--test_dataset_path", DATA_PATH,
-        "--test_data_list_path", TEST_LIST,
-        "--output_dir", OUTPUT_DIR
+        "--model_path",
+        MODEL_PATH,
+        "--test_dataset_path",
+        DATA_PATH,
+        "--test_data_list_path",
+        TEST_LIST,
+        "--output_dir",
+        OUTPUT_DIR,
+        "--device",
+        DEVICE,
     ]
 
     print("\nRunning inference...\n")
     print(" ".join(cmd))
     print("\n")
 
-    subprocess.run(cmd, env=env)
+    subprocess.run(cmd, check=True, cwd=ROOT, env=env)
 
 
-if __name__ == "__main__": 
+if __name__ == "__main__":
     main()

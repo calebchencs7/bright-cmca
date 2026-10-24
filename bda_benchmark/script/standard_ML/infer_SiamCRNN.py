@@ -43,7 +43,7 @@ class Inference:
         self.model = self.model.cuda()
         self.model.eval()
         self.color_map = {
-            0: (255, 255, 255),       # No damage - black
+            0: (255, 255, 255),       # Background - white
             1: (70, 181, 121),     # Minor damage - green
             2: (228, 189, 139),   # Major damage - yellow
             3: (182, 70, 69)      # Destroyed - red

@@ -21,13 +21,13 @@ import sys
 import subprocess
 
 # ===== Edit these paths =====
-ROOT       = r"D:\Project\haoChen\BRIGHT"
+ROOT       = os.environ.get("BRIGHT_ROOT", r"E:\haoChen\BRIGHT")
 # Path to best checkpoint saved by run_unet_dpcl.py.
 # Typically: checkpoints/unet_dpcl/BRIGHT/UNetWithFeatures_SPDPCL_<timestamp>/best_model.pth
 MODEL_PATH = os.path.join(ROOT, "checkpoints", "unet_dpcl",
                           "<run_folder>", "best_model.pth")   # ← update <run_folder>
 OUTPUT_DIR = os.path.join(ROOT, "infer_results", "unet_dpcl")
-DEVICE     = "cuda:0"   # "cuda:0" | "cuda:1" | "cpu" | "auto"
+DEVICE     = os.environ.get("BRIGHT_DEVICE", "cuda:0")
 # ============================
 
 BDA_ROOT     = os.path.join(ROOT, "bda_benchmark")

@@ -13,7 +13,7 @@ import os
 import sys
 import subprocess
 
-ROOT = r"D:\Project\haoChen\BRIGHT"
+ROOT = os.environ.get("BRIGHT_ROOT", r"E:\haoChen\BRIGHT")
 BDA_ROOT = os.path.join(ROOT, "bda_benchmark")
 
 DATA_PATH = os.path.join(ROOT, "data")
@@ -21,7 +21,8 @@ SPLIT_DIR = os.path.join(BDA_ROOT, "dataset", "splitname", "standard_ML")
 SAVE_DIR = os.path.join(ROOT, "checkpoints", "unet_cmca_odl")
 TRAIN_SCRIPT = os.path.join(BDA_ROOT, "script", "standard_ML", "train_UNet.py")
 
-DEVICE = "cuda:0"
+DEVICE = os.environ.get("BRIGHT_DEVICE", "cuda:0")
+SEED = os.environ.get("SEED", "0")
 
 os.makedirs(SAVE_DIR, exist_ok=True)
 
@@ -78,5 +79,6 @@ run([
     "--pin_memory",
     "--persistent_workers",
     "--prefetch_factor", "2",
+    "--seed", SEED,
     "--device", DEVICE,
 ])

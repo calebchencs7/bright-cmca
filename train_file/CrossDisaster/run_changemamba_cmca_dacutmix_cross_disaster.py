@@ -39,6 +39,7 @@ SPLIT_SCRIPT = os.path.join(
 
 HOLDOUT_TYPE = os.environ.get("BRIGHT_HOLDOUT_TYPE", "earthquake").lower()
 DEVICE = os.environ.get("BRIGHT_DEVICE", "cuda:0")
+SEED = os.environ.get("SEED", "0")
 
 SPLIT_DIR = os.path.join(LEAVE_TYPE_ROOT, HOLDOUT_TYPE)
 SAVE_DIR = os.path.join(
@@ -86,9 +87,9 @@ run([
     "--test_dataset_path", DATA_PATH,
     "--test_data_list_path", os.path.join(SPLIT_DIR, "test_set.txt"),
 
-    "--train_batch_size", "4",
-    "--eval_batch_size", "2",
-    "--num_workers", "8",
+    "--train_batch_size", "16",
+    "--eval_batch_size", "4",
+    "--num_workers", "16",
     "--crop_size", "640",
     "--max_iters", "800000",
     "--learning_rate", "1e-4",
@@ -121,5 +122,6 @@ run([
     "--pin_memory",
     "--persistent_workers",
     "--prefetch_factor", "2",
+    "--seed", SEED,
     "--device", DEVICE,
 ])

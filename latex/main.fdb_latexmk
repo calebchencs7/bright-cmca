@@ -1,13 +1,14 @@
 # Fdb version 4
-["bibtex main"] 1788884729.30204 "main.aux" "main.bbl" "main" 1788884730.22468 0
+["bibtex main"] 1791618427.50136 "main.aux" "main.bbl" "main" 1791618434.95532 0
   "./bright-cmca-references.bib" 1784624324.12966 82166 aa8801f181ac5c3714a0b4a2e2f42c4c ""
   "/usr/local/texlive/2026/texmf-dist/bibtex/bst/ieeetran/IEEEtran.bst" 1440712899 57748 7c8250ecf02814ce6ddc0cdbb63df1dd ""
-  "main.aux" 1788884729.94707 19760 e515121fe157b026ea6cca47b7233a72 "pdflatex"
+  "main.aux" 1791618434.67856 22363 1c739cbb6e965745a6e6ad6fcb10b803 "pdflatex"
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1788884729.4203 "main.tex" "main.pdf" "main" 1788884730.22486 0
+["pdflatex"] 1791618427.60856 "/Users/haochen/Documents/Development/bright-cmca/latex/main.tex" "main.pdf" "main" 1791618434.95548 0
+  "/Users/haochen/Documents/Development/bright-cmca/latex/main.tex" 1791618419.68969 63115 ebfcd1b552726b343e55b69a3e9fc73c ""
   "/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/local/texlive/2026/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/tfm/adobe/times/ptmb7t.tfm" 1136768653 2172 fd0c924230362ff848a33632ed45dc23 ""
@@ -124,12 +125,13 @@
   "/usr/local/texlive/2026/texmf-var/web2c/pdftex/pdflatex.fmt" 1781861354 3636769 fb5184e09960cb88dfd5868b36b313db ""
   "/usr/local/texlive/2026/texmf.cnf" 1774209515 577 648cd9f92f9c0eac486f4c71c85cfbbe ""
   "images/CMCA.png" 1788883869.23873 454781 9ad593783e5c7f3a039a5bd2e13dd6c5 ""
-  "images/DA-CutMix.png" 1788883743.66913 580988 50f6af78f61b49bc7a9c2f88fa4cc1a4 ""
-  "images/Technology Roadmap.png" 1788883727.45656 754917 9e788e4476a7ab75f506708f156eb7fb ""
+  "images/DA-CutMix.png" 1790330069.05671 9408959 a0096a5776d6ec22b9ebd3633682e1dc ""
+  "images/Technology Roadmap.png" 1790327928.65462 10746176 e669d7578137544fc6b99dd8bc67c0c1 ""
   "images/dacutmix_example.png" 1782116508.76661 1397929 809bc13f3cd250a1274d002e79293175 ""
-  "main.aux" 1788884729.94707 19760 e515121fe157b026ea6cca47b7233a72 "pdflatex"
-  "main.bbl" 1788884729.41783 10940 885848f4cc03fdfb1d67a2df66d808c8 "bibtex main"
-  "main.tex" 1788884706.02111 53278 e01f04acfc095f65690b8e1cce2568c0 ""
+  "images/qualitative_results.png" 1791364802.62047 4286135 34a89bc0ebc250e724b35f857e96a699 ""
+  "main.aux" 1791618434.67856 22363 1c739cbb6e965745a6e6ad6fcb10b803 "pdflatex"
+  "main.bbl" 1791618427.6065 10586 1ea64e81ea4c0246d3ae37106a547d03 "bibtex main"
+  "main.tex" 1791618419.68969 63115 ebfcd1b552726b343e55b69a3e9fc73c ""
   (generated)
   "main.aux"
   "main.log"

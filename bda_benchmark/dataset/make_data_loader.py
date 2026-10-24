@@ -42,6 +42,10 @@ class MultimodalDamageAssessmentDatset(Dataset):
         suffix='.tif',
         use_dacutmix=False,
         dacutmix_prob=0.0,
+        use_cutmix=False,
+        cutmix_prob=0.0,
+        cutmix_patch_min_ratio=0.20,
+        cutmix_patch_max_ratio=0.50,
         damage_class_ids=(2, 3),
         dacutmix_min_damage_pixels=200,
         dacutmix_min_damage_ratio=0.05,
@@ -61,6 +65,12 @@ class MultimodalDamageAssessmentDatset(Dataset):
         self.damage_class_ids = tuple(int(c) for c in damage_class_ids)
         self.use_dacutmix = bool(use_dacutmix)
         self.dacutmix_prob = float(dacutmix_prob)
+        self.use_cutmix = bool(use_cutmix)
+        self.cutmix_prob = float(cutmix_prob)
+        self.cutmix_patch_min_ratio = float(cutmix_patch_min_ratio)
+        self.cutmix_patch_max_ratio = float(cutmix_patch_max_ratio)
+        if self.use_dacutmix and self.use_cutmix:
+            raise ValueError("DACutMix and CutMix cannot be enabled together.")
         self.dacutmix_min_damage_pixels = int(dacutmix_min_damage_pixels)
         self.dacutmix_min_damage_ratio = float(dacutmix_min_damage_ratio)
         self.dacutmix_patch_min_ratio = float(dacutmix_patch_min_ratio)
@@ -84,6 +94,8 @@ class MultimodalDamageAssessmentDatset(Dataset):
 
         if len(self.event_to_indices) < 2:
             self.use_dacutmix = False
+        if len(set(self.data_list)) < 2:
+            self.use_cutmix = False
         self.last_dacutmix_info = None
 
     def _load_sample(self, index):
@@ -132,9 +144,13 @@ class MultimodalDamageAssessmentDatset(Dataset):
         donor_event = random.choice(donor_events)
         return random.choice(self.event_to_indices[donor_event])
 
-    def _random_patch_box(self, h, w):
-        min_ratio = min(max(self.dacutmix_patch_min_ratio, 0.01), 1.0)
-        max_ratio = min(max(self.dacutmix_patch_max_ratio, min_ratio), 1.0)
+    def _random_patch_box(self, h, w, min_ratio=None, max_ratio=None):
+        if min_ratio is None:
+            min_ratio = self.dacutmix_patch_min_ratio
+        if max_ratio is None:
+            max_ratio = self.dacutmix_patch_max_ratio
+        min_ratio = min(max(min_ratio, 0.01), 1.0)
+        max_ratio = min(max(max_ratio, min_ratio), 1.0)
         min_h = max(1, int(round(h * min_ratio)))
         max_h = max(min_h, int(round(h * max_ratio)))
         min_w = max(1, int(round(w * min_ratio)))
@@ -194,6 +210,50 @@ class MultimodalDamageAssessmentDatset(Dataset):
 
         return pre_img, post_img, label
 
+    def _sample_random_donor_index(self, index):
+        """Sample a different item without event or damage constraints."""
+        for _ in range(20):
+            donor_idx = random.randrange(len(self.data_list))
+            if self.data_list[donor_idx] != self.data_list[index]:
+                return donor_idx
+        return None
+
+    def _apply_cutmix(self, index, pre_img, post_img, label):
+        """Apply paired random CutMix to optical, SAR, and segmentation label."""
+        self.last_dacutmix_info = None
+        donor_idx = self._sample_random_donor_index(index)
+        if donor_idx is None:
+            return pre_img, post_img, label
+
+        donor_pre, donor_post, donor_label = self._load_sample(donor_idx)
+        donor_pre, donor_post, donor_label = self.__augment(
+            True, donor_pre, donor_post, donor_label
+        )
+        y0, y1, x0, x1 = self._random_patch_box(
+            label.shape[0],
+            label.shape[1],
+            self.cutmix_patch_min_ratio,
+            self.cutmix_patch_max_ratio,
+        )
+
+        pre_img = pre_img.copy()
+        post_img = post_img.copy()
+        label = label.copy()
+        pre_img[y0:y1, x0:x1, :] = donor_pre[y0:y1, x0:x1, :]
+        post_img[y0:y1, x0:x1, :] = donor_post[y0:y1, x0:x1, :]
+        label[y0:y1, x0:x1] = donor_label[y0:y1, x0:x1]
+        self.last_dacutmix_info = {
+            "method": "cutmix",
+            "base_idx": index,
+            "base_name": self.data_list[index],
+            "base_event": self.events[index],
+            "donor_idx": donor_idx,
+            "donor_name": self.data_list[donor_idx],
+            "donor_event": self.events[donor_idx],
+            "box": (y0, y1, x0, x1),
+        }
+        return pre_img, post_img, label
+
     def __getitem__(self, index):
         self.last_dacutmix_info = None
         dacutmix_attempted = 0
@@ -205,6 +265,12 @@ class MultimodalDamageAssessmentDatset(Dataset):
             if self.use_dacutmix and random.random() < self.dacutmix_prob:
                 dacutmix_attempted = 1
                 pre_img, post_img, clf_label = self._apply_dacutmix(
+                    index, pre_img, post_img, clf_label
+                )
+                dacutmix_applied = 1 if self.last_dacutmix_info is not None else 0
+            elif self.use_cutmix and random.random() < self.cutmix_prob:
+                dacutmix_attempted = 1
+                pre_img, post_img, clf_label = self._apply_cutmix(
                     index, pre_img, post_img, clf_label
                 )
                 dacutmix_applied = 1 if self.last_dacutmix_info is not None else 0

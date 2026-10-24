@@ -23,7 +23,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from model.UNetCMCA import CrossModalChangeAttention
+from model.UNetCMCA import CrossModalAttention, CrossModalChangeAttention
 
 
 def _repo_root_from_env():
@@ -342,3 +342,24 @@ class ChangeMambaCMCA(ChangeMamba):
     def __init__(self, *args, **kwargs):
         kwargs["use_cmca"] = True
         super().__init__(*args, **kwargs)
+
+
+class ChangeMambaCA(ChangeMamba):
+    """ChangeMamba control with standard CA in the same CMCA position."""
+
+    def __init__(
+        self,
+        *args,
+        ca_heads=8,
+        ca_sr_ratio=1,
+        **kwargs,
+    ):
+        # Build the CMCA variant first so all shared layers receive exactly the
+        # same initialization under a paired seed, then replace only CMCA.
+        kwargs["use_cmca"] = True
+        super().__init__(*args, **kwargs)
+        self.cmca = CrossModalAttention(
+            dim=self.encoder_2.dims[-1],
+            num_heads=ca_heads,
+            sr_ratio=ca_sr_ratio,
+        )

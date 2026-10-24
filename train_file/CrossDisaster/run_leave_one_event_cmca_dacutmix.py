@@ -25,6 +25,7 @@ MODEL_TYPE = os.environ.get("BRIGHT_MODEL_TYPE", "UNetCMCA")
 SAVE_NAME = os.environ.get("BRIGHT_SAVE_NAME", "unet_cmca_dacutmix")
 HOLDOUT_EVENT = os.environ.get("BRIGHT_HOLDOUT_EVENT", "hawaii-wildfire")
 DEVICE = os.environ.get("BRIGHT_DEVICE", "cuda:0")
+SEED = os.environ.get("SEED", "0")
 
 SPLIT_DIR = os.path.join(LEAVE_ONE_ROOT, HOLDOUT_EVENT)
 SAVE_DIR = os.path.join(
@@ -101,5 +102,6 @@ run([
     "--pin_memory",
     "--persistent_workers",
     "--prefetch_factor", "2",
+    "--seed", SEED,
     "--device", DEVICE,
 ])
